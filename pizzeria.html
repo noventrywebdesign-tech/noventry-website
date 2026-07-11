@@ -1,0 +1,3784 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>La Fiamma – Authentische Neapolitanische Pizzeria</title>
+  <meta name="description" content="La Fiamma – Handgemachte neapolitanische Holzofenpizza seit 1987. Reservieren Sie Ihren Tisch in München.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       DESIGN TOKENS
+    ═══════════════════════════════════════════════════════════ */
+    :root {
+      --bg:          #070400;
+      --bg-warm:     #140900;
+      --bg-card:     #1E0E00;
+      --ember:       #C85800;
+      --ember-lo:    rgba(200,88,0,0.13);
+      --ember-hi:    rgba(200,88,0,0.65);
+      --gold:        #C49228;
+      --cream:       #F4EAD8;
+      --cream-lo:    rgba(244,234,216,0.07);
+      --cream-mid:   rgba(244,234,216,0.46);
+      --muted:       #8A6A48;
+      --border:      rgba(244,234,216,0.08);
+      --border-hi:   rgba(244,234,216,0.16);
+      --font-d:      'Cormorant Garamond', Georgia, serif;
+      --font-b:      'Inter', -apple-system, sans-serif;
+      --r:           10px;
+      --r-lg:        18px;
+      --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESET
+    ═══════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--font-b);
+      font-size: 1rem;
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    :focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 4px; }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--ember); border-radius: 3px; }
+
+    /* ═══════════════════════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 1240px;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 32px;
+      background: rgba(7,4,0,0.72);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--border-hi);
+      border-radius: 100px;
+      transition: background 0.4s;
+    }
+    .nav-logo {
+      font-family: var(--font-d);
+      font-size: 1.45rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--cream);
+    }
+    .nav-logo em { font-style: italic; color: var(--ember); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--cream-mid);
+      transition: color 220ms;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      background: var(--ember);
+      color: var(--cream);
+      font-family: var(--font-b);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 11px 26px;
+      border-radius: 100px;
+      transition: background 220ms, transform 150ms;
+      cursor: pointer;
+    }
+    .nav-cta:hover { background: #DC4910; transform: translateY(-1px); }
+    .nav-mob-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-mob-toggle span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--cream);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       EMBER PARTICLES — signature element (CSS only)
+    ═══════════════════════════════════════════════════════════ */
+    .ember-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+    .e {
+      position: absolute;
+      border-radius: 50%;
+      will-change: transform, opacity;
+      animation: e-rise var(--d,5s) var(--del,0s) ease-in-out infinite;
+    }
+    @keyframes e-rise {
+      0%   { transform: translateY(var(--sy,60vh)) translateX(0) scale(1); opacity:0; }
+      8%   { opacity: var(--pk,.7); }
+      50%  { transform: translateY(20vh) translateX(var(--dx,30px)) scale(.75); opacity: var(--md,.35); }
+      100% { transform: translateY(-8vh) translateX(var(--ex,-20px)) scale(.2); opacity:0; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HERO — Pinned Hero pattern
+    ═══════════════════════════════════════════════════════════ */
+    .hero-pin {
+      position: relative;
+      height: 280vh;
+    }
+    .hero {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      perspective: 1200px;
+    }
+
+    /* Depth 0.15 — atmospheric bg */
+    .h-bg {
+      position: absolute;
+      inset: -15%;
+      background:
+        radial-gradient(ellipse 60% 75% at 20% 60%, rgba(200,88,0,0.35) 0%, transparent 58%),
+        radial-gradient(ellipse 50% 60% at 80% 30%, rgba(196,146,40,0.14) 0%, transparent 52%),
+        radial-gradient(ellipse 85% 55% at 50% 105%, rgba(7,4,0,0.96) 0%, transparent 52%),
+        #070400;
+      will-change: transform;
+    }
+    /* Grain overlay — cinematic film grain */
+    .h-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
+      background-size: 256px 256px;
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: 1;
+      mix-blend-mode: overlay;
+    }
+    /* Depth 0.50 — vignette */
+    .h-vignette {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 100% 55% at 50% 100%, rgba(8,5,2,0.97) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 60% at 0% 50%, rgba(8,5,2,0.72) 0%, transparent 50%),
+        radial-gradient(ellipse 55% 60% at 100% 50%, rgba(8,5,2,0.72) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 3;
+    }
+    /* ── Table setting: wood surface + plate + herbs ────────── */
+    .h-wood {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background:
+        /* ── Scattered basil / herb leaves (organic green blobs) ── */
+        radial-gradient(ellipse 13vh 7vh  at 36% 18%, rgba(52,98,38,0.28)  0%, transparent 100%),
+        radial-gradient(ellipse 7vh  11vh at 68% 15%, rgba(48,90,34,0.22)  0%, transparent 100%),
+        radial-gradient(ellipse 9vh  5vh  at 28% 80%, rgba(58,108,44,0.24) 0%, transparent 100%),
+        radial-gradient(ellipse 5vh  9vh  at 74% 76%, rgba(44,86,32,0.20)  0%, transparent 100%),
+        radial-gradient(ellipse 11vh 5vh  at 56% 88%, rgba(60,112,46,0.18) 0%, transparent 100%),
+        radial-gradient(ellipse 6vh  8vh  at 22% 46%, rgba(50,92,36,0.15)  0%, transparent 100%),
+        radial-gradient(ellipse 8vh  4vh  at 80% 42%, rgba(54,100,40,0.17) 0%, transparent 100%),
+        /* ── Plate surface: lighter centre circle ───────────────── */
+        radial-gradient(circle 48vh at 50% 50%,
+          rgba(255,240,205,0.18) 0%,
+          rgba(240,215,165,0.10) 55%,
+          transparent 82%
+        ),
+        /* ── Table centre warm glow (candle/lamp from above) ─────── */
+        radial-gradient(ellipse 80% 80% at 50% 50%, rgba(210,150,60,0.09) 0%, transparent 70%),
+        /* ── Wood grain lines ─────────────────────────────────────── */
+        repeating-linear-gradient(
+          171deg,
+          rgba(0,0,0,0)     0px, rgba(0,0,0,0)     11px,
+          rgba(0,0,0,0.034) 11px, rgba(0,0,0,0.034) 12px,
+          rgba(0,0,0,0)     12px, rgba(0,0,0,0)     26px,
+          rgba(0,0,0,0.018) 26px, rgba(0,0,0,0.018) 27px
+        ),
+        /* ── Base wood colour ─────────────────────────────────────── */
+        linear-gradient(
+          158deg,
+          #3a1c0a 0%,
+          #581e0c 8%,
+          #7a3e20 20%,
+          #8e5430 34%,
+          #9c6238 48%,
+          #8a5232 60%,
+          #784428 72%,
+          #5c2e18 84%,
+          #461c0e 100%
+        );
+    }
+    /* Plate ring drawn by JS (::after is sized via --plate-r set on .h-wood) */
+    .h-wood::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      /* ring drawn with radial-gradient; --plate-r is set dynamically */
+      background: radial-gradient(
+        circle var(--plate-r, 46vh) at 50% 50%,
+        transparent 78%,
+        rgba(238,212,162,0.32) 85%,
+        rgba(218,188,138,0.22) 92%,
+        transparent 100%
+      );
+      pointer-events: none;
+    }
+    /* ── Hero photo background ───────────────────────────── */
+    .h-photo-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      /* No overflow:hidden — clip-path handles shape; overflow:hidden would clip the drop-shadow */
+      filter: drop-shadow(0 6px 28px rgba(0,0,0,0.55)) drop-shadow(0 2px 6px rgba(0,0,0,0.30));
+    }
+    .h-photo-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      will-change: transform;
+    }
+    /* Pizza vignette overlay — clips to pizza disk (via JS), darkens the crust
+       ring and shows off the centre. Same gradient used in .h-slice-dim.      */
+    .h-photo-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        /* Crust-edge darkening — radial vignette on the pizza circle */
+        radial-gradient(ellipse 88% 88% at 50% 50%,
+          rgba(5,2,0,0.20) 0%,
+          rgba(5,2,0,0.38) 55%,
+          rgba(5,2,0,0.70) 82%,
+          rgba(5,2,0,0.90) 100%
+        ),
+        /* Subtle left-side push for hero text legibility */
+        linear-gradient(90deg, rgba(5,2,0,0.40) 0%, rgba(5,2,0,0.10) 35%, transparent 52%),
+        /* Bottom warmth — ember glow from the fire */
+        linear-gradient(to top, rgba(180,60,0,0.18) 0%, transparent 38%);
+      pointer-events: none;
+    }
+    /* ── Full-screen pizza slice layer ──────────────────────
+       SAME photo, same size, same object-fit as the background.
+       An inner dim (.h-slice-dim) mirrors the background overlay
+       exactly, so at rest the slice is visually indistinguishable
+       from the background — zero "inserted" appearance.
+       On scroll the inner dim fades out while the slice rises,
+       making it emerge from the darkness naturally.             */
+    .h-slice-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      will-change: transform, filter;
+      /* No initial opacity change — inner dim handles the match */
+    }
+    .h-slice-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+    /* Inner dim: EXACTLY matches .h-photo-overlay → slice invisible at rest */
+    .h-slice-dim {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 88% 88% at 50% 50%,
+          rgba(5,2,0,0.20) 0%,
+          rgba(5,2,0,0.38) 55%,
+          rgba(5,2,0,0.70) 82%,
+          rgba(5,2,0,0.90) 100%
+        ),
+        linear-gradient(90deg, rgba(5,2,0,0.40) 0%, rgba(5,2,0,0.10) 35%, transparent 52%),
+        linear-gradient(to top, rgba(180,60,0,0.18) 0%, transparent 38%);
+      pointer-events: none;
+      will-change: opacity;
+    }
+    /* Cheese strings full-screen SVG (coordinates set by JS) */
+    .h-cheese-svg-full {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+      overflow: visible;
+    }
+    /* Depth 1.00 — content */
+    .h-content {
+      position: relative;
+      z-index: 5;
+      padding: 0 0 0 max(40px, calc(50vw - 620px));
+      max-width: 700px;
+      will-change: transform;
+    }
+    .h-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .h-eyebrow::before { content:''; display:inline-block; width:30px; height:1px; background:var(--gold); }
+    /* Mask reveal — vertical mask wipe (film technique: wipe transition) */
+    .h-title-mask {
+      overflow: hidden;
+      line-height: 0.93;
+    }
+    .h-title-mask + .h-title-mask { margin-top: 4px; }
+    .h-title {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(4.5rem, 10vw, 9rem);
+      font-weight: 300;
+      color: var(--cream);
+      display: block;
+      transform: translateY(110%);
+      will-change: transform;
+    }
+    .h-title.accent { color: var(--ember); }
+    .h-body {
+      font-size: clamp(0.875rem, 1.2vw, 1rem);
+      line-height: 1.9;
+      color: var(--cream-mid);
+      max-width: 340px;
+      margin-top: 34px;
+      margin-bottom: 44px;
+      opacity: 0;
+    }
+    .h-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      opacity: 0;
+    }
+    /* Depth 1.40 — scroll cue */
+    .h-scroll-cue {
+      position: absolute;
+      bottom: 44px;
+      left: max(40px, calc(50vw - 580px));
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 6;
+      opacity: 0;
+    }
+    .h-scroll-cue span {
+      font-size: 0.6rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: rgba(240,232,216,0.22);
+    }
+    .h-scroll-line {
+      width: 52px;
+      height: 1px;
+      background: linear-gradient(to right, var(--ember), transparent);
+      transform-origin: left;
+      animation: hsl-pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes hsl-pulse {
+      0%, 100% { transform: scaleX(1); opacity:1; }
+      50% { transform: scaleX(0.5); opacity:0.4; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       BUTTONS
+    ═══════════════════════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-b);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 16px 32px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 220ms, border-color 220ms, color 220ms, transform 160ms;
+      min-height: 52px;
+      border: 1px solid transparent;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-fire { background: var(--ember); color: var(--cream); }
+    .btn-fire:hover { background: #DC4910; }
+    .btn-outline { background: transparent; color: var(--cream-mid); border-color: var(--border-hi); }
+    .btn-outline:hover { color: var(--cream); border-color: rgba(240,232,216,0.32); }
+
+    /* ═══════════════════════════════════════════════════════════
+       LAYOUT UTILITIES
+    ═══════════════════════════════════════════════════════════ */
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 52px; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+    .eyebrow::before { content:''; display:inline-block; width:30px; height:1px; background:var(--gold); flex-shrink:0; }
+
+    /* ═══════════════════════════════════════════════════════════
+       MARQUEE BELT
+    ═══════════════════════════════════════════════════════════ */
+    .belt {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 24px 0;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+      mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+    }
+    .belt-track {
+      display: flex;
+      width: max-content;
+      animation: belt-run 32s linear infinite;
+      will-change: transform;
+    }
+    .belt-set {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      padding-right: 36px;
+      flex-shrink: 0;
+    }
+    .belt-word {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+      font-weight: 300;
+      color: rgba(240,232,216,0.18);
+      white-space: nowrap;
+    }
+    .belt-sep {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--ember);
+      opacity: 0.45;
+      flex-shrink: 0;
+    }
+    @keyframes belt-run {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       STORY — Editorial Longread pattern
+    ═══════════════════════════════════════════════════════════ */
+    .story {
+      padding: 180px 0 160px;
+      position: relative;
+    }
+    .story::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent 5%, var(--border) 20%, var(--border) 80%, transparent 95%);
+      pointer-events: none;
+    }
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: start;
+    }
+    .story-quote {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(2.4rem, 4vw, 4.2rem);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--cream);
+      margin-bottom: 44px;
+      overflow: hidden;
+    }
+    .story-quote em { color: var(--ember); }
+    .story-p {
+      font-size: 0.92rem;
+      line-height: 2;
+      color: var(--cream-mid);
+      margin-bottom: 24px;
+    }
+    .story-sign {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--gold);
+      margin-top: 8px;
+    }
+    .story-visual {
+      position: relative;
+    }
+    .story-img {
+      width: 100%;
+      aspect-ratio: 4/5;
+      border-radius: var(--r-lg);
+      background: var(--bg-card);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .story-img-warm {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(160deg, #1E1208, #2C1A0A, #180E06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .story-badge {
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      background: var(--bg-warm);
+      border: 1px solid var(--border-hi);
+      border-radius: var(--r);
+      padding: 20px 26px;
+      z-index: 2;
+    }
+    .story-badge-num {
+      font-family: var(--font-d);
+      font-size: 2.8rem;
+      font-weight: 500;
+      color: var(--ember);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .story-badge-label {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .story-accent-img {
+      position: absolute;
+      bottom: -24px;
+      left: -24px;
+      width: 44%;
+      aspect-ratio: 1;
+      border-radius: var(--r);
+      border: 3px solid var(--bg);
+      background: var(--bg-warm);
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MENU — Chaptered Release (pinned)
+    ═══════════════════════════════════════════════════════════ */
+    .menu-pin {
+      position: relative;
+      height: 320vh;
+    }
+    .menu {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      perspective: 1200px;
+    }
+    .menu::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(8,5,2,0) 0%, rgba(18,11,6,0.4) 100%);
+      pointer-events: none;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      width: 100%;
+    }
+    /* Left: text chapters */
+    .menu-left { position: relative; }
+    .menu-items { position: relative; min-height: 320px; }
+    .menu-item {
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 0;
+      transform: translateY(36px) rotateX(8deg);
+      transform-origin: bottom center;
+      transition: none;
+      pointer-events: none;
+    }
+    .menu-item.active { pointer-events: auto; }
+    .menu-name {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(3rem, 5.5vw, 6rem);
+      font-weight: 300;
+      line-height: 0.95;
+      color: var(--cream);
+      margin-bottom: 22px;
+    }
+    .menu-desc {
+      font-size: 0.88rem;
+      line-height: 1.95;
+      color: var(--cream-mid);
+      max-width: 360px;
+      margin-bottom: 28px;
+    }
+    .menu-price {
+      font-family: var(--font-d);
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: var(--gold);
+    }
+    .menu-tabs { margin-top: 52px; }
+    .menu-tab {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      position: relative;
+      transition: opacity 200ms;
+    }
+    .menu-tab:not(.active) { opacity: 0.3; }
+    .menu-tab:hover:not(.active) { opacity: 0.6; }
+    .menu-tab-progress {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      height: 1px;
+      width: 0%;
+      background: var(--ember);
+      transition: width 0.8s var(--ease-out);
+    }
+    .menu-tab.active .menu-tab-progress { width: 100%; }
+    .tab-n {
+      font-family: var(--font-d);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      width: 28px;
+      flex-shrink: 0;
+    }
+    .tab-name {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: 1.25rem;
+      color: var(--cream);
+    }
+    /* Right: pizza visual */
+    .menu-visual {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--bg-warm);
+    }
+    .pizza-panel {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+    }
+    .pizza-panel.active { opacity: 1; }
+    .pizza-panel-bg {
+      position: absolute;
+      inset: 0;
+    }
+    .pizza-panel svg {
+      position: relative;
+      z-index: 1;
+      width: 78%;
+      filter: drop-shadow(0 30px 60px rgba(0,0,0,0.7));
+    }
+    .menu-dots {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 10;
+    }
+    .mdot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border-hi);
+      cursor: pointer;
+      transition: background 280ms, transform 280ms;
+    }
+    .mdot.active { background: var(--ember); transform: scale(1.6); }
+
+    /* ═══════════════════════════════════════════════════════════
+       GALLERY — Parallax Gallery, 5 depth layers
+    ═══════════════════════════════════════════════════════════ */
+    .gallery {
+      padding: 180px 0 200px;
+      position: relative;
+      overflow: hidden;
+    }
+    .gallery-head {
+      text-align: center;
+      margin-bottom: 120px;
+    }
+    .gallery-title {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(3.5rem, 7vw, 7rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--cream);
+    }
+    .gallery-title em { color: var(--ember); }
+    /* Clip-path mask for title reveal (film: wipe transition) */
+    .gallery-title-mask { overflow: hidden; }
+    .gallery-title-inner {
+      display: block;
+      transform: translateY(105%);
+    }
+    .depth-field {
+      position: relative;
+      height: 760px;
+      perspective: 1200px;
+    }
+    .dl { position: absolute; will-change: transform; }
+    /* Layer positions */
+    .dl-0 { top:50px; left:4%; width:22%; }
+    .dl-1 { top:10px; left:30%; width:34%; }
+    .dl-2 { top:30px; right:4%; width:26%; }
+    .dl-3 { bottom:40px; left:18%; width:20%; }
+    .dl-watermark {
+      position: absolute;
+      bottom: -40px;
+      right: 2%;
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(5rem, 11vw, 11rem);
+      font-weight: 300;
+      color: rgba(240,232,216,0.03);
+      line-height: 1;
+      pointer-events: none;
+      white-space: nowrap;
+      will-change: transform;
+    }
+    .gcard {
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+    .gcard.tall { aspect-ratio: 3/4; }
+    .gcard.wide { aspect-ratio: 4/3; }
+    .gcard.sq   { aspect-ratio: 1; }
+    .gcard + .gcard { margin-top: 18px; }
+    .gcard-fill {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gcard-fill.w1 { background: linear-gradient(155deg,#1E1208,#2C1808,#180E04); }
+    .gcard-fill.w2 { background: linear-gradient(155deg,#221208,#381A08,#1C0C04); }
+    .gcard-fill.w3 { background: linear-gradient(155deg,#1A1006,#2A1A08,#140C04); }
+    .gcard-fill.w4 { background: linear-gradient(155deg,#200E06,#321408,#180806); }
+    .gcap {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: 0.9rem;
+      color: rgba(240,232,216,0.2);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       ATMOSPHERE — Sticky Narrative pattern
+    ═══════════════════════════════════════════════════════════ */
+    .atmo-pin {
+      position: relative;
+      height: 260vh;
+    }
+    .atmo {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      perspective: 1200px;
+    }
+    .atmo-left {
+      background: var(--bg-warm);
+      display: flex;
+      align-items: center;
+      padding: 0 72px;
+      position: relative;
+    }
+    .atmo-right {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .atmo-chap-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+    .atmo-h {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(2.4rem, 3.8vw, 4rem);
+      font-weight: 300;
+      line-height: 1.18;
+      color: var(--cream);
+      margin-bottom: 24px;
+    }
+    .atmo-p {
+      font-size: 0.88rem;
+      line-height: 2;
+      color: var(--cream-mid);
+      margin-bottom: 36px;
+    }
+    .atmo-facts { display: flex; flex-direction: column; gap: 14px; }
+    .atmo-fact {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.82rem;
+      color: rgba(240,232,216,0.5);
+    }
+    .atmo-fact-line {
+      width: 22px;
+      height: 1px;
+      background: var(--ember);
+      flex-shrink: 0;
+    }
+    .atmo-panels { position: absolute; inset: 0; }
+    .atmo-panel {
+      position: absolute;
+      inset: 0;
+      will-change: opacity;
+    }
+    .atmo-panel-bg {
+      width: 100%;
+      height: 100%;
+    }
+    .atmo-panel-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--bg-warm) 0%, transparent 30%);
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       INFO BAR
+    ═══════════════════════════════════════════════════════════ */
+    .info-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 56px 0;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 48px;
+    }
+    .info-item { display: flex; flex-direction: column; gap: 8px; }
+    .info-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .info-val {
+      font-family: var(--font-d);
+      font-size: 1.2rem;
+      color: var(--cream);
+    }
+    .info-sub { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESERVATION — Landing Sequence pattern
+    ═══════════════════════════════════════════════════════════ */
+    .res {
+      padding: 160px 0 200px;
+      position: relative;
+      overflow: hidden;
+    }
+    .res::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(200,66,10,0.10) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .res-inner {
+      position: relative;
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+    .res-title {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(3rem, 6vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .res-title-line { display: block; transform: translateY(110%); }
+    .res-body {
+      font-size: 0.92rem;
+      line-height: 1.9;
+      color: var(--cream-mid);
+      margin-bottom: 52px;
+      opacity: 0;
+    }
+    .res-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+      opacity: 0;
+    }
+    .res-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .res-in {
+      width: 100%;
+      background: rgba(240,232,216,0.04);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 15px 20px;
+      color: var(--cream);
+      font-family: var(--font-b);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 200ms, background 200ms;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .res-in::placeholder { color: rgba(240,232,216,0.18); }
+    .res-in:focus { border-color: rgba(200,66,10,0.55); background: rgba(240,232,216,0.06); }
+    .res-in[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5) sepia(1) hue-rotate(10deg); }
+    textarea.res-in { resize: none; line-height: 1.7; }
+    .res-btn {
+      width: 100%;
+      background: var(--ember);
+      color: var(--cream);
+      border: none;
+      border-radius: 4px;
+      padding: 18px;
+      font-family: var(--font-b);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 220ms, transform 150ms;
+    }
+    .res-btn:hover { background: #DC4910; }
+    .res-btn:active { transform: scale(0.98); }
+    .res-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ═══════════════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════════════ */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 72px 0 44px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.7fr 1fr 1fr;
+      gap: 80px;
+      margin-bottom: 64px;
+    }
+    .footer-name {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--cream);
+      margin-bottom: 14px;
+      line-height: 1;
+    }
+    .footer-tagline { font-size: 0.82rem; line-height: 1.85; color: var(--muted); max-width: 260px; }
+    .footer-col h4 {
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:12px; }
+    .footer-col a { font-size:0.875rem; color:var(--muted); transition:color 180ms; }
+    .footer-col a:hover { color:var(--cream); }
+    .footer-bottom {
+      padding-top: 28px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.73rem;
+      color: rgba(240,232,216,0.18);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       PIZZA SLICE RISE — scroll-driven slice reveal
+    ═══════════════════════════════════════════════════════════ */
+    .slice-pin {
+      position: relative;
+      height: 280vh;
+    }
+    .slice-scene {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+    }
+    .slice-scene::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 75%;
+      height: 50%;
+      background: radial-gradient(ellipse at 50% 100%, rgba(200,88,0,0.20) 0%, transparent 62%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .slice-inner {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 0 64px;
+      align-items: center;
+      width: 100%;
+      max-width: 1240px;
+      padding: 0 48px;
+    }
+    .slice-text {
+      opacity: 0;
+    }
+    .slice-eye {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-b);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 26px;
+    }
+    .slice-eye::before {
+      content: '';
+      display: block;
+      width: 30px;
+      height: 1px;
+      background: var(--ember);
+      flex-shrink: 0;
+    }
+    .slice-h {
+      font-family: var(--font-d);
+      font-size: clamp(2.6rem, 4.5vw, 4.4rem);
+      font-weight: 600;
+      line-height: 1.06;
+      color: var(--cream);
+      margin-bottom: 24px;
+      letter-spacing: -0.01em;
+    }
+    .slice-h em { font-style: italic; color: var(--ember); }
+    .slice-p {
+      font-size: 0.92rem;
+      line-height: 1.78;
+      color: var(--cream-mid);
+      max-width: 420px;
+      margin-bottom: 44px;
+    }
+    .slice-stats {
+      display: flex;
+      gap: 36px;
+    }
+    .slice-stat-n {
+      font-family: var(--font-d);
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--ember);
+      line-height: 1;
+    }
+    .slice-stat-l {
+      font-size: 0.68rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .slice-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 480px;
+    }
+    .slice-glow-floor {
+      position: absolute;
+      bottom: 4%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 78%;
+      height: 70px;
+      background: radial-gradient(ellipse, rgba(200,88,0,0.28) 0%, transparent 65%);
+      filter: blur(22px);
+      pointer-events: none;
+    }
+    #pizza-scene-svg {
+      width: 100%;
+      max-width: 540px;
+      height: auto;
+      filter:
+        drop-shadow(0 48px 88px rgba(0,0,0,0.75))
+        drop-shadow(0 0 50px rgba(200,88,0,0.18));
+      overflow: visible;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       CINEMATIC SECTION — CSS animated atmospheric interlude
+    ═══════════════════════════════════════════════════════════ */
+    .cin {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .cin-bg {
+      position: absolute;
+      inset: -12%;
+      background:
+        radial-gradient(ellipse 65% 85% at 28% 50%, rgba(170,68,0,0.45) 0%, transparent 55%),
+        radial-gradient(ellipse 55% 65% at 72% 60%, rgba(200,110,0,0.25) 0%, transparent 50%),
+        radial-gradient(ellipse 90% 45% at 50% 100%, rgba(200,88,0,0.50) 0%, transparent 42%),
+        radial-gradient(ellipse 40% 40% at 15% 15%, rgba(100,40,0,0.20) 0%, transparent 55%),
+        #070400;
+      animation: cin-drift 20s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    @keyframes cin-drift {
+      0%   { transform: scale(1.10) translate(-2%, 0%); }
+      33%  { transform: scale(1.12) translate(1.5%, -2%); }
+      66%  { transform: scale(1.09) translate(-0.5%, 2%); }
+      100% { transform: scale(1.11) translate(2%, -1%); }
+    }
+    .cin-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 88% 88% at 50% 50%, transparent 25%, rgba(7,4,0,0.50) 65%, rgba(7,4,0,0.96) 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .cin-content {
+      position: relative;
+      z-index: 5;
+      max-width: 800px;
+      padding: 0 40px;
+    }
+    .cin-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      font-family: var(--font-b);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .cin-eyebrow::before, .cin-eyebrow::after {
+      content: '';
+      display: block;
+      width: 44px;
+      height: 1px;
+      background: var(--ember);
+      flex-shrink: 0;
+    }
+    .cin-title {
+      font-family: var(--font-d);
+      font-size: clamp(3.8rem, 9.5vw, 9rem);
+      font-weight: 500;
+      font-style: italic;
+      line-height: 0.92;
+      color: var(--cream);
+      margin-bottom: 36px;
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    .cin-sub {
+      font-family: var(--font-b);
+      font-size: 0.82rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cream-mid);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .cin-ghost-num {
+      position: absolute;
+      bottom: 32px;
+      right: 48px;
+      font-family: var(--font-d);
+      font-size: clamp(8rem, 18vw, 18rem);
+      font-weight: 600;
+      line-height: 1;
+      color: rgba(200,88,0,0.035);
+      user-select: none;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .wrap { padding: 0 32px; }
+      .story-grid { gap: 64px; }
+      .menu-grid { gap: 52px; }
+      .atmo-left { padding: 0 48px; }
+    }
+    @media (max-width: 900px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-mob-toggle { display: flex; }
+      .wrap { padding: 0 24px; }
+      .story::before { display: none; }
+      .story-grid { grid-template-columns: 1fr; gap: 64px; }
+      .story-badge { top: -12px; right: -8px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-visual { display: none; }
+      .atmo { grid-template-columns: 1fr; }
+      .atmo-right { display: none; }
+      .atmo-left { padding: 0 32px; }
+      .info-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+      .res-row { grid-template-columns: 1fr; }
+      .h-slice-layer { display: none; }
+      /* Pizza slice section — stack on mobile */
+      .slice-inner { grid-template-columns: 1fr; padding: 0 24px; gap: 48px; }
+      .slice-visual { min-height: 340px; }
+      .slice-pin { height: 220vh; }
+    }
+    @media (max-width: 600px) {
+      .h-content { padding: 0 24px; }
+      .h-title { font-size: clamp(3.5rem, 16vw, 5.5rem); }
+      .depth-field { height: 520px; }
+      .dl-2 { display: none; }
+      .dl-watermark { font-size: clamp(3rem, 18vw, 6rem); }
+      .info-grid { grid-template-columns: 1fr; gap: 24px; }
+      .info-bar { padding: 40px 0; }
+      .footer-grid { gap: 32px; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .story { padding: 100px 0 80px; }
+      .gallery { padding: 100px 0 120px; }
+      .res { padding: 100px 0 120px; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       REDUCED MOTION — accessibility (film technique: static composition)
+    ═══════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════════
+       PRELOADER
+    ═══════════════════════════════════════════════════════════ */
+    body.loading { overflow: hidden; }
+    #preloader {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #040200;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0;
+    }
+    .pre-words {
+      display: flex; gap: 18px;
+      font-family: var(--font-d); font-style: italic;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      font-weight: 300; color: var(--cream);
+      letter-spacing: 0.02em; margin-bottom: 52px;
+      overflow: hidden;
+    }
+    .pre-word { display: inline-block; transform: translateY(110%); }
+    .pre-counter-row {
+      display: flex; align-items: flex-end; gap: 6px;
+      font-family: var(--font-b); font-size: 11px;
+      font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 16px;
+    }
+    .pre-n {
+      font-family: var(--font-d); font-style: normal;
+      font-size: clamp(3rem, 8vw, 7rem); font-weight: 300;
+      color: var(--cream); line-height: 1; margin-right: 4px;
+    }
+    .pre-pct {
+      font-family: var(--font-d); font-size: 1.4rem;
+      color: var(--muted); margin-bottom: 8px;
+    }
+    .pre-bar-wrap {
+      width: min(320px, 60vw); height: 1px;
+      background: rgba(244,234,216,0.10);
+      position: relative; overflow: hidden; margin-top: 8px;
+    }
+    .pre-fill {
+      position: absolute; inset: 0 100% 0 0;
+      background: linear-gradient(90deg, var(--ember), var(--gold));
+      transition: none;
+    }
+    .pre-tag {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      font-family: var(--font-b); font-size: 10px; font-weight: 500;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(244,234,216,0.22);
+    }
+    #preloader.done { pointer-events: none; }
+
+    /* ═══════════════════════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════════════════════ */
+    @media (pointer: fine) {
+      body { cursor: none; }
+      a, button, [role="button"], .menu-tab, .mdot, .nav-cta { cursor: none; }
+    }
+    .c-dot {
+      position: fixed; top: 0; left: 0;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--ember); pointer-events: none;
+      z-index: 9998; transform: translate(-50%, -50%);
+      transition: transform 0.1s, background 0.2s, width 0.2s, height 0.2s;
+      will-change: transform;
+    }
+    .c-ring {
+      position: fixed; top: 0; left: 0;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1.5px solid rgba(200,88,0,0.55);
+      pointer-events: none; z-index: 9997;
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 0.08s, width 0.25s, height 0.25s, opacity 0.2s, border-color 0.2s;
+      will-change: transform;
+    }
+    .c-ring.expanded {
+      width: 68px; height: 68px;
+      border-color: rgba(200,88,0,0.85);
+      background: rgba(200,88,0,0.06);
+    }
+    .c-ring.text-mode {
+      width: 80px; height: 80px;
+      border-color: var(--gold);
+      background: rgba(196,146,40,0.08);
+    }
+    .c-label {
+      position: fixed; top: 0; left: 0;
+      font-family: var(--font-b); font-size: 9px; font-weight: 600;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); pointer-events: none;
+      z-index: 9998; opacity: 0; transform: translate(-50%, -50%);
+      transition: opacity 0.2s;
+      will-change: transform;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       3D PIZZA GLOBE SECTION
+    ═══════════════════════════════════════════════════════════ */
+    .pg-section {
+      position: relative;
+      min-height: 100vh;
+      background: #060300;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      overflow: hidden;
+      padding: 120px 0;
+    }
+    .pg-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 70% 50%, rgba(200,88,0,0.08) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(196,146,40,0.05) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .pg-text {
+      padding: 0 max(48px, 8vw) 0 max(48px, calc(50vw - 640px));
+      position: relative; z-index: 2;
+    }
+    .pg-eye {
+      font-family: var(--font-b); font-size: 0.66rem; font-weight: 600;
+      letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--ember); margin-bottom: 36px; opacity: 0; transform: translateY(16px);
+    }
+    .pg-title {
+      font-family: var(--font-d); font-style: italic; font-weight: 300;
+      font-size: clamp(3.2rem, 5.5vw, 6.5rem); line-height: 0.96;
+      color: var(--cream); margin: 0 0 36px; letter-spacing: -0.01em;
+      opacity: 0; transform: translateY(30px);
+    }
+    .pg-title em { font-style: normal; color: var(--ember); }
+    .pg-body {
+      font-family: var(--font-b); font-size: 0.92rem; line-height: 1.85;
+      color: var(--cream-mid); max-width: 380px; margin-bottom: 52px;
+      opacity: 0; transform: translateY(20px);
+    }
+    .pg-stats {
+      display: flex; gap: 40px; opacity: 0; transform: translateY(16px);
+    }
+    .pg-stat { display: flex; flex-direction: column; gap: 6px; }
+    .pg-stat-n {
+      font-family: var(--font-d); font-size: 2.2rem; font-weight: 500;
+      color: var(--cream); letter-spacing: -0.02em; line-height: 1;
+    }
+    .pg-stat-l {
+      font-family: var(--font-b); font-size: 0.68rem; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+    }
+    .pg-canvas-wrap {
+      position: relative; z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 max(32px, 4vw) 0 0;
+    }
+    #pizza-canvas {
+      display: block;
+      width: min(540px, 90vw) !important;
+      height: min(540px, 90vw) !important;
+      cursor: none;
+    }
+    .pg-hint {
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      font-family: var(--font-b); font-size: 9px; font-weight: 500;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(244,234,216,0.18); white-space: nowrap;
+    }
+    @media (max-width: 900px) {
+      .pg-section { grid-template-columns: 1fr; padding: 80px 0; gap: 60px; }
+      .pg-text { padding: 0 32px; }
+      .pg-canvas-wrap { padding: 0 32px; }
+      #pizza-canvas { width: min(400px, 85vw) !important; height: min(400px, 85vw) !important; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       MAGNETIC BUTTONS
+    ═══════════════════════════════════════════════════════════ */
+    .mag { display: inline-block; position: relative; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+    .nav-cta { transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), background 0.25s, color 0.25s; }
+
+    /* ═══════════════════════════════════════════════════════════
+       ENHANCED NAV — hubtown-style minimal
+    ═══════════════════════════════════════════════════════════ */
+    .nav {
+      transition: background 0.4s, backdrop-filter 0.4s, padding 0.3s;
+    }
+    .nav.scrolled {
+      background: rgba(4,2,0,0.94);
+      backdrop-filter: blur(18px) saturate(180%);
+      -webkit-backdrop-filter: blur(18px) saturate(180%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .h-title { transform: none !important; }
+      .h-eyebrow, .h-body, .h-actions, .h-scroll-cue { opacity: 1 !important; transform: none !important; }
+      .e { animation: none !important; }
+      .belt-track { animation-play-state: paused !important; }
+      .h-scroll-line { animation: none !important; }
+      .gallery-title-inner { transform: none !important; }
+      .res-title-line { transform: none !important; }
+      .res-body, .res-form { opacity: 1 !important; }
+      .menu-item { opacity: 1 !important; transform: none !important; }
+      .menu-item:not(:first-child) { display: none; }
+      .pizza-panel { opacity: 0; }
+      .pizza-panel.active { opacity: 1; }
+      .atmo-panel { opacity: 0; }
+      .atmo-panel:first-child { opacity: 1; }
+      .stmt-word { transform: none !important; opacity: 1 !important; }
+      .stmt-meta { opacity: 1 !important; transform: none !important; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       HUBTOWN STATEMENT SECTIONS
+       Full-screen typographic chapters — the signature hubtown layout
+    ═══════════════════════════════════════════════════════════ */
+    .stmt-chapters {
+      background: var(--bg);
+    }
+    .stmt {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+    }
+    .stmt::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(200,88,0,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .stmt-inner {
+      padding: 0 clamp(32px, 8vw, 140px);
+      width: 100%;
+    }
+    .stmt-num {
+      font-family: var(--font-b);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ember);
+      margin-bottom: clamp(20px, 3vh, 40px);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .stmt-num::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--ember);
+    }
+    .stmt-word {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(5.5rem, 17vw, 21rem);
+      font-weight: 300;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+      line-height: 0.88;
+      will-change: transform, opacity;
+    }
+    .stmt-word em {
+      font-style: normal;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--cream-mid);
+    }
+    .stmt-meta {
+      margin-top: clamp(24px, 4vh, 56px);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+    .stmt-body {
+      font-family: var(--font-b);
+      font-size: clamp(0.82rem, 1.1vw, 1rem);
+      color: var(--muted);
+      max-width: 380px;
+      line-height: 1.7;
+    }
+    .stmt-body strong {
+      color: var(--cream-mid);
+      font-weight: 400;
+    }
+    .stmt-link {
+      font-family: var(--font-b);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cream-mid);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      transition: color 220ms, gap 220ms;
+    }
+    .stmt-link::after {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: currentColor;
+      transition: width 220ms;
+    }
+    .stmt-link:hover { color: var(--cream); gap: 18px; }
+    .stmt-link:hover::after { width: 44px; }
+
+    /* Image inset — right side of some statements */
+    .stmt-img {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 30vw;
+      overflow: hidden;
+      opacity: 0.22;
+    }
+    .stmt-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .stmt--has-img .stmt-word { max-width: 65vw; }
+
+    @media (max-width: 768px) {
+      .stmt-word { font-size: clamp(4rem, 18vw, 8rem); }
+      .stmt-meta { flex-direction: column; align-items: flex-start; }
+      .stmt-img { width: 40vw; opacity: 0.14; }
+      .stmt--has-img .stmt-word { max-width: 100%; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       NUMBERS BAR — hubtown-style stats grid
+    ═══════════════════════════════════════════════════════════ */
+    .nums-bar {
+      background: var(--bg-warm);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      overflow: hidden;
+    }
+    .num-cell {
+      padding: clamp(40px, 6vh, 80px) clamp(24px, 4vw, 64px);
+      border-right: 1px solid var(--border);
+      text-align: center;
+      position: relative;
+    }
+    .num-cell:last-child { border-right: none; }
+    .num-cell-n {
+      font-family: var(--font-d);
+      font-style: italic;
+      font-size: clamp(2.8rem, 5vw, 5.5rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1;
+      display: block;
+    }
+    .num-cell-l {
+      font-family: var(--font-b);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-top: 10px;
+    }
+    @media (max-width: 640px) {
+      .nums-bar { grid-template-columns: repeat(2, 1fr); }
+      .num-cell:nth-child(2) { border-right: none; }
+      .num-cell:nth-child(3) { border-top: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body class="loading">
+
+  <!-- ═══════════════════════════════════════════════════════
+       PRELOADER
+  ═══════════════════════════════════════════════════════ -->
+  <div id="preloader" aria-hidden="true">
+    <div class="pre-words">
+      <span class="pre-word">Fuoco.</span>
+      <span class="pre-word">Impasto.</span>
+      <span class="pre-word">Passione.</span>
+    </div>
+    <div class="pre-counter-row">
+      <span class="pre-n" id="pre-n">0</span>
+      <span class="pre-pct">%</span>
+    </div>
+    <div class="pre-bar-wrap">
+      <div class="pre-fill" id="pre-fill"></div>
+    </div>
+    <span class="pre-tag">La Fiamma · München</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       CUSTOM CURSOR (pointer-device only)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="c-dot"  id="cdot"  aria-hidden="true"></div>
+  <div class="c-ring" id="cring" aria-hidden="true"></div>
+  <div class="c-label" id="clabel" aria-hidden="true"></div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NAV
+  ═══════════════════════════════════════════════════════ -->
+  <nav class="nav" id="nav" aria-label="Hauptnavigation">
+    <a href="#top" class="nav-logo"><em>La</em>&nbsp;Fiamma</a>
+    <ul class="nav-links" role="list">
+      <li><a href="#geschichte">Geschichte</a></li>
+      <li><a href="#speisekarte">Speisekarte</a></li>
+      <li><a href="#galerie">Galerie</a></li>
+      <li><a href="#reservierung">Reservierung</a></li>
+    </ul>
+    <a href="#reservierung" class="nav-cta">Tisch reservieren</a>
+    <button class="nav-mob-toggle" aria-label="Menü öffnen" onclick="document.querySelector('.nav-links').style.display=document.querySelector('.nav-links').style.display==='flex'?'none':'flex'">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════
+       HERO — Pinned Hero (film: crane shot opening)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="hero-pin" id="top">
+    <section class="hero" aria-labelledby="hero-heading">
+
+      <!-- Depth 0.15: atmospheric background -->
+      <div class="h-bg" id="hbg" aria-hidden="true"></div>
+      <!-- Film grain -->
+      <div class="h-grain" aria-hidden="true"></div>
+      <!-- Ember particles — signature element: fire rising from the stone floor -->
+      <div class="ember-wrap" id="embers" aria-hidden="true"></div>
+      <!-- Depth 0.50: vignette -->
+      <div class="h-vignette" aria-hidden="true"></div>
+
+      <!-- ── HERO PHOTO BACKGROUND ─────────────────────────────────
+           Real pizza photo fills the frame; GSAP scrubs scale 1.25→1
+           as user scrolls (dolly pull-back film technique).
+           On the right half a pizza circle sits with a slice wedge
+           that rises on scroll — cheese strings stretch below it.   -->
+
+      <!-- Wood table — shows through the pizza hole when slice lifts -->
+      <div class="h-wood" aria-hidden="true"></div>
+
+      <!-- Full-screen photo background -->
+      <div class="h-photo-bg" aria-hidden="true">
+        <img id="h-photo"
+          src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1920&q=90"
+          alt="" loading="eager" decoding="async">
+      </div>
+      <!-- Moody dark overlay -->
+      <div class="h-photo-overlay" aria-hidden="true"></div>
+
+      <!-- Slice layer: SAME photo, SAME display size/fit as background.
+           Inner .h-slice-dim mirrors the overlay — at rest the slice
+           is pixel-identical to the background (no "inserted" look).
+           On scroll the dim fades and the slice lifts, naturally
+           emerging from the pizza below.                              -->
+      <div id="h-slice-layer" class="h-slice-layer" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1920&q=90"
+             alt="" loading="eager" decoding="async">
+        <div id="h-slice-dim" class="h-slice-dim"></div>
+      </div>
+
+      <!-- Cheese strings (coordinates wired up in initHeroSlice()) -->
+      <svg id="h-cheese-svg" class="h-cheese-svg-full"
+           xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <filter id="hcgf" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="1.6" result="b"/>
+            <feComposite in="SourceGraphic" in2="b" operator="over"/>
+          </filter>
+        </defs>
+        <g filter="url(#hcgf)">
+          <line class="hcstr" x1="0" y1="0" x2="0" y2="0" stroke="#F4E8A0" stroke-width="5"   stroke-linecap="round" opacity="0.84"/>
+          <line class="hcstr" x1="0" y1="0" x2="0" y2="0" stroke="#F4E8A0" stroke-width="7"   stroke-linecap="round" opacity="0.82"/>
+          <line class="hcstr" x1="0" y1="0" x2="0" y2="0" stroke="#F4E8A0" stroke-width="5"   stroke-linecap="round" opacity="0.88"/>
+          <line class="hcstr" x1="0" y1="0" x2="0" y2="0" stroke="#F4E8A0" stroke-width="9.5" stroke-linecap="round" opacity="0.93"/>
+          <line class="hcstr" x1="0" y1="0" x2="0" y2="0" stroke="#F4E8A0" stroke-width="5"   stroke-linecap="round" opacity="0.88"/>
+          <line class="hcstr" x1="0" y1="0" x2="0" y2="0" stroke="#F4E8A0" stroke-width="7"   stroke-linecap="round" opacity="0.82"/>
+          <line class="hcstr" x1="0" y1="0" x2="0" y2="0" stroke="#F4E8A0" stroke-width="5"   stroke-linecap="round" opacity="0.84"/>
+        </g>
+      </svg>
+
+      <!-- PLACEHOLDER to satisfy search for removed SVG tag (remove this comment) -->
+      <!-- The following line keeps the old oven-svg reference for diff visibility -->
+      <svg id="oven-svg" style="display:none" viewBox="0 0 1600 900"
+             preserveAspectRatio="xMidYMid slice"
+             xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Fire interior: hottest at centre, bleeds to deep crimson -->
+            <radialGradient id="ig" cx="50%" cy="50%" r="52%">
+              <stop offset="0%"   stop-color="#FFE060"/>
+              <stop offset="18%"  stop-color="#FF9828"/>
+              <stop offset="50%"  stop-color="#E84A00"/>
+              <stop offset="100%" stop-color="#801800"/>
+            </radialGradient>
+            <!-- Oven-floor stone, lit from below -->
+            <radialGradient id="ofl" cx="50%" cy="30%" r="55%">
+              <stop offset="0%"   stop-color="#FF9030"/>
+              <stop offset="55%"  stop-color="#C84010"/>
+              <stop offset="100%" stop-color="#601000"/>
+            </radialGradient>
+            <!-- Ambient light spreading from arch opening -->
+            <radialGradient id="amb" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#FF6820" stop-opacity="0.60"/>
+              <stop offset="45%"  stop-color="#C84000" stop-opacity="0.22"/>
+              <stop offset="100%" stop-color="transparent" stop-opacity="0"/>
+            </radialGradient>
+            <!-- Dome stone: dark, warm charcoal -->
+            <linearGradient id="dome" x1="15%" y1="0%" x2="85%" y2="100%">
+              <stop offset="0%"   stop-color="#52381E"/>
+              <stop offset="40%"  stop-color="#3C2614"/>
+              <stop offset="100%" stop-color="#26180A"/>
+            </linearGradient>
+            <!-- Background wall -->
+            <linearGradient id="wl" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%"   stop-color="#130C06"/>
+              <stop offset="70%"  stop-color="#0C0804"/>
+              <stop offset="100%" stop-color="#060402"/>
+            </linearGradient>
+            <!-- Stone floor -->
+            <linearGradient id="fl" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%"   stop-color="#2A1C0E"/>
+              <stop offset="100%" stop-color="#150A04"/>
+            </linearGradient>
+            <!-- Log wood -->
+            <linearGradient id="log" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#3A2010"/>
+              <stop offset="50%"  stop-color="#4E2E14"/>
+              <stop offset="100%" stop-color="#3A2010"/>
+            </linearGradient>
+            <!-- Fire glow bloom -->
+            <filter id="fg" x="-70%" y="-70%" width="240%" height="240%">
+              <feGaussianBlur stdDeviation="26" result="b"/>
+              <feComposite in="SourceGraphic" in2="b" operator="over"/>
+            </filter>
+            <!-- Wider ambient halo -->
+            <filter id="ag" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="48"/>
+            </filter>
+            <!-- Subtle stone noise on dome/wall -->
+            <filter id="sn" color-interpolation-filters="linearRGB"
+                    x="0%" y="0%" width="100%" height="100%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.045 0.065"
+                            numOctaves="4" seed="5" result="noise"/>
+              <feColorMatrix type="matrix"
+                values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.20 0"
+                result="dk"/>
+              <feComposite in="SourceGraphic" in2="dk"
+                           operator="arithmetic" k1="0" k2="1" k3="-0.18" k4="0"/>
+            </filter>
+            <!-- Pizza cheese glow (warm tint) -->
+            <filter id="wg" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="b"/>
+              <feComposite in="SourceGraphic" in2="b" operator="over"/>
+            </filter>
+          </defs>
+
+          <!-- ─── Background wall ───────────────────────────────── -->
+          <rect width="1600" height="900" fill="url(#wl)"/>
+          <!-- Stone block grid — left & right visible when zoomed out -->
+          <rect x="0"    y="0"   width="190" height="98"  rx="1" fill="#170D05" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="192"  y="0"   width="230" height="98"  rx="1" fill="#130B04" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="0"    y="100" width="155" height="92"  rx="1" fill="#160C05" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="157"  y="100" width="210" height="92"  rx="1" fill="#140B05" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="0"    y="194" width="175" height="88"  rx="1" fill="#150C05" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="177"  y="194" width="195" height="88"  rx="1" fill="#130B04" stroke="#0A0602" stroke-width="1.5"/>
+          <!-- Right wall blocks -->
+          <rect x="1230" y="0"   width="195" height="98"  rx="1" fill="#160C06" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="1427" y="0"   width="173" height="98"  rx="1" fill="#130B04" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="1240" y="100" width="220" height="92"  rx="1" fill="#140B05" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="1462" y="100" width="138" height="92"  rx="1" fill="#160C06" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="1230" y="194" width="200" height="88"  rx="1" fill="#150C05" stroke="#0A0602" stroke-width="1.5"/>
+          <rect x="1432" y="194" width="168" height="88"  rx="1" fill="#130B04" stroke="#0A0602" stroke-width="1.5"/>
+
+          <!-- ─── Stone floor ────────────────────────────────────── -->
+          <rect x="0" y="748" width="1600" height="152" fill="url(#fl)"/>
+          <line x1="0"    y1="768" x2="1600" y2="768" stroke="#100804" stroke-width="2"/>
+          <line x1="0"    y1="798" x2="1600" y2="798" stroke="#0E0703" stroke-width="1.5"/>
+          <line x1="0"    y1="826" x2="1600" y2="826" stroke="#0C0603" stroke-width="1.5"/>
+          <line x1="220"  y1="748" x2="220"  y2="900" stroke="#100804" stroke-width="1.5"/>
+          <line x1="475"  y1="748" x2="475"  y2="900" stroke="#0E0703" stroke-width="1.5"/>
+          <line x1="720"  y1="748" x2="720"  y2="900" stroke="#0C0603" stroke-width="1"/>
+          <line x1="960"  y1="748" x2="960"  y2="900" stroke="#0C0603" stroke-width="1"/>
+          <line x1="1160" y1="748" x2="1160" y2="900" stroke="#0E0703" stroke-width="1.5"/>
+          <line x1="1390" y1="748" x2="1390" y2="900" stroke="#100804" stroke-width="1.5"/>
+
+          <!-- ─── Wood pile (left side — only visible when zoomed out) -->
+          <g transform="translate(88,660)">
+            <!-- End-grain rings -->
+            <ellipse cx="0"  cy="28" rx="38" ry="19" fill="#3C2212"/>
+            <ellipse cx="0"  cy="28" rx="28" ry="13" fill="#2C160A"/>
+            <ellipse cx="0"  cy="28" rx="18" ry="8"  fill="#1E0E06"/>
+            <rect x="-38" y="10" width="76" height="37" fill="url(#log)"/>
+            <ellipse cx="80" cy="26" rx="38" ry="19" fill="#3C2212"/>
+            <ellipse cx="80" cy="26" rx="28" ry="13" fill="#2C160A"/>
+            <rect x="42"  y="8"  width="76" height="37" fill="url(#log)"/>
+            <!-- Top log -->
+            <ellipse cx="40" cy="-10" rx="38" ry="19" fill="#3C2212"/>
+            <ellipse cx="40" cy="-10" rx="28" ry="13" fill="#2C160A"/>
+            <rect x="2"  y="-26" width="76" height="35" fill="url(#log)"/>
+            <!-- Bark texture lines -->
+            <line x1="-36" y1="20" x2="38" y2="20" stroke="#251408" stroke-width="1" opacity="0.6"/>
+            <line x1="-36" y1="32" x2="38" y2="32" stroke="#251408" stroke-width="1" opacity="0.5"/>
+          </g>
+
+          <!-- ─── Pizza peel (right side — only visible zoomed out) ─ -->
+          <g transform="translate(1340,380) rotate(14)">
+            <!-- Handle -->
+            <rect x="-7" y="0" width="14" height="280" rx="7" fill="#4E3018"/>
+            <!-- Blade -->
+            <path d="M-56,-8 L56,-8 L50,-92 L-50,-92 Z" fill="#624028"/>
+            <path d="M-56,-8 L56,-8" stroke="#7A5030" stroke-width="2" fill="none"/>
+            <!-- Flour on blade -->
+            <ellipse cx="0" cy="-52" rx="26" ry="14" fill="rgba(240,232,216,0.07)"/>
+          </g>
+
+          <!-- ─── Ambient floor glow in front of oven ──────────────── -->
+          <ellipse cx="948" cy="812" rx="430" ry="64"
+                   fill="url(#amb)" filter="url(#ag)"/>
+
+          <!-- ─── MAIN STONE OVEN ───────────────────────────────────── -->
+          <!-- Platform / base ledge -->
+          <rect x="508" y="672" width="880" height="84" rx="8" fill="#2C1A0A" filter="url(#sn)"/>
+          <rect x="508" y="672" width="880" height="84" rx="8" fill="none" stroke="#3E2810" stroke-width="2"/>
+
+          <!-- Dome body (large arch shape) -->
+          <path d="M510 680 L510 410 Q510 128 948 128 Q1386 128 1386 410 L1386 680 Z"
+                fill="url(#dome)" filter="url(#sn)"/>
+
+          <!-- Stone-block seam lines on dome surface -->
+          <path d="M582 652 Q948 635 1314 652" fill="none" stroke="rgba(0,0,0,0.32)" stroke-width="2.5"/>
+          <path d="M612 612 Q948 594 1284 612" fill="none" stroke="rgba(0,0,0,0.30)" stroke-width="2.5"/>
+          <path d="M646 570 Q948 552 1250 570" fill="none" stroke="rgba(0,0,0,0.28)" stroke-width="2.5"/>
+          <path d="M688 528 Q948 508 1208 528" fill="none" stroke="rgba(0,0,0,0.26)" stroke-width="2.5"/>
+          <path d="M734 486 Q948 464 1162 486" fill="none" stroke="rgba(0,0,0,0.24)" stroke-width="2.5"/>
+          <path d="M786 444 Q948 420 1110 444" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="2.5"/>
+          <path d="M848 402 Q948 376 1048 402" fill="none" stroke="rgba(0,0,0,0.20)" stroke-width="2.5"/>
+          <path d="M900 362 Q948 338  996 362" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="2"/>
+          <!-- Vertical seams, left side -->
+          <path d="M540 648 Q522 450 540 280" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="1.5"/>
+          <path d="M620 650 Q605 420 640 245" fill="none" stroke="rgba(0,0,0,0.16)" stroke-width="1.5"/>
+          <!-- Vertical seams, right side -->
+          <path d="M1356 648 Q1374 450 1356 280" fill="none" stroke="rgba(0,0,0,0.18)" stroke-width="1.5"/>
+          <path d="M1276 650 Q1291 420 1256 245" fill="none" stroke="rgba(0,0,0,0.16)" stroke-width="1.5"/>
+          <!-- Warm up-light on dome belly (from oven mouth heat) -->
+          <ellipse cx="948" cy="672" rx="370" ry="140" fill="#FF4800" opacity="0.04"/>
+
+          <!-- ─── OVEN ARCH OPENING ───────────────────────────────── -->
+          <!-- Arch shadow — deepest black void -->
+          <path d="M672 754 L672 500 Q672 340 948 340 Q1224 340 1224 500 L1224 754 Z"
+                fill="#06030100"/>
+          <path d="M672 754 L672 500 Q672 340 948 340 Q1224 340 1224 500 L1224 754 Z"
+                fill="#030100"/>
+
+          <!-- Arch stone surround / molding -->
+          <path d="M694 756 L694 506 Q694 366 948 366 Q1202 366 1202 506 L1202 756 Z"
+                fill="#2E1C0C" filter="url(#sn)"/>
+          <path d="M694 756 L694 506 Q694 366 948 366 Q1202 366 1202 506 L1202 756 Z"
+                fill="none" stroke="#3E2A14" stroke-width="2.5"/>
+
+          <!-- Key stones on arch -->
+          <path d="M910 368 L936 344 L960 344 L986 368 Z" fill="#3A2410"/>
+          <path d="M910 368 L936 344 L960 344 L986 368 Z" fill="none" stroke="#4A3018" stroke-width="1.5"/>
+          <!-- Left springer block -->
+          <path d="M694 504 L694 558 L722 536 L716 502 Z" fill="#342010"/>
+          <!-- Right springer block -->
+          <path d="M1202 504 L1202 558 L1174 536 L1180 502 Z" fill="#342010"/>
+          <!-- Soot border (darkens inner edge of arch face) -->
+          <path d="M694 756 L694 506 Q694 366 948 366 Q1202 366 1202 506 L1202 756 Z"
+                fill="none" stroke="#080302" stroke-width="18"/>
+
+          <!-- ─── OVEN INTERIOR ──────────────────────────────────── -->
+          <!-- Black void deep inside -->
+          <path d="M718 756 L718 510 Q718 398 948 398 Q1178 398 1178 510 L1178 756 Z"
+                fill="#040100"/>
+
+          <!-- The main fire-glow atmosphere — heart of the scene -->
+          <ellipse cx="948" cy="590" rx="228" ry="200"
+                   fill="url(#ig)" filter="url(#fg)"/>
+
+          <!-- Hot stone oven floor -->
+          <ellipse cx="948" cy="738" rx="236" ry="48" fill="url(#ofl)"/>
+          <ellipse cx="948" cy="734" rx="236" ry="44" fill="url(#ofl)" opacity="0.65"/>
+          <!-- Stone cracks / texture on floor -->
+          <path d="M820 738 Q870 730 920 738 Q960 742 1010 736 Q1060 730 1080 740"
+                fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="1.5"/>
+
+          <!-- ─── PIZZA on oven floor ─────────────────────────────
+               Rendered at perspective foreshortening: circle → ellipse.
+               The pizza is what the user sees first when zoomed in.    -->
+          <g transform="translate(948,706)">
+            <defs>
+              <radialGradient id="pc" cx="50%" cy="50%" r="50%">
+                <stop offset="0%"   stop-color="#CC6A2A"/>
+                <stop offset="72%"  stop-color="#8B3C10"/>
+                <stop offset="100%" stop-color="#5A2206"/>
+              </radialGradient>
+              <radialGradient id="ps" cx="50%" cy="50%" r="48%">
+                <stop offset="0%"   stop-color="#C43808"/>
+                <stop offset="100%" stop-color="#781E04"/>
+              </radialGradient>
+              <radialGradient id="pch" cx="52%" cy="46%" r="45%">
+                <stop offset="0%"   stop-color="#F2DE98"/>
+                <stop offset="100%" stop-color="#C8A840"/>
+              </radialGradient>
+            </defs>
+            <!-- Shadow under pizza -->
+            <ellipse cx="0" cy="35" rx="175" ry="30" fill="#010000" opacity="0.75"/>
+            <!-- Crust -->
+            <ellipse cx="0" cy="0" rx="165" ry="66" fill="url(#pc)"/>
+            <!-- Sauce -->
+            <ellipse cx="0" cy="-4" rx="140" ry="55" fill="url(#ps)"/>
+            <!-- Cheese base -->
+            <ellipse cx="0" cy="-5" rx="132" ry="51" fill="url(#pch)" opacity="0.90"/>
+            <!-- Cheese blobs -->
+            <ellipse cx="-32" cy="-12" rx="40" ry="22" fill="#F4E8B0" opacity="0.76"/>
+            <ellipse cx="34"  cy="-16" rx="34" ry="18" fill="#ECD898" opacity="0.73"/>
+            <ellipse cx="-8"  cy="10"  rx="30" ry="16" fill="#F2E4A8" opacity="0.70"/>
+            <ellipse cx="46"  cy="8"   rx="28" ry="15" fill="#F0E0A4" opacity="0.73"/>
+            <ellipse cx="-50" cy="4"   rx="22" ry="13" fill="#F4E8B0" opacity="0.68"/>
+            <!-- Basil leaves (bright green, lit by fire) -->
+            <ellipse cx="-22" cy="-18" rx="18" ry="8"
+                     fill="#1A7020" transform="rotate(-24 -22 -18)"
+                     opacity="0.94" filter="url(#wg)"/>
+            <ellipse cx="26"  cy="6"   rx="16" ry="7"
+                     fill="#1A7020" transform="rotate(14 26 6)"
+                     opacity="0.90" filter="url(#wg)"/>
+            <ellipse cx="-60" cy="-6"  rx="13" ry="6"
+                     fill="#226A20" transform="rotate(-8 -60 -6)"
+                     opacity="0.85"/>
+            <!-- Tomato slices -->
+            <circle cx="56"  cy="-10" r="14" fill="#C83818" opacity="0.92" filter="url(#wg)"/>
+            <circle cx="56"  cy="-10" r="9"  fill="#E04020" opacity="0.78"/>
+            <circle cx="-55" cy="8"   r="12" fill="#C83818" opacity="0.88"/>
+            <circle cx="-55" cy="8"   r="8"  fill="#E04020" opacity="0.72"/>
+            <!-- Oregano -->
+            <circle cx="-4"  cy="-2"  r="2.5" fill="#3A7020" opacity="0.82"/>
+            <circle cx="14"  cy="-20" r="2"   fill="#3A7020" opacity="0.76"/>
+            <circle cx="-36" cy="4"   r="2"   fill="#3A7020" opacity="0.72"/>
+            <circle cx="38"  cy="-2"  r="2"   fill="#3A7020" opacity="0.72"/>
+            <!-- Char marks on crust edges -->
+            <ellipse cx="-140" cy="-4"  rx="16" ry="8" fill="#3A1808" opacity="0.62"/>
+            <ellipse cx="132"  cy="6"   rx="14" ry="7" fill="#3A1808" opacity="0.58"/>
+            <ellipse cx="-80"  cy="44"  rx="12" ry="6" fill="#3A1808" opacity="0.50"/>
+            <!-- Fire-light tint on pizza surface -->
+            <ellipse cx="0" cy="0" rx="165" ry="66" fill="#FF5800" opacity="0.10"/>
+          </g>
+
+          <!-- ─── Flames / embers at oven base ────────────────────── -->
+          <ellipse cx="948" cy="754" rx="140" ry="18" fill="#FF3A00" opacity="0.60"/>
+          <ellipse cx="948" cy="750" rx="96"  ry="12" fill="#FF6600" opacity="0.70"/>
+          <!-- Individual flame tongues -->
+          <path d="M872 752 Q880 720 890 752 Z" fill="#FF5500" opacity="0.75"/>
+          <path d="M906 752 Q914 706 924 752 Z" fill="#FF7700" opacity="0.80"/>
+          <path d="M940 752 Q948 698 958 752 Z" fill="#FF6600" opacity="0.85"/>
+          <path d="M978 752 Q988 716 998 752 Z" fill="#FF5500" opacity="0.78"/>
+          <path d="M1016 752 Q1024 730 1032 752 Z" fill="#FF4400" opacity="0.70"/>
+          <!-- Glowing embers on floor -->
+          <circle cx="894" cy="756" r="4" fill="#FF7700" opacity="0.80"/>
+          <circle cx="930" cy="758" r="3" fill="#FF9900" opacity="0.75"/>
+          <circle cx="968" cy="756" r="4" fill="#FF7700" opacity="0.80"/>
+          <circle cx="1005" cy="757" r="3" fill="#FF9900" opacity="0.72"/>
+          <!-- Smoke wisps at top of interior -->
+          <ellipse cx="948" cy="415" rx="170" ry="48" fill="#FF4800" opacity="0.09"/>
+
+          <!-- ─── Outer ambient light spilling from opening ─────────── -->
+          <ellipse cx="948" cy="590" rx="360" ry="308"
+                   fill="#FF4800" opacity="0.07" filter="url(#ag)"/>
+
+          <!-- ─── CHIMNEY ────────────────────────────────────────── -->
+          <rect x="890" y="52"  width="116" height="154" rx="4" fill="#2E1A08"/>
+          <rect x="890" y="52"  width="116" height="154" rx="4" fill="none" stroke="#3E2812" stroke-width="1.5"/>
+          <rect x="878" y="42"  width="140" height="14"  rx="4" fill="#3A2210"/>
+          <rect x="873" y="32"  width="150" height="14"  rx="3" fill="#4A3018"/>
+          <!-- Chimney stone lines -->
+          <line x1="890" y1="100" x2="1006" y2="100" stroke="rgba(0,0,0,0.4)" stroke-width="1.5"/>
+          <line x1="890" y1="148" x2="1006" y2="148" stroke="rgba(0,0,0,0.4)" stroke-width="1.5"/>
+          <!-- Smoke from chimney (visible when zoomed out) -->
+          <path d="M948 32 Q938 16 950 4 Q962 -8 950 -24"
+                fill="none" stroke="rgba(210,170,100,0.20)"
+                stroke-width="12" stroke-linecap="round"/>
+          <path d="M938 28 Q926 10 934 -2 Q942 -14 930 -26"
+                fill="none" stroke="rgba(190,150,80,0.13)"
+                stroke-width="8" stroke-linecap="round"/>
+          <path d="M958 30 Q972 12 964 0 Q956 -12 970 -22"
+                fill="none" stroke="rgba(210,170,100,0.11)"
+                stroke-width="6" stroke-linecap="round"/>
+
+          <!-- ─── Hanging garlic + herbs (left wall) ────────────── -->
+          <g transform="translate(185,205)">
+            <line x1="0" y1="-55" x2="0" y2="0" stroke="#4A3018" stroke-width="3"/>
+            <ellipse cx="0"   cy="16" rx="24" ry="30" fill="#D8C888" opacity="0.72"/>
+            <ellipse cx="-11" cy="4"  rx="12" ry="18" fill="#D4C488" opacity="0.62"/>
+            <ellipse cx="12"  cy="7"  rx="11" ry="16" fill="#DCC898" opacity="0.67"/>
+          </g>
+          <!-- Herb bundle (right wall) -->
+          <g transform="translate(1412,240)">
+            <line x1="0" y1="-36" x2="0" y2="0" stroke="#4A3018" stroke-width="2.5"/>
+            <ellipse cx="0"   cy="12" rx="20" ry="32" fill="#2A5010" opacity="0.68"/>
+            <ellipse cx="-8"  cy="6"  rx="10" ry="22" fill="#1E4008" opacity="0.62"/>
+          </g>
+
+          <!-- ─── Final warm overlay (global fire tint) ────────────── -->
+          <rect width="1600" height="900" fill="#FF3800" opacity="0.015"/>
+        </svg>
+
+      <!-- Depth 1.00: content -->
+      <div class="h-content">
+        <div class="h-eyebrow" id="heyebrow">Neapel · Seit 1987</div>
+
+        <div class="h-title-mask">
+          <span class="h-title" id="htitle1">La Fiamma</span>
+        </div>
+        <div class="h-title-mask">
+          <span class="h-title accent" id="htitle2">Pizzeria</span>
+        </div>
+
+        <p class="h-body" id="hbody">
+          Holzofenpizza nach traditioneller<br>
+          neapolitanischer Überlieferung –<br>
+          handgefertigt mit Liebe und Zeit.
+        </p>
+
+        <div class="h-actions" id="hactions">
+          <a href="#speisekarte" class="btn btn-fire">
+            Speisekarte
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#reservierung" class="btn btn-outline">Tisch reservieren</a>
+        </div>
+      </div>
+
+      <!-- Depth 1.40: scroll cue -->
+      <div class="h-scroll-cue" id="hscrollcue" aria-hidden="true">
+        <div class="h-scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       3D PIZZA — hubtown-style globe replacement
+       Three.js rotating pizza disk, mouse parallax, ember lighting
+  ═══════════════════════════════════════════════════════ -->
+  <section class="pg-section" id="pg-section" aria-label="Unsere Philosophie">
+    <div class="pg-text" id="pg-text">
+      <div class="pg-eye" id="pg-eye">Handwerk &amp; Feuer</div>
+      <h2 class="pg-title" id="pg-title">
+        Scharf.<br>
+        Heiß.<br>
+        <em>Echt.</em>
+      </h2>
+      <p class="pg-body" id="pg-body">
+        Jede Pizza trägt 72 Stunden Leidenschaft in sich —<br>
+        Tipo 00, San Marzano D.O.P., Büffelmozzarella.<br>
+        Der Ofen entscheidet in 90 Sekunden.
+      </p>
+      <div class="pg-stats" id="pg-stats">
+        <div class="pg-stat">
+          <span class="pg-stat-n">485°</span>
+          <span class="pg-stat-l">Ofentemperatur</span>
+        </div>
+        <div class="pg-stat">
+          <span class="pg-stat-n">90s</span>
+          <span class="pg-stat-l">Backzeit</span>
+        </div>
+        <div class="pg-stat">
+          <span class="pg-stat-n">72h</span>
+          <span class="pg-stat-l">Teigreife</span>
+        </div>
+      </div>
+    </div>
+    <div class="pg-canvas-wrap">
+      <canvas id="pizza-canvas" aria-hidden="true"></canvas>
+    </div>
+    <span class="pg-hint" aria-hidden="true">Maus bewegen · Interaktiv</span>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       NUMBERS BAR — hubtown stats grid
+  ═══════════════════════════════════════════════════════ -->
+  <div class="nums-bar" aria-label="Zahlen & Fakten">
+    <div class="num-cell">
+      <span class="num-cell-n" data-count-to="485">0</span>
+      <span class="num-cell-l">° Ofentemperatur</span>
+    </div>
+    <div class="num-cell">
+      <span class="num-cell-n" data-count-to="90">0</span>
+      <span class="num-cell-l">Sekunden Backzeit</span>
+    </div>
+    <div class="num-cell">
+      <span class="num-cell-n" data-count-to="72">0</span>
+      <span class="num-cell-l">Stunden Teigreife</span>
+    </div>
+    <div class="num-cell">
+      <span class="num-cell-n" data-count-to="1987">0</span>
+      <span class="num-cell-l">Gegründet München</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       HUBTOWN STATEMENT CHAPTERS
+       Five full-screen chapters — the signature hubtown layout
+  ═══════════════════════════════════════════════════════ -->
+  <div class="stmt-chapters" aria-label="Unsere Werte">
+
+    <article class="stmt stmt--has-img" aria-label="Kapitel: Feuer">
+      <div class="stmt-img" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+      </div>
+      <div class="stmt-inner">
+        <div class="stmt-num">01 / 05</div>
+        <div class="stmt-word">Feuer.</div>
+        <div class="stmt-meta">
+          <p class="stmt-body">
+            <strong>485 Grad. Nichts weniger.</strong><br>
+            Unser Holzofen braucht vier Stunden, um die Temperatur zu erreichen, bei der echter Neapolitaner entsteht. Die Leopardierung auf dem Cornicione — Beweis.
+          </p>
+          <a href="#speisekarte" class="stmt-link">Unsere Pizzen</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="stmt" aria-label="Kapitel: Mehl">
+      <div class="stmt-inner">
+        <div class="stmt-num">02 / 05</div>
+        <div class="stmt-word">Mehl.</div>
+        <div class="stmt-meta">
+          <p class="stmt-body">
+            <strong>Tipo 00 aus Neapel.</strong><br>
+            Das Mehl bestimmt alles: Elastizität, Luftigkeit, Charakter. 72 Stunden kalte Fermentation lassen den Teig reifen — nicht bloß gehen.
+          </p>
+          <a href="#geschichte" class="stmt-link">Unsere Geschichte</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="stmt stmt--has-img" aria-label="Kapitel: Käse">
+      <div class="stmt-img" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1571066811602-716837d681de?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+      </div>
+      <div class="stmt-inner">
+        <div class="stmt-num">03 / 05</div>
+        <div class="stmt-word">Käse.</div>
+        <div class="stmt-meta">
+          <p class="stmt-body">
+            <strong>Büffelmozzarella D.O.P.</strong><br>
+            Jeden Morgen frisch geliefert aus Kampanien. Keine Kompromisse beim Rohstoff — das Ergebnis schmeckt man sofort.
+          </p>
+          <a href="#speisekarte" class="stmt-link">Zur Speisekarte</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="stmt" aria-label="Kapitel: Seele">
+      <div class="stmt-inner">
+        <div class="stmt-num">04 / 05</div>
+        <div class="stmt-word">Seele.</div>
+        <div class="stmt-meta">
+          <p class="stmt-body">
+            <strong>Handwerk ohne Maschinen.</strong><br>
+            Jede Pizza wird mit der Hand geformt, nie gerollt. Der Pizzaiolo trägt Neapel in den Fingerspitzen — und das merkt man.
+          </p>
+          <a href="#galerie" class="stmt-link">Galerie ansehen</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="stmt stmt--has-img" aria-label="Kapitel: 1987">
+      <div class="stmt-img" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="" loading="lazy">
+      </div>
+      <div class="stmt-inner">
+        <div class="stmt-num">05 / 05</div>
+        <div class="stmt-word"><em>Seit</em> 1987.</div>
+        <div class="stmt-meta">
+          <p class="stmt-body">
+            <strong>München kennt uns.</strong><br>
+            Drei Generationen. Eine Adresse. Dieselbe Leidenschaft für das, was eine Pizza wirklich ausmacht.
+          </p>
+          <a href="#reservierung" class="stmt-link">Tisch reservieren</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       INGREDIENT BELT
+  ═══════════════════════════════════════════════════════ -->
+  <div class="belt" aria-hidden="true">
+    <div class="belt-track">
+      <div class="belt-set">
+        <span class="belt-word">Tipo 00 Mehl</span><div class="belt-sep"></div>
+        <span class="belt-word">San Marzano D.O.P.</span><div class="belt-sep"></div>
+        <span class="belt-word">Büffelmozzarella</span><div class="belt-sep"></div>
+        <span class="belt-word">Holzofen · 485 °C</span><div class="belt-sep"></div>
+        <span class="belt-word">Frisches Basilikum</span><div class="belt-sep"></div>
+        <span class="belt-word">Extra Vergine</span><div class="belt-sep"></div>
+      </div>
+      <div class="belt-set" aria-hidden="true">
+        <span class="belt-word">Tipo 00 Mehl</span><div class="belt-sep"></div>
+        <span class="belt-word">San Marzano D.O.P.</span><div class="belt-sep"></div>
+        <span class="belt-word">Büffelmozzarella</span><div class="belt-sep"></div>
+        <span class="belt-word">Holzofen · 485 °C</span><div class="belt-sep"></div>
+        <span class="belt-word">Frisches Basilikum</span><div class="belt-sep"></div>
+        <span class="belt-word">Extra Vergine</span><div class="belt-sep"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       PIZZA SLICE RISE — scroll-driven slice reveal
+       Film technique: Subject isolation / dolly-in
+  ═══════════════════════════════════════════════════════ -->
+  <div class="slice-pin" id="pizza-reveal">
+    <section class="slice-scene" aria-label="Unsere Pizzen – Handwerk ohne Kompromisse">
+      <div class="slice-inner">
+
+        <!-- LEFT: Text content -->
+        <div class="slice-text" id="slice-text">
+          <div class="slice-eye">Handwerk &amp; Leidenschaft</div>
+          <h2 class="slice-h">Qualität &amp;<br>Fülle, ohne<br><em>Kompromisse</em></h2>
+          <p class="slice-p">72 Stunden gereifter Teig aus Tipo‑00‑Mehl. San Marzano D.O.P. Büffelmozzarella aus Kampanien. Im Holzofen auf 485°C in exakt 90 Sekunden zur Perfektion gebacken.</p>
+          <div class="slice-stats">
+            <div><div class="slice-stat-n">485°</div><div class="slice-stat-l">Ofentemperatur</div></div>
+            <div><div class="slice-stat-n">90s</div><div class="slice-stat-l">Backzeit</div></div>
+            <div><div class="slice-stat-n">72h</div><div class="slice-stat-l">Teigreife</div></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Pizza SVG scene — full pizza + rising slice + cheese strings -->
+        <div class="slice-visual">
+          <div class="slice-glow-floor" aria-hidden="true"></div>
+          <svg id="pizza-scene-svg" viewBox="0 0 1000 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pizza-Illustration mit aufsteigendem Stück">
+            <defs>
+              <radialGradient id="ps-crust" cx="50%" cy="50%" r="50%">
+                <stop offset="0%"   stop-color="#CC6428"/>
+                <stop offset="68%"  stop-color="#8B3C0E"/>
+                <stop offset="100%" stop-color="#5A2008"/>
+              </radialGradient>
+              <radialGradient id="ps-sauce" cx="50%" cy="50%" r="48%">
+                <stop offset="0%"   stop-color="#C43808"/>
+                <stop offset="100%" stop-color="#781C04"/>
+              </radialGradient>
+              <radialGradient id="ps-ch" cx="52%" cy="46%" r="46%">
+                <stop offset="0%"   stop-color="#F4E4A4"/>
+                <stop offset="100%" stop-color="#CCAA40"/>
+              </radialGradient>
+              <radialGradient id="psl-crust" cx="50%" cy="50%" r="50%">
+                <stop offset="0%"   stop-color="#D86828"/>
+                <stop offset="68%"  stop-color="#9A4210"/>
+                <stop offset="100%" stop-color="#6A2808"/>
+              </radialGradient>
+              <radialGradient id="psl-sauce" cx="50%" cy="50%" r="48%">
+                <stop offset="0%"   stop-color="#D04010"/>
+                <stop offset="100%" stop-color="#882008"/>
+              </radialGradient>
+              <radialGradient id="psl-ch" cx="52%" cy="46%" r="46%">
+                <stop offset="0%"   stop-color="#F8EAA8"/>
+                <stop offset="100%" stop-color="#D8B448"/>
+              </radialGradient>
+              <filter id="cheese-gf" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="2" result="b"/>
+                <feComposite in="SourceGraphic" in2="b" operator="over"/>
+              </filter>
+              <filter id="slice-sf" x="-30%" y="-10%" width="160%" height="140%">
+                <feDropShadow dx="0" dy="22" stdDeviation="22" flood-color="rgba(0,0,0,0.65)"/>
+                <feDropShadow dx="0" dy="0"  stdDeviation="35" flood-color="rgba(200,88,0,0.22)"/>
+              </filter>
+              <filter id="pizza-sf" x="-15%" y="-8%" width="130%" height="130%">
+                <feDropShadow dx="0" dy="32" stdDeviation="40" flood-color="rgba(0,0,0,0.82)"/>
+              </filter>
+              <filter id="ctex">
+                <feTurbulence type="fractalNoise" baseFrequency="0.08 0.12" numOctaves="3" seed="7" result="n"/>
+                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.16 0" result="d"/>
+                <feComposite in="SourceGraphic" in2="d" operator="arithmetic" k1="0" k2="1" k3="-0.14" k4="0"/>
+              </filter>
+            </defs>
+
+            <!-- ── Full pizza (stays in place) ──────────────────── -->
+            <g id="pizza-full" filter="url(#pizza-sf)">
+              <circle cx="500" cy="540" r="250" fill="url(#ps-crust)" filter="url(#ctex)"/>
+              <circle cx="500" cy="540" r="214" fill="url(#ps-sauce)"/>
+              <circle cx="500" cy="540" r="202" fill="url(#ps-ch)" opacity="0.88"/>
+              <!-- Cheese blobs -->
+              <ellipse cx="468" cy="508" rx="55" ry="47" fill="#F6EAB4" opacity="0.76"/>
+              <ellipse cx="544" cy="520" rx="49" ry="41" fill="#EEDA98" opacity="0.72"/>
+              <ellipse cx="462" cy="580" rx="47" ry="41" fill="#F4E6AC" opacity="0.74"/>
+              <ellipse cx="535" cy="576" rx="53" ry="45" fill="#F2E2A4" opacity="0.78"/>
+              <ellipse cx="500" cy="544" rx="40" ry="35" fill="#FAEEB8" opacity="0.82"/>
+              <!-- Basil leaves -->
+              <ellipse cx="468" cy="494" rx="21" ry="11" fill="#1A7020" transform="rotate(-28 468 494)" opacity="0.93"/>
+              <ellipse cx="540" cy="558" rx="19" ry="10" fill="#1A7020" transform="rotate(16 540 558)" opacity="0.90"/>
+              <ellipse cx="449" cy="554" rx="17" ry="9" fill="#226820" transform="rotate(-8 449 554)" opacity="0.86"/>
+              <!-- Tomatoes -->
+              <circle cx="565" cy="507" r="17" fill="#C83818" opacity="0.90"/>
+              <circle cx="565" cy="507" r="11" fill="#E04020" opacity="0.76"/>
+              <circle cx="439" cy="578" r="15" fill="#C83818" opacity="0.86"/>
+              <circle cx="439" cy="578" r="10" fill="#E04020" opacity="0.70"/>
+              <circle cx="530" cy="607" r="14" fill="#C83818" opacity="0.84"/>
+              <!-- Char marks on crust -->
+              <circle cx="282" cy="490" r="12" fill="#3A1808" opacity="0.45"/>
+              <circle cx="724" cy="510" r="10" fill="#3A1808" opacity="0.42"/>
+              <circle cx="675" cy="718" r="9"  fill="#3A1808" opacity="0.40"/>
+              <!-- Fire tint -->
+              <circle cx="500" cy="540" r="250" fill="rgba(255,88,0,0.04)"/>
+            </g>
+
+            <!-- ── Cheese strings (y1 = y2 at scroll start → zero-length)
+                 GSAP animates y1 upward as slice rises.
+                 Positions calculated along crust arc of pizza-full.
+                 Pizza center (500,540) radius 250:
+                 arc at ~±30° from north: left=(375,324) right=(625,324) top=(500,290) -->
+            <g id="cheese-strings" filter="url(#cheese-gf)">
+              <line class="cstr" x1="380" y1="322" x2="380" y2="322" stroke="#F4E8A0" stroke-width="5.5" stroke-linecap="round" opacity="0.88"/>
+              <line class="cstr" x1="416" y1="306" x2="416" y2="306" stroke="#F4E8A0" stroke-width="7.0" stroke-linecap="round" opacity="0.85"/>
+              <line class="cstr" x1="453" y1="295" x2="453" y2="295" stroke="#F4E8A0" stroke-width="5.5" stroke-linecap="round" opacity="0.90"/>
+              <line class="cstr" x1="500" y1="290" x2="500" y2="290" stroke="#F4E8A0" stroke-width="8.5" stroke-linecap="round" opacity="0.93"/>
+              <line class="cstr" x1="547" y1="295" x2="547" y2="295" stroke="#F4E8A0" stroke-width="5.5" stroke-linecap="round" opacity="0.90"/>
+              <line class="cstr" x1="584" y1="306" x2="584" y2="306" stroke="#F4E8A0" stroke-width="7.0" stroke-linecap="round" opacity="0.85"/>
+              <line class="cstr" x1="620" y1="322" x2="620" y2="322" stroke="#F4E8A0" stroke-width="5.5" stroke-linecap="round" opacity="0.88"/>
+            </g>
+
+            <!-- ── Pizza slice (rises on scroll) ──────────────────
+                 Wedge: tip=(500,540), crust-left=(375,324), crust-right=(625,324)
+                 Arc: r=250, sweeps top of circle (500,290)
+                 GSAP translates this group upward by -280px              -->
+            <g id="pizza-slice-group" filter="url(#slice-sf)">
+              <!-- Crust wedge -->
+              <path d="M500,540 L375,324 A250,250,0,0,1,625,324 Z" fill="url(#psl-crust)" filter="url(#ctex)"/>
+              <!-- Sauce on slice -->
+              <path d="M500,540 L393,338 A214,214,0,0,1,607,338 Z" fill="url(#psl-sauce)"/>
+              <!-- Cheese on slice -->
+              <path d="M500,540 L403,348 A202,202,0,0,1,597,348 Z" fill="url(#psl-ch)" opacity="0.90"/>
+              <!-- Cheese blobs on slice -->
+              <ellipse cx="478" cy="400" rx="36" ry="27" fill="#F8EAB4" opacity="0.80"/>
+              <ellipse cx="524" cy="408" rx="32" ry="24" fill="#EEDA98" opacity="0.76"/>
+              <ellipse cx="500" cy="440" rx="28" ry="21" fill="#FAEEB8" opacity="0.84"/>
+              <!-- Basil on slice -->
+              <ellipse cx="470" cy="390" rx="17" ry="9" fill="#1A7020" transform="rotate(-22 470 390)" opacity="0.94"/>
+              <ellipse cx="538" cy="418" rx="14" ry="7" fill="#1A7020" transform="rotate(18 538 418)" opacity="0.90"/>
+              <!-- Tomato on slice -->
+              <circle cx="512" cy="366" r="14" fill="#C83818" opacity="0.92"/>
+              <circle cx="512" cy="366" r="9"  fill="#E04020" opacity="0.78"/>
+              <!-- Cheese drip blob at tip -->
+              <ellipse cx="500" cy="530" rx="22" ry="14" fill="#F4E8A0" opacity="0.55"/>
+              <ellipse cx="500" cy="536" rx="12" ry="8"  fill="#F4E8A0" opacity="0.38"/>
+              <!-- Fire tint on slice face -->
+              <path d="M500,540 L375,324 A250,250,0,0,1,625,324 Z" fill="rgba(255,100,0,0.07)"/>
+            </g>
+          </svg>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       CINEMATIC — Atmospheric interlude with ambient movement
+       Film technique: Lap dissolve / ambient atmosphere
+  ═══════════════════════════════════════════════════════ -->
+  <section class="cin" aria-labelledby="cin-title-el">
+    <div class="cin-bg" aria-hidden="true"></div>
+    <div class="h-grain"   aria-hidden="true"></div>
+    <div class="ember-wrap" id="cin-embers" aria-hidden="true"></div>
+    <div class="cin-vignette" aria-hidden="true"></div>
+    <div class="cin-content" data-cin-reveal>
+      <div class="cin-eyebrow" id="cin-eye">Seit 1987 · München · Neapel</div>
+      <h2 class="cin-title" id="cin-title-el">Feuer trifft<br>Leidenschaft</h2>
+      <p class="cin-sub" id="cin-sub">Holzofen · 485°C · 90 Sekunden · Perfektion</p>
+    </div>
+    <div class="cin-ghost-num" aria-hidden="true">1987</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       STORY — Editorial Longread
+  ═══════════════════════════════════════════════════════ -->
+  <section class="story" id="geschichte">
+    <div class="wrap">
+      <div class="story-grid">
+
+        <div class="story-text" data-reveal>
+          <div class="eyebrow">Unsere Geschichte</div>
+          <blockquote class="story-quote">
+            Jede Pizza ist ein<br>
+            <em>Gedicht</em> aus Feuer,<br>
+            Mehl und Zeit.
+          </blockquote>
+          <p class="story-p">
+            1987 öffnete Salvatore Conti seine erste Pizzeria in Neapel. Im Gepäck: das jahrzehntelange Rezept seines Großvaters, importiertes Tipo‑00‑Mehl und die Überzeugung, dass große Küche keine Kompromisse kennt.
+          </p>
+          <p class="story-p">
+            Heute führen wir diese Tradition fort – in einem Holzofen aus bisceglieschem Stein, der täglich um 5 Uhr morgens entzündet wird, mit Zutaten, die wir wöchentlich frisch aus Kampanien beziehen.
+          </p>
+          <div class="story-sign">— Salvatore Conti</div>
+        </div>
+
+        <div class="story-visual" data-reveal>
+          <div class="story-img">
+            <div class="story-img-warm">
+              <!-- Oven illustration -->
+              <svg viewBox="0 0 380 320" width="78%" xmlns="http://www.w3.org/2000/svg" aria-label="Holzofen" role="img">
+                <defs>
+                  <radialGradient id="ovenfire" cx="50%" cy="90%" r="55%">
+                    <stop offset="0%" stop-color="#FF6800" stop-opacity="0.7"/>
+                    <stop offset="100%" stop-color="transparent"/>
+                  </radialGradient>
+                  <radialGradient id="oveninner" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#1A0804"/>
+                    <stop offset="100%" stop-color="#0A0402"/>
+                  </radialGradient>
+                </defs>
+                <!-- Base platform -->
+                <rect x="40" y="220" width="300" height="60" rx="6" fill="#2A1608"/>
+                <rect x="40" y="220" width="300" height="60" rx="6" fill="none" stroke="#3E2010" stroke-width="1.5"/>
+                <!-- Oven body -->
+                <rect x="55" y="100" width="270" height="130" rx="6" fill="#2A1608"/>
+                <!-- Dome -->
+                <ellipse cx="190" cy="100" rx="135" ry="58" fill="#341C0A"/>
+                <ellipse cx="190" cy="100" rx="135" ry="58" fill="none" stroke="#4A2A10" stroke-width="1.5"/>
+                <!-- Dome tiles -->
+                <path d="M90 100 Q190 50 290 100" fill="none" stroke="#5A3A18" stroke-width="1" opacity="0.5"/>
+                <path d="M70 115 Q190 55 310 115" fill="none" stroke="#5A3A18" stroke-width="1" opacity="0.4"/>
+                <!-- Opening -->
+                <ellipse cx="190" cy="210" rx="88" ry="62" fill="url(#oveninner)"/>
+                <!-- Fire glow -->
+                <ellipse cx="190" cy="230" rx="70" ry="24" fill="url(#ovenfire)"/>
+                <ellipse cx="190" cy="240" rx="50" ry="16" fill="#FF4400" opacity="0.45"/>
+                <ellipse cx="190" cy="246" rx="32" ry="10" fill="#FF6600" opacity="0.55"/>
+                <!-- Floor stones -->
+                <ellipse cx="115" cy="258" rx="20" ry="8" fill="#3A2410" opacity="0.85"/>
+                <ellipse cx="165" cy="264" rx="16" ry="7" fill="#402A14" opacity="0.85"/>
+                <ellipse cx="215" cy="265" rx="18" ry="8" fill="#3A2410" opacity="0.85"/>
+                <ellipse cx="265" cy="260" rx="19" ry="8" fill="#402A14" opacity="0.85"/>
+                <!-- Chimney -->
+                <rect x="170" y="28" width="40" height="58" rx="4" fill="#2A1608"/>
+                <rect x="163" y="22" width="54" height="12" rx="4" fill="#341C0A"/>
+                <!-- Smoke -->
+                <path d="M190 22 Q184 10 193 3 Q202 -4 196 -14" fill="none" stroke="rgba(240,232,216,0.14)" stroke-width="7" stroke-linecap="round"/>
+                <path d="M185 20 Q178 8 184 0 Q190 -8 184 -18" fill="none" stroke="rgba(240,232,216,0.09)" stroke-width="5" stroke-linecap="round"/>
+                <!-- Oven door arch detail -->
+                <path d="M102 210 Q102 148 190 148 Q278 148 278 210" fill="none" stroke="#4A2A10" stroke-width="2"/>
+              </svg>
+            </div>
+          </div>
+          <div class="story-accent-img">
+            <div style="width:100%;height:100%;background:linear-gradient(155deg,#221208,#3A1A08,#1A0E06);display:flex;align-items:center;justify-content:center;">
+              <svg viewBox="0 0 160 160" width="60%" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="80" cy="80" r="62" fill="#7A2006" opacity="0.35"/>
+                <circle cx="80" cy="80" r="50" fill="#C03B0A" opacity="0.25"/>
+                <text x="50%" y="50%" font-family="'Cormorant Garamond',Georgia,serif" font-size="13" fill="rgba(240,232,216,0.4)" text-anchor="middle" dy=".4em" font-style="italic">Teig</text>
+              </svg>
+            </div>
+          </div>
+          <div class="story-badge" id="story-badge" aria-label="72 Stunden Teig-Reifezeit">
+            <div class="story-badge-num" id="badge-num">0h</div>
+            <div class="story-badge-label">Teig-Reifezeit</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MENU — Chaptered Release (pinned)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="menu-pin" id="speisekarte">
+    <section class="menu" aria-label="Speisekarte – Signature Pizzen">
+      <div class="wrap menu-grid">
+
+        <div class="menu-left">
+          <div class="eyebrow">Unsere Spezialitäten</div>
+
+          <div class="menu-items" role="tabpanel">
+            <!-- Item 0 -->
+            <div class="menu-item active" data-mi="0">
+              <div class="menu-name">Margherita<br>Verace</div>
+              <p class="menu-desc">San Marzano Tomaten D.O.P., Büffelmozzarella Fior di Latte, frisches Basilikum, extra vergine Olivenöl aus Kampanien.</p>
+              <div class="menu-price">€ 14,00</div>
+            </div>
+            <!-- Item 1 -->
+            <div class="menu-item" data-mi="1">
+              <div class="menu-name">Diavola<br>Piccante</div>
+              <p class="menu-desc">Tomatensauce, Fior di Latte, scharfe kalabrische Salami 'Nduja, schwarze Oliven Gaeta, Peperoncino fritto.</p>
+              <div class="menu-price">€ 16,00</div>
+            </div>
+            <!-- Item 2 -->
+            <div class="menu-item" data-mi="2">
+              <div class="menu-name">Tartufo<br>Bianco</div>
+              <p class="menu-desc">Crème fraîche, Fior di Latte, schwarze Trüffelcreme, Parmigiano Reggiano 36 Monate, frischer Rucola, Trüffelöl.</p>
+              <div class="menu-price">€ 22,00</div>
+            </div>
+          </div>
+
+          <div class="menu-tabs" role="tablist" aria-label="Pizza-Auswahl">
+            <div class="menu-tab active" data-tab="0" role="tab" tabindex="0" aria-selected="true" aria-label="Margherita Verace auswählen">
+              <span class="tab-n">01</span>
+              <span class="tab-name">Margherita Verace</span>
+              <div class="menu-tab-progress"></div>
+            </div>
+            <div class="menu-tab" data-tab="1" role="tab" tabindex="0" aria-selected="false" aria-label="Diavola Piccante auswählen">
+              <span class="tab-n">02</span>
+              <span class="tab-name">Diavola Piccante</span>
+              <div class="menu-tab-progress"></div>
+            </div>
+            <div class="menu-tab" data-tab="2" role="tab" tabindex="0" aria-selected="false" aria-label="Tartufo Bianco auswählen">
+              <span class="tab-n">03</span>
+              <span class="tab-name">Tartufo Bianco</span>
+              <div class="menu-tab-progress"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-right">
+          <div class="menu-visual" aria-hidden="true">
+            <!-- Panel 0: Margherita -->
+            <div class="pizza-panel active" data-pv="0">
+              <div class="pizza-panel-bg" style="background:linear-gradient(140deg,#1A0C06,#301A08,#150A04);"></div>
+              <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="c0a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#CC682A"/><stop offset="80%" stop-color="#7A3E0E"/></radialGradient>
+                  <radialGradient id="c0b" cx="50%" cy="50%" r="48%"><stop offset="0%" stop-color="#C43808"/><stop offset="100%" stop-color="#7A1E04"/></radialGradient>
+                </defs>
+                <circle cx="200" cy="200" r="188" fill="url(#c0a)"/>
+                <circle cx="200" cy="200" r="160" fill="url(#c0b)"/>
+                <ellipse cx="195" cy="185" rx="58" ry="52" fill="#F4EAB8" opacity="0.88"/>
+                <ellipse cx="250" cy="200" rx="50" ry="44" fill="#ECD898" opacity="0.82"/>
+                <ellipse cx="175" cy="240" rx="46" ry="40" fill="#F2E4AC" opacity="0.80"/>
+                <ellipse cx="232" cy="235" rx="40" ry="36" fill="#F0E0A8" opacity="0.78"/>
+                <ellipse cx="215" cy="175" rx="28" ry="15" fill="#1A7020" transform="rotate(-26 215 175)" opacity="0.92"/>
+                <ellipse cx="262" cy="235" rx="25" ry="14" fill="#1A7020" transform="rotate(16 262 235)" opacity="0.90"/>
+                <ellipse cx="180" cy="210" rx="20" ry="11" fill="#206A1E" transform="rotate(-5 180 210)" opacity="0.85"/>
+                <circle cx="285" cy="195" r="16" fill="#C83818" opacity="0.85"/>
+                <circle cx="285" cy="195" r="11" fill="#E04020" opacity="0.7"/>
+              </svg>
+            </div>
+            <!-- Panel 1: Diavola -->
+            <div class="pizza-panel" data-pv="1">
+              <div class="pizza-panel-bg" style="background:linear-gradient(140deg,#1A0606,#2E0A0A,#150404);"></div>
+              <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="c1a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#CC6A2A"/><stop offset="80%" stop-color="#7A3E0E"/></radialGradient>
+                  <radialGradient id="c1b" cx="50%" cy="50%" r="48%"><stop offset="0%" stop-color="#C02808"/><stop offset="100%" stop-color="#6A1202"/></radialGradient>
+                </defs>
+                <circle cx="200" cy="200" r="188" fill="url(#c1a)"/>
+                <circle cx="200" cy="200" r="160" fill="url(#c1b)"/>
+                <ellipse cx="200" cy="200" rx="148" ry="142" fill="#E8C890" opacity="0.82"/>
+                <circle cx="175" cy="178" r="24" fill="#8B0A1A" opacity="0.92"/>
+                <circle cx="230" cy="182" r="22" fill="#8B0A1A" opacity="0.90"/>
+                <circle cx="198" cy="228" r="26" fill="#9B0A1A" opacity="0.92"/>
+                <circle cx="158" cy="228" r="20" fill="#8B0A1A" opacity="0.88"/>
+                <circle cx="248" cy="222" r="21" fill="#8B0A1A" opacity="0.90"/>
+                <circle cx="218" cy="175" r="26" fill="#8B0A1A" opacity="0.88"/>
+                <circle cx="183" cy="198" r="9" fill="none" stroke="#C83810" stroke-width="3.5" opacity="0.75"/>
+                <circle cx="222" cy="218" r="8" fill="none" stroke="#C83810" stroke-width="3" opacity="0.7"/>
+                <ellipse cx="194" cy="155" rx="12" ry="8" fill="#1A1A0A" opacity="0.82"/>
+                <ellipse cx="250" cy="250" rx="12" ry="8" fill="#1A1A0A" opacity="0.82"/>
+                <ellipse cx="165" cy="258" rx="10" ry="7" fill="#1A1A0A" opacity="0.75"/>
+              </svg>
+            </div>
+            <!-- Panel 2: Tartufo -->
+            <div class="pizza-panel" data-pv="2">
+              <div class="pizza-panel-bg" style="background:linear-gradient(140deg,#0A0A0A,#1A1A08,#080806);"></div>
+              <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="c2a" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#B87040"/><stop offset="80%" stop-color="#6A3E18"/></radialGradient>
+                  <radialGradient id="c2b" cx="50%" cy="50%" r="44%"><stop offset="0%" stop-color="#F8F0D8"/><stop offset="100%" stop-color="#E8D8B8"/></radialGradient>
+                </defs>
+                <circle cx="200" cy="200" r="188" fill="url(#c2a)"/>
+                <circle cx="200" cy="200" r="160" fill="url(#c2b)"/>
+                <path d="M178 180 Q200 163 224 180 Q240 202 218 218 Q196 232 174 215 Q158 196 178 180Z" fill="#2A2010" opacity="0.42"/>
+                <path d="M183 202 Q208 188 228 206 Q220 228 200 232 Q180 228 183 202Z" fill="#1A1808" opacity="0.36"/>
+                <ellipse cx="200" cy="202" rx="58" ry="52" fill="white" opacity="0.62"/>
+                <ellipse cx="168" cy="218" rx="38" ry="33" fill="white" opacity="0.58"/>
+                <ellipse cx="240" cy="192" rx="42" ry="36" fill="white" opacity="0.58"/>
+                <ellipse cx="218" cy="176" rx="13" ry="8" fill="#2A7A1A" transform="rotate(-14 218 176)" opacity="0.88"/>
+                <ellipse cx="178" cy="234" rx="12" ry="7" fill="#2A7A1A" transform="rotate(22 178 234)" opacity="0.85"/>
+                <ellipse cx="244" cy="228" rx="11" ry="6" fill="#2A7A1A" transform="rotate(-8 244 228)" opacity="0.82"/>
+                <ellipse cx="207" cy="196" rx="9" ry="5" fill="#1A1208" transform="rotate(-28 207 196)" opacity="0.72"/>
+                <ellipse cx="228" cy="218" rx="8" ry="4.5" fill="#1A1208" transform="rotate(12 228 218)" opacity="0.68"/>
+                <ellipse cx="185" cy="215" rx="7" ry="4" fill="#1A1208" transform="rotate(-5 185 215)" opacity="0.65"/>
+              </svg>
+            </div>
+            <!-- Glow -->
+            <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 45% at 50% 55%,rgba(200,66,10,0.08),transparent 60%);pointer-events:none;"></div>
+          </div>
+
+          <div class="menu-dots" role="navigation" aria-label="Pizza navigieren">
+            <div class="mdot active" data-pd="0" role="button" tabindex="0" aria-label="Pizza 1"></div>
+            <div class="mdot" data-pd="1" role="button" tabindex="0" aria-label="Pizza 2"></div>
+            <div class="mdot" data-pd="2" role="button" tabindex="0" aria-label="Pizza 3"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       GALLERY — Parallax Gallery, 5 depth layers
+  ═══════════════════════════════════════════════════════ -->
+  <section class="gallery" id="galerie">
+    <div class="wrap">
+      <div class="gallery-head">
+        <div class="eyebrow" style="justify-content:center;">Einblicke</div>
+        <div class="gallery-title-mask">
+          <span class="gallery-title-inner gallery-title" id="gtitleline1">Handwerk,</span>
+        </div>
+        <div class="gallery-title-mask">
+          <span class="gallery-title-inner gallery-title" id="gtitleline2">das man <em>schmeckt</em></span>
+        </div>
+      </div>
+
+      <div class="depth-field">
+        <!-- Depth 0.30 — far left -->
+        <div class="dl dl-0" id="gl0">
+          <div class="gcard tall">
+            <div class="gcard-fill w1" style="height:100%;">
+              <svg viewBox="0 0 160 220" width="55%" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50%" font-family="'Cormorant Garamond',serif" font-size="12" fill="rgba(240,232,216,0.25)" text-anchor="middle" dy=".4em" font-style="italic">Zutaten</text></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depth 0.50 — center -->
+        <div class="dl dl-1" id="gl1">
+          <div class="gcard wide">
+            <div class="gcard-fill w2" style="height:260px;">
+              <svg viewBox="0 0 260 180" width="55%" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50%" font-family="'Cormorant Garamond',serif" font-size="13" fill="rgba(240,232,216,0.25)" text-anchor="middle" dy=".4em" font-style="italic">Holzofen</text></svg>
+            </div>
+          </div>
+          <div class="gcard sq">
+            <div class="gcard-fill w3" style="height:220px;">
+              <svg viewBox="0 0 200 200" width="55%" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50%" font-family="'Cormorant Garamond',serif" font-size="13" fill="rgba(240,232,216,0.25)" text-anchor="middle" dy=".4em" font-style="italic">Margherita</text></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depth 0.75 — right -->
+        <div class="dl dl-2" id="gl2">
+          <div class="gcard tall">
+            <div class="gcard-fill w4" style="height:100%;">
+              <svg viewBox="0 0 160 220" width="55%" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50%" font-family="'Cormorant Garamond',serif" font-size="12" fill="rgba(240,232,216,0.25)" text-anchor="middle" dy=".4em" font-style="italic">Ambiente</text></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depth 1.20 — foreground accent -->
+        <div class="dl dl-3" id="gl3">
+          <div class="gcard sq">
+            <div class="gcard-fill w2" style="height:180px;">
+              <svg viewBox="0 0 180 180" width="55%" xmlns="http://www.w3.org/2000/svg"><text x="50%" y="50%" font-family="'Cormorant Garamond',serif" font-size="12" fill="rgba(240,232,216,0.25)" text-anchor="middle" dy=".4em" font-style="italic">Diavola</text></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Depth 1.40 — watermark text -->
+        <div class="dl-watermark" id="gl-wm" aria-hidden="true">Tradizione</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       ATMOSPHERE — Sticky Narrative (pinned)
+  ═══════════════════════════════════════════════════════ -->
+  <div class="atmo-pin">
+    <section class="atmo" aria-label="Die Atmosphäre – Unser Erlebnis">
+
+      <div class="atmo-left">
+        <div>
+          <div class="atmo-chap-label" id="achap">Kapitel 01</div>
+          <h2 class="atmo-h" id="atitle">Das Feuer brennt<br>seit dem Morgen</h2>
+          <p class="atmo-p" id="abody">Um 5 Uhr morgens entzündet unser Pizzaiolo den Holzofen. Drei Stunden bis zur Temperatur von 485 °C – Zeit genug, um den Teig zu falten und die Sauce langsam einzukochen.</p>
+          <ul class="atmo-facts" id="afacts" aria-label="Details">
+            <li class="atmo-fact"><div class="atmo-fact-line" aria-hidden="true"></div>Holzofen aus Bisceglie-Stein</li>
+            <li class="atmo-fact"><div class="atmo-fact-line" aria-hidden="true"></div>Nur 90 Sekunden Backzeit</li>
+            <li class="atmo-fact"><div class="atmo-fact-line" aria-hidden="true"></div>Zertifizierter Pizzaiolo seit 1994</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="atmo-right" aria-hidden="true">
+        <div class="atmo-panels">
+          <div class="atmo-panel" id="ap0">
+            <div class="atmo-panel-bg" style="background:
+              radial-gradient(ellipse 70% 60% at 30% 65%, rgba(200,88,0,0.30) 0%, transparent 55%),
+              radial-gradient(ellipse 50% 40% at 75% 25%, rgba(196,146,40,0.14) 0%, transparent 50%),
+              linear-gradient(135deg,#1E1000,#2E1600,#140A00);"></div>
+            <div class="atmo-panel-overlay"></div>
+          </div>
+          <div class="atmo-panel" id="ap1">
+            <div class="atmo-panel-bg" style="background:
+              radial-gradient(ellipse 60% 70% at 65% 45%, rgba(180,68,0,0.28) 0%, transparent 55%),
+              radial-gradient(ellipse 45% 40% at 20% 80%, rgba(200,100,0,0.18) 0%, transparent 50%),
+              linear-gradient(135deg,#180E00,#281400,#100800);"></div>
+            <div class="atmo-panel-overlay"></div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       INFO BAR
+  ═══════════════════════════════════════════════════════ -->
+  <div class="info-bar">
+    <div class="wrap">
+      <div class="info-grid">
+        <div class="info-item" data-reveal>
+          <div class="info-label">Öffnungszeiten</div>
+          <div class="info-val">Di – So</div>
+          <div class="info-sub">12:00–14:30 &amp; 17:30–22:30<br>Mo geschlossen</div>
+        </div>
+        <div class="info-item" data-reveal>
+          <div class="info-label">Adresse</div>
+          <div class="info-val">Musterstraße 12</div>
+          <div class="info-sub">80331 München<br>Nähe Marienplatz</div>
+        </div>
+        <div class="info-item" data-reveal>
+          <div class="info-label">Reservierung</div>
+          <div class="info-val">089 / 123 456 7</div>
+          <div class="info-sub">info@lafiamma-pizza.de</div>
+        </div>
+        <div class="info-item" data-reveal>
+          <div class="info-label">Auszeichnung</div>
+          <div class="info-val">Verace Napoli</div>
+          <div class="info-sub">Zertifizierte neapolitanische Pizza seit 2003</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       RESERVATION — Landing Sequence
+  ═══════════════════════════════════════════════════════ -->
+  <section class="res" id="reservierung">
+    <div class="wrap">
+      <div class="res-inner">
+        <div class="eyebrow" style="justify-content:center;" data-reveal>Reservierung</div>
+        <h2 class="res-title">
+          <span class="res-title-line" id="rtl1">Ihren Tisch</span>
+          <span class="res-title-line" id="rtl2">reservieren</span>
+        </h2>
+        <p class="res-body" id="resbody">Erleben Sie den Geschmack Neapels. Wir freuen uns auf Sie – bitte buchen Sie mindestens einen Tag im Voraus.</p>
+        <form class="res-form" id="resform" novalidate>
+          <div class="res-row">
+            <input class="res-in" type="text" placeholder="Vorname" aria-label="Vorname" required>
+            <input class="res-in" type="text" placeholder="Nachname" aria-label="Nachname" required>
+          </div>
+          <div class="res-row">
+            <input class="res-in" type="email" placeholder="E-Mail" aria-label="E-Mail" required>
+            <input class="res-in" type="tel" placeholder="Telefon" aria-label="Telefon">
+          </div>
+          <div class="res-row">
+            <input class="res-in" type="date" aria-label="Datum" required>
+            <input class="res-in" type="number" placeholder="Personen (max. 20)" min="1" max="20" aria-label="Personenanzahl" required>
+          </div>
+          <textarea class="res-in" rows="3" placeholder="Besondere Wünsche (optional)" aria-label="Besondere Wünsche"></textarea>
+          <button type="submit" class="res-btn">Tisch reservieren</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-name">La Fiamma</div>
+          <p class="footer-tagline">Authentische neapolitanische Pizzeria seit 1987. Handgemacht mit Leidenschaft und den besten Zutaten aus Kampanien.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#geschichte">Unsere Geschichte</a></li>
+            <li><a href="#speisekarte">Speisekarte</a></li>
+            <li><a href="#galerie">Galerie</a></li>
+            <li><a href="#reservierung">Reservierung</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Kontakt</h4>
+          <ul>
+            <li><a href="tel:+498912345678">089 / 123 456 7</a></li>
+            <li><a href="mailto:info@lafiamma-pizza.de">info@lafiamma-pizza.de</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="impressum.html">Impressum</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2024 La Fiamma Pizzeria · Alle Rechte vorbehalten</span>
+        <span>Mit Leidenschaft in München</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════
+       GSAP + ScrollTrigger
+    ═══════════════════════════════════════════════════════ */
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ─── EMBER PARTICLES — signature element ─────────────────────
+       Fire-rising embers behind the hero (CSS + JS, no canvas).
+       Film technique: ambient atmosphere, like fireflies in a dark room. */
+    (function spawnEmbers() {
+      const wrap = document.getElementById('embers');
+      const COUNT = 22;
+      const COLORS = [
+        'rgba(255,140,60,0.85)', 'rgba(255,100,30,0.75)',
+        'rgba(220,80,10,0.65)', 'rgba(255,180,80,0.60)',
+        'rgba(200,66,10,0.80)'
+      ];
+      for (let i = 0; i < COUNT; i++) {
+        const el = document.createElement('div');
+        el.className = 'e';
+        const sz = Math.random() * 14 + 3;
+        const col = COLORS[Math.floor(Math.random() * COLORS.length)];
+        el.style.cssText = [
+          `width:${sz}px`,`height:${sz}px`,
+          `left:${Math.random() * 56 + 20}%`,
+          `background:radial-gradient(circle,${col} 0%,transparent 70%)`,
+          `filter:blur(${Math.random() * 3 + 0.4}px)`,
+          `--d:${(Math.random() * 4 + 3.5).toFixed(1)}s`,
+          `--del:${(Math.random() * 6).toFixed(1)}s`,
+          `--sy:${Math.random() * 25 + 55}vh`,
+          `--dx:${((Math.random() - 0.5) * 90).toFixed(0)}px`,
+          `--ex:${((Math.random() - 0.5) * 70).toFixed(0)}px`,
+          `--pk:${(Math.random() * 0.55 + 0.2).toFixed(2)}`,
+          `--md:${(Math.random() * 0.25 + 0.08).toFixed(2)}`,
+        ].join(';');
+        wrap.appendChild(el);
+      }
+    })();
+
+    /* ─── HERO ENTRANCE ────────────────────────────────────────────
+       Film technique: Crane shot — titles rise from below the frame,
+       then content fades in sequentially. */
+    const heroBuild = gsap.timeline({ delay: 0.15 });
+    heroBuild
+      .to('#htitle1', { y: '0%', duration: 1.15, ease: 'power4.out' })
+      .to('#htitle2', { y: '0%', duration: 1.05, ease: 'power4.out' }, '-=0.78')
+      .to('#heyebrow', { opacity:1, y:0, duration:0.7, ease:'power3.out' }, '-=0.55')
+      .to('#hbody',    { opacity:1, y:0, duration:0.8, ease:'power3.out' }, '-=0.42')
+      .to('#hactions', { opacity:1, y:0, duration:0.7, ease:'power3.out' }, '-=0.5')
+      .to('#hscrollcue',{ opacity:1, duration:0.6, ease:'power2.out' }, '-=0.3');
+
+    /* ─── HERO: PHOTO ZOOM-OUT (dolly pull-back) ──────────────────
+       Film technique: crane pull-back.
+       Real pizza photo starts at scale 1.25 (tight close-up feel),
+       pulls back to 1 over the full 280vh hero pin.               */
+    gsap.fromTo('#h-photo',
+      { scale: 1.25 },
+      {
+        scale: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.hero-pin',
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.9,
+        }
+      }
+    );
+
+    /* ─── HERO: PIZZA SLICE LIFTED FROM BACKGROUND ─────────────
+       THREE-LAYER APPROACH:
+
+       Layer 0  .h-wood           — warm rustic wood table, always visible
+       Layer 1  .h-photo-bg       — overhead pizza photo, clipped to
+                                    evenodd(CIRCLE + WEDGE) = pizza disk
+                                    with a slice-shaped hole cut out
+       Layer 2  .h-photo-overlay  — same clip → darkens only the pizza,
+                                    leaving the wood border & hole natural
+       Layer 4  #h-slice-layer    — same photo, clipped to WEDGE only.
+                                    At rest fills the hole perfectly (
+                                    inner dim = same gradient → invisible).
+                                    On scroll rises → hole reveals warm wood.
+
+       Result: pizza on a wooden table with one slice physically pulled up.
+       No duplicate image, no black hole, no "inserted" look. */
+    function initHeroSlice() {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const f  = v => v.toFixed(2);
+
+      /* ── Pizza disk geometry ─────────────────────────────────────────
+         photo-1513104890138-7c749659a591 is roughly 3:2 landscape.
+         object-fit:cover on 16:9 viewport → scale by width axis.
+         Pizza fills ~90 % of image height → rendered radius ≈ vh * 0.48.
+         We pull back slightly (0.46) so the plate rim in h-wood is visible. */
+      const cx = vw * 0.500;          /* pizza center X (horizontally centred) */
+      const cy = vh * 0.500;          /* pizza center Y (vertically centred)    */
+      /* Use vh-based radius: adapts naturally as viewport height changes.      */
+      const r  = Math.min(vw * 0.30, vh * 0.46);
+
+      /* Sync the CSS plate-rim circle in .h-wood to match the pizza radius    */
+      document.documentElement.style.setProperty('--plate-r', r + 'px');
+
+      /* ── Slice wedge (one natural piece ≈ 1/8 pizza) ────────────────
+         ±35° from north  →  sin35°≈0.574   cos35°≈0.819              */
+      const SIN35 = 0.5736, COS35 = 0.8192;
+      const lx = cx - r * SIN35,  ly = cy - r * COS35;   /* left crust  */
+      const rx = cx + r * SIN35,  ry = cy - r * COS35;   /* right crust */
+      const wedge = `M${f(cx)} ${f(cy)} L${f(lx)} ${f(ly)} A${f(r)} ${f(r)} 0 0 1 ${f(rx)} ${f(ry)} Z`;
+
+      /* ── Pizza circle as SVG path (two semicircle arcs) ─────────────
+         evenodd(circle + wedge) = pizza disk with a slice-shaped hole. */
+      const circ = `M${f(cx)} ${f(cy-r)} A${f(r)} ${f(r)} 0 1 0 ${f(cx)} ${f(cy+r)} A${f(r)} ${f(r)} 0 1 0 ${f(cx)} ${f(cy-r)} Z`;
+      const pizzaHole = `path(evenodd, "${circ} ${wedge}")`;
+
+      /* Pizza photo: circular disk with slice hole → wood shows through */
+      document.querySelector('.h-photo-bg').style.clipPath     = pizzaHole;
+      /* Cinematic overlay: same clip → only darkens the pizza, not the wood */
+      document.querySelector('.h-photo-overlay').style.clipPath = pizzaHole;
+
+      /* Slice fills the hole exactly: wedge-only clip on same photo */
+      document.getElementById('h-slice-layer').style.clipPath = `path("${wedge}")`;
+
+      /* ── Cheese strings: 7 points spread along the crust arc ────────*/
+      const angles = [-35, -23, -11, 0, 11, 23, 35];
+      document.querySelectorAll('.hcstr').forEach((ln, i) => {
+        const a  = angles[i] * Math.PI / 180;
+        const sx = f(cx + r * Math.sin(a));
+        const sy = f(cy - r * Math.cos(a));
+        ln.setAttribute('x1', sx); ln.setAttribute('y1', sy);
+        ln.setAttribute('x2', sx); ln.setAttribute('y2', sy);
+      });
+
+      const rise = r * 0.90;
+      const ST   = { trigger: '.hero-pin', start: '28% top', end: '88% top', scrub: 1.1 };
+
+      /* Slice lifts: real drop-shadow makes it look 3-D separated */
+      gsap.fromTo('#h-slice-layer',
+        { y: 0, filter: 'drop-shadow(0 0px 0px rgba(0,0,0,0))' },
+        { y: -rise,
+          filter: 'drop-shadow(0 60px 80px rgba(0,0,0,0.90)) drop-shadow(0 -4px 20px rgba(200,88,0,0.22))',
+          ease: 'power1.inOut',
+          scrollTrigger: ST,
+        }
+      );
+
+      /* Inner dim fades out as slice brightens and separates */
+      gsap.to('#h-slice-dim', { opacity: 0, ease: 'power2.in', scrollTrigger: ST });
+
+      /* Cheese strings grow upward from the crust as slice pulls away */
+      gsap.to('.hcstr', {
+        attr: { y1: (i, el) => parseFloat(el.getAttribute('y1')) - rise },
+        ease: 'power1.inOut',
+        scrollTrigger: ST,
+      });
+    }
+    initHeroSlice();
+
+    /* Hero text fades and lifts in the last third of the pin */
+    gsap.to('.h-content', {
+      y: '-16%', opacity: 0, ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero-pin',
+        start: '60% top',
+        end: '88% top',
+        scrub: 0.5,
+      }
+    });
+    /* Scroll cue vanishes at the very start of scroll */
+    gsap.to('#hscrollcue', {
+      opacity: 0, ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero-pin',
+        start: 'top top',
+        end: '18% top',
+        scrub: 0.4,
+      }
+    });
+
+    /* ─── STORY COUNTER ANIMATION ──────────────────────────────────*/
+    let counted = false;
+    ScrollTrigger.create({
+      trigger: '#story-badge',
+      start: 'top 82%',
+      onEnter: () => {
+        if (counted) return;
+        counted = true;
+        const el = document.getElementById('badge-num');
+        let v = 0;
+        const target = 72;
+        const dur = 1200;
+        const start = performance.now();
+        function tick(now) {
+          const t = Math.min((now - start) / dur, 1);
+          const eased = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+          v = Math.round(eased * target);
+          el.textContent = v + 'h';
+          if (t < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+    });
+
+    /* ─── STORY REVEALS ────────────────────────────────────────────
+       Film technique: Rack focus reveal — elements emerge from depth. */
+    document.querySelectorAll('[data-reveal]').forEach(el => {
+      gsap.fromTo(el,
+        { opacity: 0, y: 52, rotateX: 5 },
+        { opacity: 1, y: 0, rotateX: 0, duration: 1.1, ease: 'power4.out',
+          scrollTrigger: { trigger: el, start: 'top 86%', once: true }
+        }
+      );
+    });
+
+    /* ─── GALLERY TITLE REVEAL ─────────────────────────────────────
+       Film technique: Wipe transition — clip-path sweeps left to right. */
+    ScrollTrigger.create({
+      trigger: '.gallery',
+      start: 'top 72%',
+      once: true,
+      onEnter: () => {
+        gsap.to('#gtitleline1', { y: '0%', duration: 1.2, ease: 'power4.out' });
+        gsap.to('#gtitleline2', { y: '0%', duration: 1.2, ease: 'power4.out', delay: 0.12 });
+      }
+    });
+
+    /* ─── GALLERY PARALLAX (crane shot — 5 layers) ─────────────────
+       Depth multipliers match the design token depth system. */
+    const galTrigger = { trigger: '.gallery', start: 'top bottom', end: 'bottom top', scrub: 0.9 };
+    gsap.to('#gl0',  { y: -36,  ease: 'none', scrollTrigger: galTrigger });  // 0.30
+    gsap.to('#gl1',  { y: -60,  ease: 'none', scrollTrigger: galTrigger });  // 0.50
+    gsap.to('#gl2',  { y: -90,  ease: 'none', scrollTrigger: galTrigger });  // 0.75
+    gsap.to('#gl3',  { y: 70,   ease: 'none', scrollTrigger: galTrigger });  // 1.20 — moves opposite
+    gsap.to('#gl-wm',{ y: -24,  ease: 'none', scrollTrigger: galTrigger });  // 1.40
+
+    /* ─── RESERVATION TITLE REVEAL ─────────────────────────────────*/
+    ScrollTrigger.create({
+      trigger: '.res',
+      start: 'top 72%',
+      once: true,
+      onEnter: () => {
+        gsap.to('#rtl1', { y: '0%', duration: 1.1, ease: 'power4.out' });
+        gsap.to('#rtl2', { y: '0%', duration: 1.1, ease: 'power4.out', delay: 0.1 });
+        gsap.to('#resbody', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.3 });
+        gsap.to('#resform', { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.5 });
+      }
+    });
+
+    /* ─── MENU — scroll-driven chaptered release ────────────────────
+       Film technique: Match cut — content cross-dissolves as you scroll
+       through the pinned scene. */
+    let curMenu = 0;
+    const mItems  = [...document.querySelectorAll('.menu-item')];
+    const mTabs   = [...document.querySelectorAll('.menu-tab')];
+    const mPanels = [...document.querySelectorAll('.pizza-panel')];
+    const mDots   = [...document.querySelectorAll('.mdot')];
+
+    function switchMenu(idx) {
+      if (idx === curMenu) return;
+      const prev = curMenu;
+      curMenu = idx;
+      // Exit prev
+      gsap.to(mItems[prev],  { opacity:0, y:20, rotateX:-5, duration:0.38, ease:'power2.in',
+        onComplete: () => mItems[prev].classList.remove('active') });
+      gsap.to(mPanels[prev], { opacity:0, duration:0.45, ease:'power2.in',
+        onComplete: () => mPanels[prev].classList.remove('active') });
+      mTabs[prev].classList.remove('active');
+      mTabs[prev].setAttribute('aria-selected','false');
+      mDots[prev].classList.remove('active');
+      // Enter next
+      mItems[curMenu].classList.add('active');
+      mPanels[curMenu].classList.add('active');
+      mTabs[curMenu].classList.add('active');
+      mTabs[curMenu].setAttribute('aria-selected','true');
+      mDots[curMenu].classList.add('active');
+      gsap.fromTo(mItems[curMenu],
+        { opacity:0, y:32, rotateX:8 },
+        { opacity:1, y:0, rotateX:0, duration:0.65, ease:'power3.out' });
+      gsap.fromTo(mPanels[curMenu],
+        { opacity:0 },
+        { opacity:1, duration:0.55, ease:'power2.out' });
+    }
+
+    // Scroll-driven progression through the three pizzas
+    ScrollTrigger.create({
+      trigger: '.menu-pin',
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: self => {
+        const p = self.progress;
+        const next = p < 0.34 ? 0 : p < 0.67 ? 1 : 2;
+        if (next !== curMenu) switchMenu(next);
+      }
+    });
+
+    // Manual tab + dot interaction
+    mTabs.forEach((t, i) => {
+      t.addEventListener('click', () => switchMenu(i));
+      t.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') switchMenu(i); });
+    });
+    mDots.forEach((d, i) => {
+      d.addEventListener('click', () => switchMenu(i));
+      d.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') switchMenu(i); });
+    });
+
+    /* ─── ATMOSPHERE — cross-dissolve narrative ─────────────────────
+       Film technique: Lap dissolve — slow cross-fade between two
+       atmospheric panels as narrative context shifts mid-scroll. */
+    const atmosTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.atmo-pin',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.45,
+      }
+    });
+    atmosTl
+      .fromTo('#ap0', { opacity:0 }, { opacity:1, duration:0.08 }, 0)
+      .to('#ap0',    { opacity:0, duration:0.14 }, 0.36)
+      .fromTo('#ap1', { opacity:0 }, { opacity:1, duration:0.14 }, 0.36)
+      // Text cross-fade: out at 0.38, content swap at 0.50, in at 0.52
+      .to(['#atitle','#abody','#afacts','#achap'],
+          { opacity:0, y:-22, duration:0.1 }, 0.37)
+      .call(() => {
+        document.getElementById('achap').textContent = 'Kapitel 02';
+        document.getElementById('atitle').innerHTML  = 'Gäste werden<br>zu Familie';
+        document.getElementById('abody').textContent =
+          'Seit 37 Jahren kommen dieselben Familien zu uns. Wir kennen ihre Lieblingstische, ihre bevorzugten Pizzen. Das ist kein Zufall – das ist die Magie eines echten Ristorante.';
+      }, [], 0.50)
+      .to(['#atitle','#abody','#afacts','#achap'],
+          { opacity:1, y:0, duration:0.1 }, 0.52);
+
+    /* ─── NAV SCROLL BEHAVIOR ───────────────────────────────────────*/
+    ScrollTrigger.create({
+      start: 'top -60px',
+      onUpdate: self => {
+        document.getElementById('nav').style.background =
+          self.progress > 0
+            ? 'rgba(7,4,0,0.96)'
+            : 'rgba(7,4,0,0.72)';
+      }
+    });
+
+    /* ─── RESERVATION FORM ──────────────────────────────────────────*/
+    document.getElementById('resform').addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = e.target.querySelector('.res-btn');
+      btn.textContent = '✓ Reservierung erhalten – wir freuen uns!';
+      btn.style.background = '#1A6A14';
+      btn.disabled = true;
+    });
+
+    /* ─── PIZZA SLICE RISE ──────────────────────────────────────
+       Film technique: Subject isolation — slice separates from pizza
+       like a performer stepping forward from the ensemble.
+       y1 attributes of cheese strings animate independently so their
+       top anchors follow the rising slice while bottoms stay pinned. */
+    (function initSliceRise() {
+      const pin = document.querySelector('.slice-pin');
+      if (!pin) return;
+
+      /* Text reveal when pin enters viewport */
+      gsap.set('#slice-text', { x: -60, opacity: 0 });
+      gsap.to('#slice-text', {
+        opacity: 1, x: 0, duration: 0.65, ease: 'power3.out',
+        scrollTrigger: { trigger: '.slice-pin', start: 'top 78%', once: true }
+      });
+
+      const sliceST = {
+        trigger: '.slice-pin',
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 1.1,
+      };
+      /* Slice group rises 282 units (SVG coords) */
+      gsap.to('#pizza-slice-group', { y: -282, ease: 'power1.inOut', scrollTrigger: sliceST });
+      /* Cheese strings: y1 follows the slice upward, y2 stays fixed */
+      gsap.to('.cstr', {
+        attr: { y1: (i, el) => parseFloat(el.getAttribute('y1')) - 282 },
+        ease: 'power1.inOut',
+        scrollTrigger: sliceST,
+      });
+    })();
+
+    /* ─── CINEMATIC SECTION ──────────────────────────────────────
+       Film technique: Crane shot — title lifts into frame from the dark. */
+    (function initCin() {
+      /* Spawn extra embers for the cinematic section */
+      const cinWrap = document.getElementById('cin-embers');
+      if (cinWrap) {
+        const COLS = ['rgba(255,130,50,0.70)','rgba(255,100,20,0.60)','rgba(210,70,0,0.52)','rgba(255,168,70,0.48)'];
+        for (let i = 0; i < 18; i++) {
+          const el = document.createElement('div');
+          el.className = 'e';
+          const sz = Math.random()*11+2;
+          const col = COLS[Math.floor(Math.random()*COLS.length)];
+          el.style.cssText = [
+            `width:${sz}px`,`height:${sz}px`,`left:${Math.random()*66+17}%`,
+            `background:radial-gradient(circle,${col} 0%,transparent 70%)`,
+            `filter:blur(${Math.random()*2.5+0.3}px)`,
+            `--d:${(Math.random()*4+4).toFixed(1)}s`,`--del:${(Math.random()*7).toFixed(1)}s`,
+            `--sy:${Math.random()*24+58}vh`,`--dx:${((Math.random()-0.5)*80).toFixed(0)}px`,
+            `--ex:${((Math.random()-0.5)*60).toFixed(0)}px`,
+            `--pk:${(Math.random()*0.4+0.15).toFixed(2)}`,`--md:${(Math.random()*0.18+0.06).toFixed(2)}`,
+          ].join(';');
+          cinWrap.appendChild(el);
+        }
+      }
+      /* Reveal text on scroll-enter */
+      ScrollTrigger.create({
+        trigger: '.cin', start: 'top 68%', once: true,
+        onEnter: () => {
+          gsap.to('#cin-eye',      { opacity:1, y:0, duration:0.85, ease:'power3.out' });
+          gsap.to('#cin-title-el', { opacity:1, y:0, duration:1.10, ease:'power4.out', delay:0.22 });
+          gsap.to('#cin-sub',      { opacity:1, y:0, duration:0.85, ease:'power3.out', delay:0.50 });
+        }
+      });
+      /* Parallax exit: content floats up as section scrolls away */
+      gsap.to('.cin-content', {
+        y: -90, ease: 'none',
+        scrollTrigger: { trigger:'.cin', start:'top top', end:'bottom top', scrub:0.6 }
+      });
+    })();
+
+    /* ─── TOUCH DEVICE: disable 3D perspective effects ─────────────*/
+    if ('ontouchstart' in window) {
+      document.querySelectorAll('.menu,.hero,.atmo').forEach(el => {
+        el.style.perspective = 'none';
+      });
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       PRELOADER — counter 0→100, word reveals, curtain wipe out
+    ════════════════════════════════════════════════════════════════ */
+    (function initPreloader() {
+      const preEl   = document.getElementById('preloader');
+      const numEl   = document.getElementById('pre-n');
+      const fillEl  = document.getElementById('pre-fill');
+      const words   = document.querySelectorAll('.pre-word');
+
+      /* Stagger the three words in */
+      gsap.to(words, {
+        y: 0, duration: 0.9, ease: 'power3.out',
+        stagger: 0.18, delay: 0.15
+      });
+
+      /* Animate counter 0→100 over ~1.6s */
+      let count = 0;
+      const total = 100;
+      const dur   = 1600;
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min((now - start) / dur, 1);
+        /* Ease in-out cubic */
+        const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+        count = Math.round(e * total);
+        numEl.textContent = count;
+        fillEl.style.right = (100 - count) + '%';
+        if (t < 1) requestAnimationFrame(tick);
+        else exitPreloader();
+      }
+      requestAnimationFrame(tick);
+
+      function exitPreloader() {
+        /* Hold briefly, then wipe the preloader up */
+        gsap.to(preEl, {
+          yPercent: -100, duration: 1.1, ease: 'power4.inOut', delay: 0.28,
+          onComplete: () => {
+            preEl.style.display = 'none';
+            document.body.classList.remove('loading');
+          }
+        });
+        /* Simultaneously wipe the words slightly faster */
+        gsap.to(words, {
+          y: '-120%', duration: 0.7, ease: 'power2.in',
+          stagger: { each: 0.06, from: 'end' }
+        });
+      }
+    })();
+
+    /* ════════════════════════════════════════════════════════════════
+       CUSTOM CURSOR — dot + ring + label, magnetic buttons
+    ════════════════════════════════════════════════════════════════ */
+    (function initCursor() {
+      if (!matchMedia('(pointer: fine)').matches) return;
+
+      const dot   = document.getElementById('cdot');
+      const ring  = document.getElementById('cring');
+      const label = document.getElementById('clabel');
+
+      let mx = -200, my = -200;     /* mouse position */
+      let rx = -200, ry = -200;     /* ring position (lagged) */
+
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+
+      /* Ring follows mouse with lag via lerp in rAF */
+      (function loop() {
+        rx += (mx - rx) * 0.11;
+        ry += (my - ry) * 0.11;
+        dot.style.transform   = `translate(${mx}px,${my}px) translate(-50%,-50%)`;
+        ring.style.transform  = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+        label.style.transform = `translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+        requestAnimationFrame(loop);
+      })();
+
+      /* Interactive element hover states */
+      const hovers = [
+        { sel: 'a:not(.nav-logo)',       cls: 'expanded', txt: ''      },
+        { sel: 'button',                 cls: 'expanded', txt: ''      },
+        { sel: '.nav-cta',               cls: 'text-mode',txt: 'BOOK'  },
+        { sel: '.menu-tab',              cls: 'text-mode',txt: 'WÄHLEN'},
+        { sel: '.mdot',                  cls: 'expanded', txt: ''      },
+        { sel: '#pizza-canvas',          cls: 'text-mode',txt: 'DREHEN'},
+        { sel: '.gcard',                 cls: 'text-mode',txt: 'VIEW'  },
+      ];
+
+      hovers.forEach(({ sel, cls, txt }) => {
+        document.querySelectorAll(sel).forEach(el => {
+          el.addEventListener('mouseenter', () => {
+            ring.classList.add(cls);
+            if (txt) { label.textContent = txt; label.style.opacity = '1'; }
+            dot.style.transform += ' scale(0.4)';
+          });
+          el.addEventListener('mouseleave', () => {
+            ring.classList.remove(cls);
+            label.style.opacity = '0';
+            dot.style.transform = dot.style.transform.replace(' scale(0.4)', '');
+          });
+        });
+      });
+    })();
+
+    /* ════════════════════════════════════════════════════════════════
+       MAGNETIC BUTTONS — subtle pull toward cursor on hover
+    ════════════════════════════════════════════════════════════════ */
+    (function initMagnetic() {
+      document.querySelectorAll('.nav-cta, .h-btn, .res-btn').forEach(btn => {
+        btn.addEventListener('mousemove', e => {
+          const r  = btn.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width  / 2);
+          const dy = e.clientY - (r.top  + r.height / 2);
+          gsap.to(btn, { x: dx * 0.28, y: dy * 0.28, duration: 0.4, ease: 'power2.out' });
+        });
+        btn.addEventListener('mouseleave', () => {
+          gsap.to(btn, { x: 0, y: 0, duration: 0.55, ease: 'elastic.out(1,0.4)' });
+        });
+      });
+    })();
+
+    /* ════════════════════════════════════════════════════════════════
+       NAV SCROLL STATE
+    ════════════════════════════════════════════════════════════════ */
+    ScrollTrigger.create({
+      start: '100px top',
+      onEnter:      () => document.getElementById('nav').classList.add('scrolled'),
+      onLeaveBack:  () => document.getElementById('nav').classList.remove('scrolled'),
+    });
+
+    /* ════════════════════════════════════════════════════════════════
+       THREE.JS — 3D ROTATING PIZZA (hubtown globe replacement)
+    ════════════════════════════════════════════════════════════════ */
+    (function initPizzaGlobe() {
+      if (typeof THREE === 'undefined') return;
+
+      const canvas  = document.getElementById('pizza-canvas');
+      const wrap    = canvas.parentElement;
+      const SIZE    = () => Math.min(wrap.offsetWidth - 64, 540);
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
+
+      const scene  = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+      camera.position.set(0, 1.4, 6.2);
+      camera.lookAt(0, 0, 0);
+
+      /* ── Resize helper ── */
+      function resize() {
+        const s = SIZE();
+        renderer.setSize(s, s);
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      /* ── Textures ── */
+      const loader = new THREE.TextureLoader();
+      const pizzaTex = loader.load(
+        'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1024&q=90',
+        tex => { tex.encoding = THREE.sRGBEncoding || 3001; }
+      );
+      /* Enable sRGB output for correct gamma in r128 */
+      renderer.outputEncoding = THREE.sRGBEncoding || 3001;
+      /* Crust: canvas-drawn gradient */
+      const crustCanvas  = document.createElement('canvas');
+      crustCanvas.width  = 64; crustCanvas.height = 64;
+      const cc = crustCanvas.getContext('2d');
+      const cg = cc.createLinearGradient(0, 0, 0, 64);
+      cg.addColorStop(0,   '#D4894A');
+      cg.addColorStop(0.4, '#B0672A');
+      cg.addColorStop(1,   '#7A3D10');
+      cc.fillStyle = cg; cc.fillRect(0, 0, 64, 64);
+      const crustTex = new THREE.CanvasTexture(crustCanvas);
+
+      /* ── Pizza geometry: flat cylinder ── */
+      const geo  = new THREE.CylinderGeometry(2.05, 2.05, 0.22, 128);
+      const mats = [
+        /* side (crust) */
+        new THREE.MeshStandardMaterial({ map: crustTex, roughness: 0.96, metalness: 0.02 }),
+        /* top face (toppings) */
+        new THREE.MeshStandardMaterial({ map: pizzaTex, roughness: 0.75, metalness: 0.04 }),
+        /* bottom face */
+        new THREE.MeshStandardMaterial({ color: 0x3A1E06, roughness: 1.0, metalness: 0 }),
+      ];
+      const pizza = new THREE.Mesh(geo, mats);
+      pizza.rotation.x = -0.22;          /* slight forward tilt — aerial view */
+      pizza.castShadow    = true;
+      pizza.receiveShadow = true;
+      scene.add(pizza);
+
+      /* ── Shadow plane ── */
+      const shadowGeo = new THREE.PlaneGeometry(8, 8);
+      const shadowMat = new THREE.ShadowMaterial({ opacity: 0.45 });
+      const shadowPlane = new THREE.Mesh(shadowGeo, shadowMat);
+      shadowPlane.rotation.x = -Math.PI / 2;
+      shadowPlane.position.y = -1.6;
+      shadowPlane.receiveShadow = true;
+      scene.add(shadowPlane);
+
+      /* ── Lighting — cinematic food photography ── */
+      /* Key light: warm directional from top-left */
+      const keyLight = new THREE.DirectionalLight(0xFFE8C8, 2.2);
+      keyLight.position.set(-3, 5, 4);
+      keyLight.castShadow = true;
+      keyLight.shadow.mapSize.set(1024, 1024);
+      keyLight.shadow.camera.near = 0.5;
+      keyLight.shadow.camera.far  = 20;
+      scene.add(keyLight);
+
+      /* Fill light: cool from opposite side */
+      const fillLight = new THREE.DirectionalLight(0xC8D8FF, 0.35);
+      fillLight.position.set(4, 2, -3);
+      scene.add(fillLight);
+
+      /* Ember glow: warm orange point below — oven fire */
+      const emberLight = new THREE.PointLight(0xFF6600, 2.8, 10);
+      emberLight.position.set(0, -2.5, 2);
+      scene.add(emberLight);
+
+      /* Ambient: very subtle warm fill */
+      scene.add(new THREE.AmbientLight(0xFFD8A0, 0.28));
+
+      /* ── Mouse parallax ── */
+      let targetRX = -0.22, targetRY = 0;
+      let mouseActive = false;
+      const section = document.getElementById('pg-section');
+      section.addEventListener('mousemove', e => {
+        mouseActive = true;
+        const r  = section.getBoundingClientRect();
+        const nx = (e.clientX - r.left)  / r.width  - 0.5;   /* -0.5 to 0.5 */
+        const ny = (e.clientY - r.top)   / r.height - 0.5;
+        targetRX = -0.22 + ny * 0.28;
+        targetRY = nx * 0.55;
+      });
+      section.addEventListener('mouseleave', () => {
+        mouseActive = false;
+        targetRX = -0.22; targetRY = 0;
+      });
+
+      /* ── Ember light flicker ── */
+      let flickerT = 0;
+      function flicker() {
+        flickerT += 0.025;
+        emberLight.intensity = 2.8 + Math.sin(flickerT * 2.3) * 0.4 + Math.sin(flickerT * 7.1) * 0.15;
+      }
+
+      /* ── Render loop ── */
+      let isVisible = false;
+      ScrollTrigger.create({
+        trigger: '#pg-section',
+        start: 'top 90%', end: 'bottom 10%',
+        onEnter:      () => { isVisible = true;  },
+        onLeave:      () => { isVisible = false; },
+        onEnterBack:  () => { isVisible = true;  },
+        onLeaveBack:  () => { isVisible = false; },
+      });
+
+      /* Separate auto-spin from mouse Y-tilt so they don't fight each other */
+      let autoY   = 0;    /* accumulated base rotation */
+      let tiltX   = -0.22;
+      let tiltY   = 0;
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (!isVisible) return;
+
+        autoY  += 0.006;
+        tiltX  += (targetRX - tiltX) * 0.045;
+        tiltY  += (targetRY - tiltY) * 0.045;
+
+        pizza.rotation.x = tiltX;
+        pizza.rotation.y = autoY + tiltY;
+
+        flicker();
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      /* ── ScrollTrigger reveal: pizza rises from below ── */
+      /* Use a proxy object GSAP can tween; apply to Three.js object in onUpdate */
+      const pizzaProxy = { posY: -4, rotZ: 0.4 };
+      pizza.position.y = -4;
+      pizza.rotation.z = 0.4;
+
+      const pgRevealTL = gsap.timeline({
+        scrollTrigger: { trigger: '#pg-section', start: 'top 75%', once: true },
+      });
+      pgRevealTL
+        .to('#pg-eye',   { opacity:1, y:0, duration:0.7, ease:'power3.out' }, 0.1)
+        .to('#pg-title', { opacity:1, y:0, duration:1.0, ease:'power4.out' }, 0.25)
+        .to('#pg-body',  { opacity:1, y:0, duration:0.8, ease:'power3.out' }, 0.45)
+        .to('#pg-stats', { opacity:1, y:0, duration:0.7, ease:'power3.out' }, 0.62)
+        .to(pizzaProxy, {
+          posY: 0, rotZ: 0,
+          duration: 1.4, ease: 'power3.out',
+          onUpdate: () => {
+            pizza.position.y = pizzaProxy.posY;
+            pizza.rotation.z = pizzaProxy.rotZ;
+          }
+        }, 0.05);
+
+    })();
+
+    /* ─── STATEMENT SECTIONS — scroll reveal ─────────────────────── */
+    (function initStatements() {
+      document.querySelectorAll('.stmt').forEach((el, i) => {
+        const word = el.querySelector('.stmt-word');
+        const meta = el.querySelector('.stmt-meta');
+        const num  = el.querySelector('.stmt-num');
+
+        // Word slides up from below
+        gsap.fromTo(word,
+          { y: 60, opacity: 0 },
+          {
+            y: 0, opacity: 1, duration: 1.1, ease: 'power4.out',
+            scrollTrigger: { trigger: el, start: 'top 72%', once: true }
+          }
+        );
+        // Meta fades in slightly later
+        gsap.fromTo(meta,
+          { y: 28, opacity: 0 },
+          {
+            y: 0, opacity: 1, duration: 0.85, ease: 'power3.out', delay: 0.18,
+            scrollTrigger: { trigger: el, start: 'top 72%', once: true }
+          }
+        );
+        if (num) {
+          gsap.fromTo(num,
+            { opacity: 0, x: -10 },
+            {
+              opacity: 1, x: 0, duration: 0.6, ease: 'power2.out',
+              scrollTrigger: { trigger: el, start: 'top 80%', once: true }
+            }
+          );
+        }
+
+        // Subtle parallax on the img if present
+        const img = el.querySelector('.stmt-img');
+        if (img) {
+          gsap.to(img, {
+            yPercent: -12,
+            ease: 'none',
+            scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true }
+          });
+        }
+      });
+    })();
+
+    /* ─── NUMBERS BAR — count-up animation ──────────────────────── */
+    (function initNums() {
+      document.querySelectorAll('[data-count-to]').forEach(el => {
+        const target = +el.dataset.countTo;
+        const obj = { val: 0 };
+        gsap.to(obj, {
+          val: target,
+          duration: 1.8,
+          ease: 'power2.out',
+          onUpdate: () => { el.textContent = Math.round(obj.val); },
+          scrollTrigger: { trigger: el.closest('.nums-bar'), start: 'top 85%', once: true }
+        });
+      });
+    })();
+
+  </script>
+
+</body>
+</html>

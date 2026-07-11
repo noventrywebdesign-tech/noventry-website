@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Impressum – Noventry Webdesign</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080A0F;
+      --bg-2:      #0E1118;
+      --text:      #F0F2F7;
+      --muted:     rgba(240,242,247,0.52);
+      --border:    rgba(255,255,255,0.07);
+      --accent:    #ffffff;
+      --font-d:    'Syne', sans-serif;
+      --font-b:    'Inter', sans-serif;
+      --r-lg:      18px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-b);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    .nav {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: 16px auto 0;
+      padding: 10px 16px 10px 20px;
+      background: rgba(14,17,24,0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+    }
+    .nav-logo {
+      font-family: var(--font-d);
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text);
+    }
+    .nav-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 180ms;
+    }
+    .nav-back:hover { color: var(--text); }
+    .nav-back svg { width: 14px; height: 14px; }
+
+    /* ── MAIN ── */
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .page-header {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+    .page-eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--muted);
+    }
+    .page-header h1 {
+      font-family: var(--font-d);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+    }
+
+    /* ── CONTENT ── */
+    .imprint-body {
+      padding: 64px 0 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    .imprint-section { display: flex; flex-direction: column; gap: 0; }
+
+    .imprint-section h2 {
+      font-family: var(--font-d);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .imprint-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 32px 36px;
+    }
+
+    .imprint-card p,
+    .imprint-card address {
+      font-style: normal;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.9;
+    }
+
+    .imprint-card a {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: rgba(255,255,255,0.25);
+      text-underline-offset: 3px;
+      transition: text-decoration-color 180ms;
+    }
+    .imprint-card a:hover { text-decoration-color: var(--text); }
+
+    .prose p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.85;
+    }
+    .prose p + p { margin-top: 16px; }
+
+    /* ── FOOTER ── */
+    .footer-simple {
+      border-top: 1px solid var(--border);
+      padding: 28px 0;
+    }
+    .footer-simple .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .footer-simple span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .footer-simple a {
+      font-size: 0.8rem;
+      color: var(--muted);
+      transition: color 180ms;
+    }
+    .footer-simple a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .imprint-card { padding: 24px 22px; }
+      .footer-simple .wrap { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav" aria-label="Seitennavigation">
+    <a href="index.html" class="nav-logo">NY</a>
+    <a href="index.html" class="nav-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+      Zurück zur Website
+    </a>
+  </nav>
+
+  <!-- Header -->
+  <header class="wrap">
+    <div class="page-header">
+      <div class="page-eyebrow">Rechtliches</div>
+      <h1>Impressum</h1>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="wrap">
+    <div class="imprint-body">
+
+      <!-- Angaben gemäß § 5 TMG -->
+      <section class="imprint-section" aria-labelledby="tmg">
+        <h2 id="tmg">Angaben gemäß § 5 TMG</h2>
+        <div class="imprint-card">
+          <address>
+            <strong>Noventry Webdesign</strong><br>
+            Tim Bimberg<br>
+            August-Hermann-Francke-Weg 6<br>
+            58675 Hemer<br>
+            Deutschland
+          </address>
+        </div>
+      </section>
+
+      <!-- Kontakt -->
+      <section class="imprint-section" aria-labelledby="kontakt-h">
+        <h2 id="kontakt-h">Kontakt</h2>
+        <div class="imprint-card">
+          <p>E-Mail: <a href="mailto:noventrywebdesign@gmail.com">noventrywebdesign@gmail.com</a></p>
+        </div>
+      </section>
+
+      <!-- Haftung für Inhalte -->
+      <section class="imprint-section" aria-labelledby="haftung-h">
+        <h2 id="haftung-h">Haftungsausschluss</h2>
+        <div class="imprint-card prose">
+          <p><strong style="color:var(--text);font-size:0.95rem;">Haftung für Inhalte</strong></p>
+          <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+
+          <p><strong style="color:var(--text);font-size:0.95rem;">Haftung für Links</strong></p>
+          <p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
+        </div>
+      </section>
+
+      <!-- Urheberrecht -->
+      <section class="imprint-section" aria-labelledby="urheber-h">
+        <h2 id="urheber-h">Urheberrecht</h2>
+        <div class="imprint-card prose">
+          <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
+          <p>Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer-simple">
+    <div class="wrap">
+      <span>© 2026 Noventry Webdesign · Tim Bimberg</span>
+      <a href="index.html">Zurück zur Startseite</a>
+    </div>
+  </footer>
+
+</body>
+</html>

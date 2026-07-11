@@ -1,0 +1,7 @@
+node_modules/
+.claude/skills/cinematic-scroll-skill/
+.env
+.env.local
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ristorante Piazza – Authentisch Italienisch in Iserlohn</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0e0906;
+      --bg-2:   #1a1008;
+      --bg-3:   #221508;
+      --text:   #FFF5E8;
+      --muted:  rgba(255,245,232,0.5);
+      --red:    #C9292B;
+      --gold:   #D4A843;
+      --border: rgba(255,245,232,0.07);
+      --r:      16px;
+      --serif:  'Playfair Display', Georgia, serif;
+      --sans:   'Inter', sans-serif;
+      --display:'Syne', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+
+    /* ── NOVENTRY BADGE ── */
+    .nv-badge {
+      position: fixed; bottom: 20px; right: 20px; z-index: 999;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(14,9,6,0.92); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
+      padding: 8px 14px 8px 10px; font-size: 0.75rem; font-weight: 600;
+      color: rgba(255,255,255,0.5); transition: color 180ms, border-color 180ms;
+    }
+    .nv-badge:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    .nv-badge-logo { font-family: var(--display); font-size: 0.8rem; font-weight: 800; color: var(--text); }
+
+    /* ── MARQUEE TICKER ── */
+    .ticker {
+      background: var(--red);
+      padding: 9px 0;
+      overflow: hidden;
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker-scroll 18s linear infinite;
+    }
+    .ticker-set {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-shrink: 0;
+    }
+    .ticker-item {
+      font-family: var(--display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,245,232,0.9);
+      padding: 0 20px;
+      white-space: nowrap;
+    }
+    .ticker-sep {
+      color: rgba(255,245,232,0.4);
+      font-size: 0.6rem;
+    }
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(14,9,6,0.9);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0;
+    }
+    .nav-logo {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 1px;
+    }
+    .nav-logo-name {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+    .nav-logo-sub {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .nav-links {
+      display: flex; list-style: none; gap: 36px;
+    }
+    .nav-links a {
+      font-size: 0.82rem; font-weight: 500; letter-spacing: 0.05em;
+      color: var(--muted); text-transform: uppercase; transition: color 180ms;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 9px 22px; border-radius: 100px;
+      transition: background 180ms, color 180ms;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--bg); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 94vh;
+      display: flex; align-items: center;
+      overflow: hidden;
+    }
+    /* Full-bleed background photo */
+    .hero-bg-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      pointer-events: none;
+    }
+    /* Canvas fire overlay — full hero */
+    .fire-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    /* Readability gradient — darker on left where text sits */
+    .hero-overlay {
+      position: absolute; inset: 0; pointer-events: none; z-index: 2;
+      background:
+        linear-gradient(to right,
+          rgba(10,5,2,0.88) 0%,
+          rgba(10,5,2,0.72) 38%,
+          rgba(10,5,2,0.30) 62%,
+          rgba(10,5,2,0.08) 100%),
+        linear-gradient(to top, rgba(10,5,2,0.55) 0%, transparent 55%);
+    }
+    /* Floating gold particles */
+    .hero-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 3; }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: rise var(--dur) ease-in var(--delay) infinite;
+      opacity: 0;
+      left: var(--x);
+    }
+    @keyframes rise {
+      0%   { transform: translateY(0) scale(1); opacity: 0; }
+      10%  { opacity: 0.6; }
+      80%  { opacity: 0.2; }
+      100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+    }
+
+    .hero-inner {
+      position: relative; z-index: 4;
+      width: 100%;
+      max-width: 560px;
+    }
+    .hero-left { }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: ''; display: block; width: 28px; height: 1px;
+      background: var(--gold); opacity: 0.5;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--red);
+    }
+    .hero-divider {
+      display: flex; align-items: center; gap: 14px;
+      margin-bottom: 24px;
+    }
+    .hero-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .hero-divider span {
+      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .hero-sub {
+      font-size: 1rem; color: var(--muted); line-height: 1.8; margin-bottom: 36px;
+    }
+    .hero-actions {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .btn-red {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--red); color: var(--text);
+      font-weight: 600; font-size: 0.875rem; letter-spacing: 0.03em;
+      padding: 14px 28px; border-radius: 100px;
+      transition: background 180ms, transform 160ms;
+    }
+    .btn-red:hover { background: #a82224; transform: translateY(-2px); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--muted); font-size: 0.875rem; font-weight: 500;
+      padding: 14px 24px; border-radius: 100px;
+      border: 1px solid var(--border);
+      transition: color 180ms, border-color 180ms;
+    }
+    .btn-outline:hover { color: var(--text); border-color: rgba(255,245,232,0.2); }
+
+    /* ─── STONE PIZZA OVEN ─────────────────────────────────────────── */
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .oven-scene {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: ov-float 6s ease-in-out infinite;
+      filter: drop-shadow(0 0 60px rgba(255,70,0,0.13));
+    }
+    @keyframes ov-float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    /* Ambient radial glow behind arch */
+    .oven-amb {
+      position: absolute;
+      width: 260px; height: 130px;
+      background: radial-gradient(ellipse, rgba(255,78,0,0.22), transparent 72%);
+      bottom: 22%; left: 50%;
+      transform: translateX(-50%);
+      filter: blur(26px);
+      pointer-events: none;
+      animation: amb-pulse 2.2s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+    @keyframes amb-pulse {
+      0%   { opacity: 0.65; transform: translateX(-50%) scaleX(1); }
+      100% { opacity: 1;    transform: translateX(-50%) scaleX(1.12); }
+    }
+
+    /* Chimney */
+    .oven-chimney {
+      position: relative;
+      width: 24px; height: 52px;
+      background: linear-gradient(to right, #1e0e06, #3c2012, #1e0e06);
+      border-radius: 3px 3px 0 0;
+      z-index: 3;
+    }
+    .oven-chimney::before {
+      content: '';
+      position: absolute;
+      top: -7px; left: -8px;
+      width: 40px; height: 9px;
+      background: linear-gradient(to right, #180c05, #382010, #180c05);
+      border-radius: 2px;
+    }
+
+    /* Smoke puffs */
+    .smoke-wrap {
+      position: absolute;
+      top: -6px; left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .smoke {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(192,172,155,0.22);
+      filter: blur(7px);
+      opacity: 0;
+      animation: smoke-rise var(--dur,3s) ease-out var(--del,0s) infinite;
+    }
+    @keyframes smoke-rise {
+      0%   { transform: translateY(0) translateX(0) scale(0.4);   opacity: 0; }
+      18%  { opacity: 0.85; }
+      72%  { opacity: 0.28; }
+      100% { transform: translateY(-95px) translateX(var(--dx,9px)) scale(3.2); opacity: 0; }
+    }
+
+    /* Dome body */
+    .oven-dome {
+      position: relative;
+      width: 300px; height: 192px;
+      background:
+        radial-gradient(ellipse 78% 52% at 48%  7%,  rgba(98,62,32,0.42),  transparent 56%),
+        radial-gradient(circle             at 10% 62%, rgba(112,70,28,0.22), transparent 36%),
+        radial-gradient(circle             at 90% 74%, rgba(38,20,6,0.48),   transparent 40%),
+        repeating-linear-gradient(0deg,
+          transparent 0, transparent 17px,
+          rgba(0,0,0,0.17) 17px, rgba(0,0,0,0.17) 19px),
+        repeating-linear-gradient(90deg,
+          transparent 0, transparent 37px,
+          rgba(0,0,0,0.07) 37px, rgba(0,0,0,0.07) 38px),
+        linear-gradient(160deg, #523624 0%, #2e1c0c 30%, #3e2618 68%, #261608 100%);
+      border-radius: 52% 52% 0 0 / 72% 72% 0 0;
+      border: 1px solid rgba(96,58,26,0.42);
+      border-bottom: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+    /* Top specular highlight */
+    .oven-dome::after {
+      content: '';
+      position: absolute;
+      top: 11%; left: 26%; right: 26%; height: 18%;
+      background: radial-gradient(ellipse, rgba(255,210,140,0.07), transparent 68%);
+      border-radius: 50%;
+    }
+
+    /* Arch stone frame (inside dome, bottom) */
+    .oven-arch-frame {
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 200px; height: 152px;
+      background: linear-gradient(168deg, #3e2816 0%, #261808 52%, #3e2816 100%);
+      border-radius: 100px 100px 0 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      box-shadow: 0 0 32px 6px rgba(255,72,0,0.2), inset 0 -4px 14px rgba(255,85,0,0.1);
+    }
+    .oven-arch-frame::before {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border-radius: 90px 90px 0 0;
+      border: 1px solid rgba(82,50,20,0.32);
+    }
+
+    /* Oven mouth opening */
+    .oven-mouth {
+      width: 162px; height: 124px;
+      border-radius: 81px 81px 0 0;
+      background: #040201;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 44px 16px rgba(255,68,0,0.3);
+    }
+
+    /* Ember floor */
+    .fire-floor {
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 24px;
+      background: linear-gradient(to top, rgba(255,42,0,0.95), rgba(255,95,0,0.65), transparent);
+    }
+
+    /* Interior radial glow */
+    .fire-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 102% 72% at 50% 100%,
+        rgba(255,82,0,0.78) 0%, rgba(255,48,0,0.38) 44%, transparent 68%);
+      animation: glow-pulse 1.95s ease-in-out infinite alternate;
+    }
+    @keyframes glow-pulse {
+      0%   { opacity: 0.62; }
+      100% { opacity: 1; }
+    }
+
+    /* Flames wrapper */
+    .flames-wrap {
+      position: absolute;
+      bottom: 12px; left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 2px;
+      height: 92px;
+    }
+
+    /* Flame base style */
+    .fl {
+      flex-shrink: 0;
+      border-radius: 50% 50% 22% 22% / 74% 74% 26% 26%;
+      transform-origin: bottom center;
+      animation: flame-dance var(--dur,1.2s) ease-in-out var(--del,0s) infinite alternate;
+    }
+    @keyframes flame-dance {
+      0%   { transform: scaleX(1)    skewX(0deg)  scaleY(1);    }
+      28%  { transform: scaleX(0.87) skewX(-7deg) scaleY(0.93); }
+      72%  { transform: scaleX(1.11) skewX(5deg)  scaleY(1.08); }
+      100% { transform: scaleX(0.94) skewX(-2deg) scaleY(0.97); }
+    }
+    .fl-a { width:15px; height:58px;  background:linear-gradient(to top,#e42d00,#ff8800,#ffd400,rgba(255,250,185,0.55)); filter:blur(1.4px); --dur:1.06s; --del:0s; }
+    .fl-b { width:22px; height:84px;  background:linear-gradient(to top,#ff3300,#ff7a00,#ffba00,rgba(255,255,198,0.5));  filter:blur(2px);   --dur:1.38s; --del:-0.28s; }
+    .fl-c { width:13px; height:50px;  background:linear-gradient(to top,#ff4e00,#ff9a00,rgba(255,218,95,0.8));           filter:blur(1px);   --dur:0.94s; --del:-0.54s; }
+    .fl-d { width:20px; height:76px;  background:linear-gradient(to top,#ff3c00,#ff8200,#ffc600,rgba(255,255,208,0.44)); filter:blur(1.9px); --dur:1.24s; --del:-0.76s; }
+    .fl-e { width:11px; height:42px;  background:linear-gradient(to top,#ff5300,#ffaa00,rgba(255,234,138,0.72));         filter:blur(1.1px); --dur:1.1s;  --del:-0.19s; }
+    .fl-f { width:18px; height:68px;  background:linear-gradient(to top,#ff3a00,#ff8600,#ffce00,rgba(255,252,198,0.5));  filter:blur(1.8px); --dur:1.46s; --del:-0.9s; }
+
+    /* Embers inside */
+    .emb {
+      position: absolute;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: #ffaa33;
+      box-shadow: 0 0 4px #ff7700;
+      opacity: 0;
+      animation: emb-rise var(--dur,1.8s) ease-in var(--del,0s) infinite;
+    }
+    @keyframes emb-rise {
+      0%   { transform: translateY(0) translateX(0);                     opacity: 0.92; }
+      82%  { opacity: 0.4; }
+      100% { transform: translateY(-78px) translateX(var(--dx,8px));     opacity: 0; }
+    }
+
+    /* Stone ledge */
+    .oven-ledge {
+      position: relative;
+      width: 322px; height: 18px;
+      background: linear-gradient(to bottom, #3e2a14, #2c1e0e);
+      border: 1px solid rgba(86,52,22,0.44);
+      border-top: none;
+      z-index: 2;
+    }
+
+    /* Plinth base */
+    .oven-plinth {
+      width: 352px; height: 28px;
+      background: linear-gradient(to bottom, #3c2812, #1e1208);
+      border-radius: 4px;
+      border: 1px solid rgba(68,40,16,0.5);
+      position: relative;
+      z-index: 2;
+    }
+    .oven-plinth::before {
+      content: '';
+      display: block;
+      height: 3px; width: 100%;
+      background: linear-gradient(to right, transparent, rgba(98,60,26,0.48), transparent);
+      border-radius: 4px 4px 0 0;
+    }
+
+    /* Pizza peel */
+    .pizza-peel-wrap {
+      position: absolute;
+      bottom: 3px; left: -28px;
+      display: flex; align-items: center;
+      transform: rotate(-7deg);
+      transform-origin: right bottom;
+      z-index: 10;
+      filter: drop-shadow(2px 3px 7px rgba(0,0,0,0.55));
+    }
+    .peel-handle {
+      width: 118px; height: 11px;
+      background: linear-gradient(to bottom, #9e6432, #6e3e1a, #9e6432);
+      border-radius: 6px;
+    }
+    .peel-head {
+      width: 84px; height: 84px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ba7242, #7e4a22, #a26232);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: inset 0 2px 5px rgba(255,200,100,0.12);
+    }
+    .pizza {
+      width: 68px; height: 68px;
+      border-radius: 50%;
+      position: relative; overflow: hidden;
+      background:
+        radial-gradient(circle at 34% 34%, rgba(255,225,158,0.32), transparent 50%),
+        radial-gradient(circle, #f2c46a 54%, #c47c2a 80%, #9a5c22 100%);
+    }
+    .pizza-sauce {
+      position: absolute;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      background: radial-gradient(circle, #bf2020, #8c1616);
+    }
+    .pz { position: absolute; border-radius: 50%; }
+    .pz.mz { background: rgba(244,226,198,0.92); }
+    .pz.bs { background: rgba(36,88,36,0.86); border-radius: 50% 50% 50% 20%/50% 50% 20% 50%; }
+
+    /* Flying sparks */
+    .ov-spark {
+      position: absolute;
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: #ffbc44;
+      box-shadow: 0 0 5px #ff7700;
+      opacity: 0;
+      animation: spark-fly var(--dur,1.4s) ease-out var(--del,0s) infinite;
+      z-index: 5;
+    }
+    @keyframes spark-fly {
+      0%   { transform: translate(0,0) scale(1);                                  opacity: 1; }
+      68%  { opacity: 0.65; }
+      100% { transform: translate(var(--dx,18px),var(--dy,-82px)) scale(0.15);    opacity: 0; }
+    }
+
+    /* ── OVEN PHOTO WRAPPER ─────────────────────────────────────── */
+    /* .oven-photo-wrap no longer used — fire is full-hero */
+    /* CSS steam/smoke wisps from pizza */
+    .oven-steam {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(218,200,178,0.18);
+      filter: blur(9px);
+      pointer-events: none;
+      opacity: 0;
+      animation: steam-rise var(--dur,4s) ease-out var(--del,0s) infinite;
+      z-index: 3;
+    }
+    @keyframes steam-rise {
+      0%   { transform: translateY(0) translateX(0) scale(0.45);  opacity: 0; }
+      16%  { opacity: 0.75; }
+      68%  { opacity: 0.22; }
+      100% { transform: translateY(-130px) translateX(var(--dx,12px)) scale(3.5); opacity: 0; }
+    }
+
+    /* ── DIVIDER ── */
+    .ornament-divider {
+      display: flex; align-items: center; gap: 20px;
+      padding: 0 0 0;
+    }
+    .ornament-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .ornament { font-family: var(--serif); font-size: 1.4rem; color: var(--gold); opacity: 0.6; }
+
+    /* ── MENU ── */
+    .menu-section { padding: 96px 0; }
+    .menu-header { text-align: center; margin-bottom: 56px; }
+    .menu-eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .menu-h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+      color: var(--text); margin-bottom: 12px;
+    }
+    .menu-sub { color: var(--muted); font-size: 0.9rem; font-style: italic; }
+
+    .menu-tabs {
+      display: flex; justify-content: center; gap: 4px;
+      margin-bottom: 44px;
+    }
+    .menu-tab {
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 8px 20px; border-radius: 100px;
+      border: 1px solid var(--border); color: var(--muted);
+      cursor: pointer; background: none;
+      font-family: var(--sans);
+      transition: all 200ms;
+    }
+    .menu-tab.active, .menu-tab:hover {
+      background: var(--red); border-color: var(--red);
+      color: var(--text);
+    }
+
+    .menu-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+    .menu-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 28px 28px;
+      transition: border-color 220ms, transform 220ms;
+      position: relative; overflow: hidden;
+    }
+    .menu-card::before {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 80px; height: 80px;
+      background: radial-gradient(circle at top right, rgba(201,41,43,0.08), transparent);
+    }
+    .menu-card:hover { border-color: rgba(201,41,43,0.25); transform: translateY(-3px); }
+    .menu-category {
+      font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--red); font-weight: 600; margin-bottom: 16px;
+    }
+    .menu-dish {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,245,232,0.05);
+    }
+    .menu-dish:last-child { border-bottom: none; padding-bottom: 0; }
+    .menu-dish-name {
+      font-family: var(--serif); font-size: 0.95rem; font-weight: 700;
+      color: var(--text); margin-bottom: 2px;
+    }
+    .menu-dish-desc { font-size: 0.76rem; color: var(--muted); font-style: italic; }
+    .menu-price {
+      font-family: var(--display); font-size: 0.9rem; font-weight: 700;
+      color: var(--gold); white-space: nowrap; margin-left: 16px;
+    }
+
+    /* ── ATMOSPHERE ── */
+    .atmo-section { padding: 80px 0; background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .atmo-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .atmo-text .menu-eyebrow { text-align: left; margin-bottom: 16px; }
+    .atmo-h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900; line-height: 1.15;
+      margin-bottom: 20px;
+    }
+    .atmo-h2 em { font-style: italic; color: var(--red); }
+    .atmo-text p { color: var(--muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 16px; }
+    .atmo-stats { display: flex; gap: 32px; margin-top: 32px; }
+    .atmo-stat strong {
+      display: block; font-family: var(--serif);
+      font-size: 2rem; font-weight: 900; color: var(--text); letter-spacing: -0.02em;
+    }
+    .atmo-stat strong em { font-style: normal; color: var(--red); }
+    .atmo-stat span { font-size: 0.78rem; color: var(--muted); }
+    .atmo-gallery {
+      display: grid; grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr; gap: 10px; height: 340px;
+    }
+    .atmo-img {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+    .atmo-img:first-child { grid-row: span 2; }
+    .atmo-img-inner {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif); font-size: 0.8rem; color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── CTA ── */
+    .cta-section { padding: 96px 0; text-align: center; }
+    .cta-ornament {
+      font-family: var(--serif); font-size: 3rem; color: var(--gold);
+      opacity: 0.25; line-height: 1; margin-bottom: 12px;
+    }
+    .cta-h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      font-weight: 900; margin-bottom: 16px;
+    }
+    .cta-h2 em { font-style: italic; color: var(--red); }
+    .cta-sub { color: var(--muted); font-size: 1rem; margin-bottom: 36px; line-height: 1.75; }
+    .cta-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 36px 0; }
+    .footer-inner {
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; gap: 24px;
+    }
+    .footer-logo-full { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; }
+    .footer-logo-full span { display: block; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+    .footer-copy { font-size: 0.78rem; color: var(--muted); text-align: center; }
+    .footer-links { display: flex; gap: 20px; justify-content: flex-end; }
+    .footer-links a { font-size: 0.78rem; color: var(--muted); transition: color 180ms; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .atmo-inner { grid-template-columns: 1fr; }
+      .atmo-gallery { display: none; }
+      .footer-inner { grid-template-columns: 1fr; text-align: center; }
+      .footer-links { justify-content: center; }
+      .nav-links { display: none; }
+    }
+
+    /* ── REVEAL ANIMATIONS ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.on { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="nv-badge"><span class="nv-badge-logo">NY</span> Erstellt von Noventry</a>
+
+  <!-- Ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <div class="ticker-set">
+        <span class="ticker-item">Ristorante Piazza</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Authentisch Italienisch</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Iserlohn · Sauerland</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Seit 2009</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Frische Zutaten</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Handgemachte Pasta</span><span class="ticker-sep">✦</span>
+      </div>
+      <div class="ticker-set" aria-hidden="true">
+        <span class="ticker-item">Ristorante Piazza</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Authentisch Italienisch</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Iserlohn · Sauerland</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Seit 2009</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Frische Zutaten</span><span class="ticker-sep">✦</span>
+        <span class="ticker-item">Handgemachte Pasta</span><span class="ticker-sep">✦</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav>
+    <div class="wrap">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <span class="nav-logo-name">Piazza</span>
+          <span class="nav-logo-sub">Ristorante</span>
+        </a>
+        <ul class="nav-links" role="list">
+          <li><a href="#speisekarte">Speisekarte</a></li>
+          <li><a href="#ueber-uns">Über uns</a></li>
+          <li><a href="#reservierung">Reservierung</a></li>
+        </ul>
+        <a href="#reservierung" class="nav-cta">Tisch reservieren</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <!-- Full-bleed background -->
+    <img src="pizza-oven.jpg" alt="" class="hero-bg-img" aria-hidden="true">
+    <!-- Canvas fire particles -->
+    <canvas id="fire-canvas" class="fire-canvas" aria-hidden="true"></canvas>
+    <!-- Readability overlay -->
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <!-- Steam wisps from the pizza (30-36% x / 52-60% y of image) -->
+    <div class="oven-steam" style="width:28px;height:28px;left:30%;top:54%;--dur:4.2s;--del:0s;--dx:11px;"  aria-hidden="true"></div>
+    <div class="oven-steam" style="width:22px;height:22px;left:36%;top:58%;--dur:3.6s;--del:1.1s;--dx:-8px;" aria-hidden="true"></div>
+    <div class="oven-steam" style="width:34px;height:34px;left:27%;top:56%;--dur:5.0s;--del:2.0s;--dx:15px;" aria-hidden="true"></div>
+    <div class="oven-steam" style="width:18px;height:18px;left:33%;top:62%;--dur:3.9s;--del:3.2s;--dx:-9px;"  aria-hidden="true"></div>
+    <!-- Gold particles -->
+    <div class="hero-particles" aria-hidden="true">
+      <div class="particle" style="--x:20%;--dur:4s;--delay:0s;bottom:10%;"></div>
+      <div class="particle" style="--x:35%;--dur:5s;--delay:0.8s;bottom:15%;"></div>
+      <div class="particle" style="--x:50%;--dur:3.5s;--delay:1.6s;bottom:8%;"></div>
+      <div class="particle" style="--x:65%;--dur:4.5s;--delay:0.4s;bottom:12%;"></div>
+      <div class="particle" style="--x:80%;--dur:4s;--delay:2s;bottom:9%;"></div>
+    </div>
+    <!-- Text content -->
+    <div class="wrap">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div class="hero-eyebrow">Iserlohn · Sauerland</div>
+          <h1>La cucina che<br><em>innamora</em></h1>
+          <div class="hero-divider">
+            <div class="hero-divider-line"></div>
+            <span>Ristorante dal 2009</span>
+            <div class="hero-divider-line"></div>
+          </div>
+          <p class="hero-sub">Handgemachte Pasta, frische saisonale Zutaten und der unverwechselbare Geschmack Süditaliens – mitten in Iserlohn. Herzlich willkommen in der Piazza.</p>
+          <div class="hero-actions">
+            <a href="#reservierung" class="btn-red">
+              Tisch reservieren
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#speisekarte" class="btn-outline">Zur Speisekarte</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <section class="menu-section" id="speisekarte">
+    <div class="wrap">
+      <div class="menu-header reveal">
+        <div class="menu-eyebrow">La Nostra Cucina</div>
+        <h2 class="menu-h2">Unsere Speisekarte</h2>
+        <p class="menu-sub">Frisch zubereitet, täglich wechselnde Tagesgerichte</p>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card reveal reveal-delay-1">
+          <div class="menu-category">Antipasti</div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Bruschetta al Pomodoro</div><div class="menu-dish-desc">Tomaten, Basilikum, Olivenöl extra vergine</div></div>
+            <div class="menu-price">7,90 €</div>
+          </div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Vitello Tonnato</div><div class="menu-dish-desc">Kalbfleisch, Thunfischsauce, Kapern</div></div>
+            <div class="menu-price">14,50 €</div>
+          </div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Burrata con Prosciutto</div><div class="menu-dish-desc">Cremige Burrata, Parmaschinken, Rucola</div></div>
+            <div class="menu-price">13,90 €</div>
+          </div>
+        </div>
+        <div class="menu-card reveal reveal-delay-2">
+          <div class="menu-category">Paste Fresche</div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Tagliatelle al Ragù</div><div class="menu-dish-desc">Handgemachte Nudeln, Bolognese nach Nonna's Rezept</div></div>
+            <div class="menu-price">16,90 €</div>
+          </div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Pappardelle ai Funghi</div><div class="menu-dish-desc">Breite Nudeln, Waldpilze, Thymian, Pecorino</div></div>
+            <div class="menu-price">17,50 €</div>
+          </div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Cacio e Pepe</div><div class="menu-dish-desc">Tonnarelli, Pecorino Romano, schwarzer Pfeffer</div></div>
+            <div class="menu-price">15,90 €</div>
+          </div>
+        </div>
+        <div class="menu-card reveal reveal-delay-3">
+          <div class="menu-category">Secondi</div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Branzino al Forno</div><div class="menu-dish-desc">Wolfsbarsch, Zitronenkräuter, Ofengemüse</div></div>
+            <div class="menu-price">24,90 €</div>
+          </div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Osso Buco alla Milanese</div><div class="menu-dish-desc">Geschmorte Kalbshaxe, Gremolata, Risotto</div></div>
+            <div class="menu-price">27,50 €</div>
+          </div>
+        </div>
+        <div class="menu-card reveal reveal-delay-4">
+          <div class="menu-category">Dolci</div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Tiramisù della Casa</div><div class="menu-dish-desc">Hausgemacht, täglich frisch nach Originalrezept</div></div>
+            <div class="menu-price">7,90 €</div>
+          </div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Panna Cotta al Caramello</div><div class="menu-dish-desc">Vanille-Panna-Cotta, Karamellsauce, Beeren</div></div>
+            <div class="menu-price">7,50 €</div>
+          </div>
+          <div class="menu-dish">
+            <div><div class="menu-dish-name">Gelato Artigianale</div><div class="menu-dish-desc">3 Kugeln hausgemachtes Eis, Wahl der Sorte</div></div>
+            <div class="menu-price">5,90 €</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Atmosphere -->
+  <section class="atmo-section" id="ueber-uns">
+    <div class="wrap">
+      <div class="atmo-inner">
+        <div class="atmo-text reveal">
+          <div class="menu-eyebrow">La Nostra Storia</div>
+          <h2 class="atmo-h2">Cucina <em>autentica</em><br>mit Herz</h2>
+          <p>Seit 2009 bringen wir den Geschmack Süditaliens nach Iserlohn. Jedes Gericht entsteht mit frischen, sorgfältig ausgewählten Zutaten – viele davon direkt aus Italien importiert.</p>
+          <p>Ob romantisches Abendessen zu zweit, Familienfeier oder Geschäftsessen – bei uns fühlen Sie sich wie zuhause.</p>
+          <div class="atmo-stats">
+            <div class="atmo-stat"><strong>15<em>+</em></strong><span>Jahre in Iserlohn</span></div>
+            <div class="atmo-stat"><strong>80<em>+</em></strong><span>Plätze im Haus</span></div>
+            <div class="atmo-stat"><strong>4,9<em>★</em></strong><span>Google Bewertung</span></div>
+          </div>
+        </div>
+        <div class="atmo-gallery reveal reveal-delay-2" aria-hidden="true">
+          <div class="atmo-img" style="background:linear-gradient(135deg,rgba(201,41,43,0.12),rgba(30,15,8,0.8));">
+            <div class="atmo-img-inner">Innenraum</div>
+          </div>
+          <div class="atmo-img" style="background:linear-gradient(135deg,rgba(212,168,67,0.1),rgba(30,15,8,0.8));">
+            <div class="atmo-img-inner">Pasta</div>
+          </div>
+          <div class="atmo-img" style="background:linear-gradient(135deg,rgba(201,41,43,0.08),rgba(30,15,8,0.8));">
+            <div class="atmo-img-inner">Weinkarte</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="wrap">
+      <div class="cta-ornament" aria-hidden="true">❧</div>
+      <h2 class="cta-h2 reveal">Wir freuen uns<br>auf Ihren <em>Besuch</em></h2>
+      <p class="cta-sub reveal reveal-delay-1">Reservieren Sie jetzt Ihren Tisch – online oder telefonisch.<br>Di–So 17:00–23:00 Uhr · Mi Ruhetag</p>
+      <div class="cta-actions reveal reveal-delay-2">
+        <a href="#reservierung" class="btn-red">Tisch reservieren</a>
+        <a href="tel:+492371000000" class="btn-outline">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          02371 · 000 000
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <div class="footer-logo-full">
+          Piazza
+          <span>Ristorante · Iserlohn</span>
+        </div>
+        <span class="footer-copy">© 2026 Ristorante Piazza</span>
+        <nav class="footer-links">
+          <a href="#">Impressum</a>
+          <a href="#">Datenschutz</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver(
+      es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // Menu tabs (visual only)
+    document.querySelectorAll('.menu-tab').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.menu-tab').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+
+  <script>
+  /* ── CANVAS FIRE SIMULATION ──────────────────────────────────────
+     Particle system with screen blend-mode layered over the oven photo.
+     Fire origin: ~62% from left, ~68% from top (where the big flame is).
+     Embers scatter across the floor (45-78% x, 75-82% y).
+  ─────────────────────────────────────────────────────────────────── */
+  (function initOvenFire() {
+    var wrap   = document.querySelector('.hero');
+    var canvas = document.getElementById('fire-canvas');
+    var img    = document.querySelector('.hero-bg-img');
+    if (!canvas || !wrap || !img) return;
+
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var W = 0, H = 0;
+    var running = false;
+
+    function resize() {
+      var r = wrap.getBoundingClientRect();
+      W = r.width;
+      H = r.height;
+      canvas.width  = W;
+      canvas.height = H;
+    }
+
+    function rand(a, b) { return a + Math.random() * (b - a); }
+
+    function spawnFlame() {
+      /* spawn at fire zone: 55-70% x, 60-72% y */
+      particles.push({
+        x: W * rand(0.55, 0.70),
+        y: H * rand(0.62, 0.74),
+        vx: rand(-0.9, 0.9),
+        vy: -rand(3.5, 7.0),
+        life: 1,
+        decay: rand(0.014, 0.024),
+        r: rand(24, 54),
+        type: 'flame'
+      });
+    }
+
+    function spawnSpark() {
+      particles.push({
+        x: W * rand(0.52, 0.72),
+        y: H * rand(0.55, 0.70),
+        vx: rand(-2.2, 2.2),
+        vy: -rand(1.8, 4.5),
+        life: 1,
+        decay: rand(0.028, 0.055),
+        r: rand(1.5, 4),
+        type: 'spark'
+      });
+    }
+
+    function spawnEmber() {
+      /* glowing embers on floor: 44-80% x, 75-84% y */
+      particles.push({
+        x: W * rand(0.44, 0.80),
+        y: H * rand(0.75, 0.84),
+        vx: rand(-0.6, 0.6),
+        vy: rand(-0.8, -0.2),
+        life: 1,
+        decay: rand(0.008, 0.018),
+        r: rand(3, 9),
+        type: 'ember'
+      });
+    }
+
+    function tick() {
+      if (!running) return;
+      ctx.clearRect(0, 0, W, H);
+
+      /* spawn */
+      for (var i = 0; i < 7; i++) spawnFlame();
+      if (Math.random() < 0.55) spawnSpark();
+      if (Math.random() < 0.30) spawnEmber();
+
+      ctx.globalCompositeOperation = 'screen';
+
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        /* physics */
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.vx += rand(-0.14, 0.14);   /* turbulence */
+        p.vy += rand(-0.06, 0.04);
+        p.vy *= 0.982;               /* air drag */
+        p.life -= p.decay;
+        if (p.life <= 0) { particles.splice(i, 1); continue; }
+
+        var t = p.life; /* 1=fresh → 0=dead */
+
+        if (p.type === 'flame') {
+          var gr = p.r * (0.75 + (1 - t) * 0.55);
+          var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, gr);
+          g.addColorStop(0,    'rgba(255,248,165,' + (t * 0.52) + ')');
+          g.addColorStop(0.22, 'rgba(255,170,28,'  + (t * 0.46) + ')');
+          g.addColorStop(0.55, 'rgba(255,55,0,'    + (t * 0.28) + ')');
+          g.addColorStop(1,    'rgba(160,8,0,0)');
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, gr, 0, 6.2832);
+          ctx.fill();
+
+        } else if (p.type === 'spark') {
+          ctx.globalAlpha = t * 0.88;
+          ctx.fillStyle = t > 0.5
+            ? 'rgba(255,238,90,1)'
+            : 'rgba(255,120,20,1)';
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+        } else { /* ember */
+          var eg = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
+          eg.addColorStop(0, 'rgba(255,190,40,' + (t * 0.85) + ')');
+          eg.addColorStop(0.5,'rgba(255,80,0,'  + (t * 0.55) + ')');
+          eg.addColorStop(1,  'rgba(200,20,0,0)');
+          ctx.fillStyle = eg;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, 6.2832);
+          ctx.fill();
+        }
+      }
+
+      /* pulsing ambient glow over the fire zone */
+      var pulse = 0.08 + Math.sin(Date.now() * 0.0028) * 0.04;
+      var ag = ctx.createRadialGradient(W*0.63, H*0.60, 0, W*0.63, H*0.60, W*0.22);
+      ag.addColorStop(0, 'rgba(255,110,0,' + pulse + ')');
+      ag.addColorStop(1, 'rgba(255,40,0,0)');
+      ctx.fillStyle = ag;
+      ctx.beginPath();
+      ctx.arc(W*0.63, H*0.60, W*0.22, 0, 6.2832);
+      ctx.fill();
+
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(tick);
+    }
+
+    function start() {
+      resize();
+      running = true;
+      tick();
+    }
+
+    window.addEventListener('resize', resize);
+
+    /* start once image is loaded */
+    if (img.complete && img.naturalWidth > 0) {
+      start();
+    } else {
+      img.addEventListener('load', start);
+      /* fallback: start anyway after 2 s in case load already fired */
+      setTimeout(function() { if (!running) start(); }, 2000);
+    }
+  })();
+  </script>
+</body>
+</html>

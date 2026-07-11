@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Schreinerei Weber – Maßgefertigte Holzarbeiten</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #080500;
+      --bg-2:   #110d04;
+      --bg-3:   #1a1206;
+      --text:   #F5EDDA;
+      --muted:  rgba(245,237,218,0.48);
+      --amber:  #D97706;
+      --amber-l:#F59E0B;
+      --amber-d:#B45309;
+      --border: rgba(245,237,218,0.07);
+      --r:      14px;
+      --font-d: 'Syne', sans-serif;
+      --font-b: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-b); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+
+    .nv-badge {
+      position: fixed; bottom: 20px; right: 20px; z-index: 999;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(8,5,0,0.92); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
+      padding: 8px 14px 8px 10px; font-size: 0.75rem; font-weight: 600;
+      color: rgba(255,255,255,0.5); transition: color 180ms;
+    }
+    .nv-badge:hover { color: var(--text); }
+    .nv-badge-logo { font-family: var(--font-d); font-size: 0.8rem; font-weight: 800; color: var(--text); }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8,5,0,0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+    .nav-logo {
+      font-family: var(--font-d); font-size: 1.05rem; font-weight: 800;
+      letter-spacing: -0.02em; display: flex; align-items: center; gap: 12px;
+    }
+    .nav-logo-icon {
+      width: 36px; height: 36px; border-radius: 9px;
+      background: var(--amber); display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-icon svg { width: 18px; height: 18px; color: var(--bg); }
+    .nav-links { display: flex; list-style: none; gap: 32px; }
+    .nav-links a { font-size: 0.875rem; color: var(--muted); transition: color 180ms; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: transparent; border: 1px solid var(--amber);
+      color: var(--amber); font-size: 0.85rem; font-weight: 600;
+      padding: 9px 22px; border-radius: 8px;
+      transition: background 180ms, color 180ms;
+    }
+    .nav-cta:hover { background: var(--amber); color: var(--bg); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      overflow: hidden;
+    }
+    /* Wood grain texture via CSS */
+    .hero::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background: repeating-linear-gradient(
+        92deg,
+        transparent 0px, transparent 18px,
+        rgba(217,119,6,0.015) 18px, rgba(217,119,6,0.015) 19px,
+        transparent 19px, transparent 42px,
+        rgba(217,119,6,0.02) 42px, rgba(217,119,6,0.02) 43px,
+        transparent 43px, transparent 71px,
+        rgba(217,119,6,0.01) 71px, rgba(217,119,6,0.01) 72px
+      );
+    }
+    .hero-glow {
+      position: absolute; pointer-events: none;
+      top: 0; right: -100px;
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse at top right, rgba(217,119,6,0.12), transparent 60%);
+    }
+
+    /* Ghost year number */
+    .hero-ghost-num {
+      position: absolute;
+      font-family: var(--font-d);
+      font-size: clamp(180px, 22vw, 280px);
+      font-weight: 800;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      color: rgba(217,119,6,0.06);
+      right: -0.04em;
+      top: 50%; transform: translateY(-50%);
+      pointer-events: none; user-select: none;
+    }
+
+    .hero-content { position: relative; padding: 100px 0 60px; }
+    .hero-eyebrow {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--amber);
+      margin-bottom: 24px; display: flex; align-items: center; gap: 12px;
+    }
+    .hero-eyebrow::after { content: ''; display: block; height: 1px; width: 40px; background: var(--amber); opacity: 0.5; }
+
+    .hero h1 {
+      font-family: var(--font-d);
+      font-size: clamp(3rem, 7vw, 6.5rem);
+      font-weight: 800; letter-spacing: -0.05em; line-height: 0.95;
+      margin-bottom: 40px; max-width: 700px;
+    }
+    .hero h1 span { display: block; color: var(--amber); }
+
+    /* Ruler / tape measure decoration */
+    .ruler {
+      display: flex; align-items: flex-end; gap: 0;
+      margin-bottom: 36px; overflow: hidden;
+      height: 32px; max-width: 480px;
+    }
+    .ruler-tick {
+      flex-shrink: 0; border-left: 1px solid rgba(217,119,6,0.35);
+      display: flex; flex-direction: column; align-items: flex-start;
+    }
+    .ruler-tick.major { border-color: rgba(217,119,6,0.6); }
+    .ruler-num {
+      font-size: 0.52rem; color: rgba(217,119,6,0.5);
+      margin-top: 2px; padding-left: 2px;
+    }
+
+    .hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.8; max-width: 500px; margin-bottom: 40px; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 72px; }
+    .btn-amber {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--amber); color: var(--bg);
+      font-weight: 700; font-size: 0.9rem;
+      padding: 13px 28px; border-radius: 9px;
+      transition: background 180ms, transform 160ms;
+    }
+    .btn-amber:hover { background: var(--amber-l); transform: translateY(-2px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--muted); font-size: 0.875rem;
+      padding: 13px 22px; border-radius: 9px;
+      border: 1px solid var(--border); transition: color 180ms, border-color 180ms;
+    }
+    .btn-ghost:hover { color: var(--text); border-color: rgba(245,237,218,0.2); }
+
+    /* Stats bar */
+    .hero-stats {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 0; border: 1px solid var(--border); border-radius: var(--r);
+      overflow: hidden; max-width: 540px;
+    }
+    .hero-stat {
+      padding: 20px 24px; position: relative;
+    }
+    .hero-stat + .hero-stat { border-left: 1px solid var(--border); }
+    .hero-stat-num {
+      font-family: var(--font-d);
+      font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em;
+      line-height: 1; color: var(--text); margin-bottom: 4px;
+    }
+    .hero-stat-num .counter-val { color: var(--amber); }
+    .hero-stat-label { font-size: 0.76rem; color: var(--muted); }
+
+    /* ── PORTFOLIO ── */
+    .port-section { padding: 96px 0; }
+    .section-eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 14px; }
+    .section-h2 { font-family: var(--font-d); font-size: clamp(1.8rem,3.5vw,2.6rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.15; margin-bottom: 12px; }
+    .section-sub { color: var(--muted); font-size: 1rem; max-width: 500px; line-height: 1.75; }
+
+    .port-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      grid-template-rows: auto auto;
+      gap: 14px;
+      margin-top: 52px;
+    }
+    .port-card {
+      border-radius: var(--r); overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+      transition: border-color 220ms, transform 220ms;
+      cursor: pointer;
+    }
+    .port-card:hover { border-color: rgba(217,119,6,0.35); transform: translateY(-4px); }
+    .port-card:first-child { grid-row: span 2; }
+    .port-thumb {
+      width: 100%; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .port-card:first-child .port-thumb { aspect-ratio: 3/4; }
+    .port-thumb { aspect-ratio: 4/3; }
+    .port-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(8,5,0,0.85) 0%, transparent 50%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 20px;
+      opacity: 0; transition: opacity 220ms;
+    }
+    .port-card:hover .port-overlay { opacity: 1; }
+    .port-name { font-family: var(--font-d); font-size: 0.95rem; font-weight: 700; }
+    .port-tag { font-size: 0.72rem; color: var(--amber); margin-top: 3px; }
+
+    /* ── CRAFT SECTION ── */
+    .craft-section { padding: 80px 0; background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .craft-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .craft-h2 { font-family: var(--font-d); font-size: clamp(1.8rem,3vw,2.4rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 20px; }
+    .craft-h2 em { font-style: normal; color: var(--amber); }
+    .craft-text p { color: var(--muted); font-size: 0.95rem; line-height: 1.85; margin-bottom: 16px; }
+
+    .craft-process { display: flex; flex-direction: column; gap: 0; }
+    .craft-step {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 20px 0; border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .craft-step:last-child { border-bottom: none; }
+    .craft-step-num {
+      font-family: var(--font-d); font-size: 0.72rem; font-weight: 800;
+      color: var(--amber); letter-spacing: 0.06em;
+      flex-shrink: 0; padding-top: 3px; width: 28px;
+    }
+    .craft-step-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: rgba(217,119,6,0.1); border: 1px solid rgba(217,119,6,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--amber); flex-shrink: 0;
+    }
+    .craft-step-icon svg { width: 16px; height: 16px; }
+    .craft-step h4 { font-family: var(--font-d); font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+    .craft-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── MATERIALS ── */
+    .mat-section { padding: 80px 0; }
+    .mat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-top: 48px; }
+    .mat-card {
+      border-radius: var(--r); padding: 24px 20px;
+      border: 1px solid var(--border);
+      transition: border-color 220ms, transform 220ms;
+    }
+    .mat-card:hover { border-color: rgba(217,119,6,0.3); transform: translateY(-3px); }
+    .mat-swatch {
+      width: 100%; aspect-ratio: 3/1; border-radius: 8px;
+      margin-bottom: 14px; position: relative; overflow: hidden;
+    }
+    .mat-name { font-family: var(--font-d); font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
+    .mat-desc { font-size: 0.76rem; color: var(--muted); }
+
+    /* ── CTA ── */
+    .cta-section { padding: 96px 0; position: relative; overflow: hidden; }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(92deg, transparent 0px, transparent 18px, rgba(217,119,6,0.012) 18px, rgba(217,119,6,0.012) 19px, transparent 19px, transparent 42px);
+      pointer-events: none;
+    }
+    .cta-box {
+      position: relative;
+      background: var(--bg-2); border: 1px solid rgba(217,119,6,0.25);
+      border-radius: 20px; padding: 64px;
+      text-align: center; overflow: hidden;
+    }
+    .cta-box::before {
+      content: ''; position: absolute; bottom: -60px; right: -60px;
+      width: 260px; height: 260px;
+      background: radial-gradient(circle, rgba(217,119,6,0.1), transparent 70%);
+      pointer-events: none;
+    }
+    .cta-box h2 { font-family: var(--font-d); font-size: clamp(1.8rem,3.5vw,2.8rem); font-weight: 800; letter-spacing: -0.04em; margin-bottom: 14px; }
+    .cta-box h2 em { font-style: normal; color: var(--amber); }
+    .cta-box p { color: var(--muted); font-size: 1rem; margin-bottom: 36px; line-height: 1.75; }
+    .cta-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 32px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .footer-brand { display: flex; align-items: center; gap: 10px; }
+    .footer-icon { width: 28px; height: 28px; background: var(--amber); border-radius: 6px; display: flex; align-items: center; justify-content: center; }
+    .footer-icon svg { width: 14px; height: 14px; color: var(--bg); }
+    .footer-name { font-family: var(--font-d); font-size: 0.95rem; font-weight: 700; }
+    .footer-copy { font-size: 0.78rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 0.78rem; color: var(--muted); transition: color 180ms; }
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-up.on { opacity: 1; transform: translateY(0); }
+    .fade-left { opacity: 0; transform: translateX(-24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-left.on { opacity: 1; transform: translateX(0); }
+    .d1 { transition-delay: 0.1s; }
+    .d2 { transition-delay: 0.2s; }
+    .d3 { transition-delay: 0.3s; }
+    .d4 { transition-delay: 0.4s; }
+    .d5 { transition-delay: 0.5s; }
+
+    @media (max-width: 860px) {
+      .craft-inner { grid-template-columns: 1fr; gap: 40px; }
+      .port-grid { grid-template-columns: 1fr 1fr; }
+      .port-card:first-child { grid-row: auto; }
+      .mat-grid { grid-template-columns: 1fr 1fr; }
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
+      .cta-box { padding: 40px 28px; }
+    }
+    @media (max-width: 560px) {
+      .port-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="nv-badge"><span class="nv-badge-logo">NY</span> Erstellt von Noventry</a>
+
+  <!-- Nav -->
+  <nav>
+    <div class="wrap">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <div class="nav-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          Schreinerei Weber
+        </a>
+        <ul class="nav-links" role="list">
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#handwerk">Handwerk</a></li>
+          <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+        <a href="#kontakt" class="nav-cta">Anfrage stellen</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-ghost-num" aria-hidden="true">25</div>
+    <div class="wrap">
+      <div class="hero-content">
+        <div class="hero-eyebrow">Gegründet 1999 · Menden, Sauerland</div>
+        <h1>
+          Holz.<br>
+          <span>Maßgefertigt.</span>
+        </h1>
+
+        <!-- Ruler decoration -->
+        <div class="ruler" aria-hidden="true" id="ruler"></div>
+
+        <p class="hero-sub">Seit 25 Jahren fertigen wir individuelle Möbel, Treppen, Türen und Innenausbauten – von Hand, mit Leidenschaft und dem Respekt vor dem Material Holz.</p>
+        <div class="hero-actions">
+          <a href="#portfolio" class="btn-amber">
+            Portfolio ansehen
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#kontakt" class="btn-ghost">Anfrage stellen</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-num"><span class="counter-val" data-target="25">0</span>+</div>
+            <div class="hero-stat-label">Jahre Erfahrung</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num"><span class="counter-val" data-target="340">0</span></div>
+            <div class="hero-stat-label">Projekte</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-num"><span class="counter-val" data-target="100">0</span>%</div>
+            <div class="hero-stat-label">Handarbeit</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section class="port-section" id="portfolio">
+    <div class="wrap">
+      <div class="section-eyebrow fade-up">Referenzen</div>
+      <h2 class="section-h2 fade-up d1">Ausgewählte Projekte</h2>
+      <p class="section-sub fade-up d2">Jedes Stück einmalig – entworfen und gefertigt für den jeweiligen Raum und Kunden.</p>
+      <div class="port-grid">
+        <!-- Large card -->
+        <div class="port-card fade-up d1">
+          <div class="port-thumb" style="background:linear-gradient(160deg,#2a1a08,#0f0800);">
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(88deg,transparent 0,transparent 20px,rgba(217,119,6,0.04) 20px,rgba(217,119,6,0.04) 21px);"></div>
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(217,119,6,0.3)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="position:relative;z-index:1;">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+            </svg>
+          </div>
+          <div class="port-overlay">
+            <div class="port-name">Einbauschrank Wohnzimmer</div>
+            <div class="port-tag">Eiche · Maßanfertigung · 2024</div>
+          </div>
+        </div>
+
+        <div class="port-card fade-up d2">
+          <div class="port-thumb" style="background:linear-gradient(140deg,#1e1106,#120b03);">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(217,119,6,0.25)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+          <div class="port-overlay">
+            <div class="port-name">Holztreppe Einfamilienhaus</div>
+            <div class="port-tag">Buche · Massivholz · 2024</div>
+          </div>
+        </div>
+
+        <div class="port-card fade-up d3">
+          <div class="port-thumb" style="background:linear-gradient(140deg,#241503,#160e02);">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(217,119,6,0.25)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;">
+              <path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+            </svg>
+          </div>
+          <div class="port-overlay">
+            <div class="port-name">Massivholz-Küche</div>
+            <div class="port-tag">Nussbaum · Küche · 2023</div>
+          </div>
+        </div>
+
+        <div class="port-card fade-up d2">
+          <div class="port-thumb" style="background:linear-gradient(140deg,#1b1104,#0d0801);">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(217,119,6,0.25)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <div class="port-overlay">
+            <div class="port-name">Büromöbel Kanzlei</div>
+            <div class="port-tag">Kirsche · Büro · 2023</div>
+          </div>
+        </div>
+
+        <div class="port-card fade-up d3">
+          <div class="port-thumb" style="background:linear-gradient(140deg,#201403,#110b02);">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(217,119,6,0.25)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+          </div>
+          <div class="port-overlay">
+            <div class="port-name">Individuelle Türen</div>
+            <div class="port-tag">Eiche · Türen · 2022</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Craft -->
+  <section class="craft-section" id="handwerk">
+    <div class="wrap">
+      <div class="craft-inner">
+        <div class="craft-text fade-left">
+          <div class="section-eyebrow">Unser Handwerk</div>
+          <h2 class="craft-h2">Qualität, die man <em>spürt</em></h2>
+          <p>Jedes Stück, das unsere Werkstatt verlässt, wurde von Hand gefertigt – mit ausgewählten Hölzern, traditionellen Techniken und dem Blick fürs Detail.</p>
+          <p>Wir arbeiten ausschließlich mit zertifizierten, nachhaltigen Hölzern aus kontrollierter Forstwirtschaft.</p>
+        </div>
+        <div class="craft-process fade-up d1">
+          <div class="craft-step">
+            <span class="craft-step-num">01</span>
+            <div class="craft-step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div>
+              <h4>Beratungsgespräch</h4>
+              <p>Gemeinsam besprechen wir Ihre Wünsche, Maße und Materialvorstellungen.</p>
+            </div>
+          </div>
+          <div class="craft-step">
+            <span class="craft-step-num">02</span>
+            <div class="craft-step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <div>
+              <h4>Planung & Entwurf</h4>
+              <p>Detaillierte Zeichnungen und Materialauswahl – Sie sehen alles bevor es gebaut wird.</p>
+            </div>
+          </div>
+          <div class="craft-step">
+            <span class="craft-step-num">03</span>
+            <div class="craft-step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <div>
+              <h4>Fertigung in der Werkstatt</h4>
+              <p>Handwerkliche Verarbeitung in unserer Mendener Werkstatt – ohne Kompromisse bei der Qualität.</p>
+            </div>
+          </div>
+          <div class="craft-step">
+            <span class="craft-step-num">04</span>
+            <div class="craft-step-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div>
+              <h4>Montage & Übergabe</h4>
+              <p>Fachgerechte Montage vor Ort und sorgfältige Endkontrolle bis zu Ihrer Zufriedenheit.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Materials -->
+  <section class="mat-section">
+    <div class="wrap">
+      <div class="section-eyebrow fade-up">Materialien</div>
+      <h2 class="section-h2 fade-up d1">Ausgewählte Hölzer</h2>
+      <div class="mat-grid">
+        <div class="mat-card fade-up d1">
+          <div class="mat-swatch" style="background:linear-gradient(135deg,#c8963a,#8a5f1e,#c8963a);"></div>
+          <div class="mat-name">Eiche</div>
+          <div class="mat-desc">Robust, langlebig und zeitlos – unser meistgefragtes Holz.</div>
+        </div>
+        <div class="mat-card fade-up d2">
+          <div class="mat-swatch" style="background:linear-gradient(135deg,#5c3317,#3a200e,#5c3317);"></div>
+          <div class="mat-name">Nussbaum</div>
+          <div class="mat-desc">Dunkle Maserung, edles Erscheinungsbild – für Premiummöbel.</div>
+        </div>
+        <div class="mat-card fade-up d3">
+          <div class="mat-swatch" style="background:linear-gradient(135deg,#c8a45c,#9e7a38,#c8a45c);"></div>
+          <div class="mat-name">Buche</div>
+          <div class="mat-desc">Hell, feinkörnig und äußerst belastbar – ideal für Treppen.</div>
+        </div>
+        <div class="mat-card fade-up d4">
+          <div class="mat-swatch" style="background:linear-gradient(135deg,#8b3a2a,#5e2518,#8b3a2a);"></div>
+          <div class="mat-name">Kirsche</div>
+          <div class="mat-desc">Warm, rottonig und elegant – für besondere Wohnräume.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="kontakt">
+    <div class="wrap">
+      <div class="cta-box fade-up">
+        <h2>Ihr Projekt in<br><em>besten Händen</em></h2>
+        <p>Erzählen Sie uns von Ihrem Vorhaben – wir beraten Sie kostenlos und erstellen ein individuelles Angebot.</p>
+        <div class="cta-actions">
+          <a href="mailto:info@schreinerei-weber-menden.de" class="btn-amber">
+            Anfrage stellen
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="tel:+492373000001" class="btn-ghost">02373 · 000 001</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <span class="footer-name">Schreinerei Weber</span>
+        </div>
+        <span class="footer-copy">© 2026 Schreinerei Weber · Menden</span>
+        <nav class="footer-links">
+          <a href="#">Impressum</a>
+          <a href="#">Datenschutz</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const obs = new IntersectionObserver(
+      es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.fade-up, .fade-left').forEach(el => obs.observe(el));
+
+    // Animated counters
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.target);
+      const duration = 1800;
+      const step = target / (duration / 16);
+      let current = 0;
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = Math.round(current);
+        if (current >= target) clearInterval(timer);
+      }, 16);
+    }
+    const counterObs = new IntersectionObserver(es => {
+      es.forEach(e => {
+        if (e.isIntersecting) {
+          animateCounter(e.target);
+          counterObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.counter-val').forEach(el => counterObs.observe(el));
+
+    // Build ruler ticks
+    const ruler = document.getElementById('ruler');
+    if (ruler) {
+      for (let i = 0; i <= 48; i++) {
+        const tick = document.createElement('div');
+        tick.className = 'ruler-tick' + (i % 10 === 0 ? ' major' : '');
+        const isMajor = i % 10 === 0;
+        tick.style.width = isMajor ? '1px' : '1px';
+        const inner = document.createElement('div');
+        inner.style.height = isMajor ? '18px' : (i % 5 === 0 ? '12px' : '7px');
+        inner.style.borderLeft = '1px solid ' + (isMajor ? 'rgba(217,119,6,0.6)' : (i % 5 === 0 ? 'rgba(217,119,6,0.4)' : 'rgba(217,119,6,0.2)'));
+        if (isMajor && i > 0) {
+          const num = document.createElement('div');
+          num.className = 'ruler-num';
+          num.textContent = i;
+          tick.appendChild(num);
+        }
+        tick.appendChild(inner);
+        tick.style.paddingRight = '8px';
+        ruler.appendChild(tick);
+      }
+    }
+  </script>
+</body>
+</html>

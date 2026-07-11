@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Physio &amp; Bewegung Lenz – Physiotherapie Menden</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #040f0d;
+      --bg-2:   #081a17;
+      --bg-3:   #0c2420;
+      --text:   #E6F4F1;
+      --muted:  rgba(230,244,241,0.48);
+      --teal:   #14B8A6;
+      --teal-d: #0D9488;
+      --teal-l: #5EEAD4;
+      --border: rgba(230,244,241,0.07);
+      --r:      14px;
+      --font-d: 'Syne', sans-serif;
+      --font-b: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-b); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
+
+    .nv-badge {
+      position: fixed; bottom: 20px; right: 20px; z-index: 999;
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(4,15,13,0.92); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 100px;
+      padding: 8px 14px 8px 10px; font-size: 0.75rem; font-weight: 600;
+      color: rgba(255,255,255,0.5); transition: color 180ms;
+    }
+    .nv-badge:hover { color: var(--text); }
+    .nv-badge-logo { font-family: var(--font-d); font-size: 0.8rem; font-weight: 800; color: var(--text); }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(4,15,13,0.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-d); font-size: 1rem; font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo-mark {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1.5px solid var(--teal);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--teal);
+      position: relative;
+    }
+    .nav-logo-mark::before {
+      content: '';
+      position: absolute; inset: -5px;
+      border-radius: 50%;
+      border: 1px solid rgba(20,184,166,0.2);
+      animation: logo-pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes logo-pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%       { transform: scale(1.15); opacity: 0; }
+    }
+    .nav-logo-mark svg { width: 16px; height: 16px; }
+    .nav-links { display: flex; list-style: none; gap: 32px; }
+    .nav-links a { font-size: 0.875rem; font-weight: 400; color: var(--muted); transition: color 180ms; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--teal); color: var(--bg);
+      font-size: 0.85rem; font-weight: 700;
+      padding: 9px 22px; border-radius: 100px;
+      transition: background 180ms, transform 160ms;
+    }
+    .nav-cta:hover { background: var(--teal-d); transform: translateY(-1px); }
+
+    /* ── HERO ── */
+    .hero { position: relative; min-height: 96vh; display: flex; align-items: center; overflow: hidden; }
+    .hero-lines {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(20,184,166,0.025) 60px, rgba(20,184,166,0.025) 61px),
+        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(20,184,166,0.025) 60px, rgba(20,184,166,0.025) 61px);
+    }
+    .hero-glow {
+      position: absolute; pointer-events: none;
+      top: 50%; right: 0; transform: translateY(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(20,184,166,0.1), transparent 65%);
+    }
+
+    .hero-inner { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal);
+      margin-bottom: 28px;
+    }
+    .hero-label-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+    .hero h1 {
+      font-family: var(--font-d);
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 800; letter-spacing: -0.04em; line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .hero-sub { font-size: 1rem; color: var(--muted); line-height: 1.8; margin-bottom: 36px; max-width: 440px; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 52px; }
+    .btn-teal {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--teal); color: var(--bg);
+      font-weight: 700; font-size: 0.9rem;
+      padding: 13px 26px; border-radius: 100px;
+      transition: background 180ms, transform 160ms;
+    }
+    .btn-teal:hover { background: var(--teal-d); transform: translateY(-2px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--muted); font-size: 0.875rem; font-weight: 500;
+      padding: 13px 22px; border-radius: 100px;
+      border: 1px solid var(--border); transition: color 180ms, border-color 180ms;
+    }
+    .btn-ghost:hover { color: var(--text); border-color: rgba(230,244,241,0.2); }
+
+    .hero-features { display: flex; flex-direction: column; gap: 14px; }
+    .hero-feature {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 0.875rem; color: var(--muted);
+    }
+    .hero-feature-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(20,184,166,0.1); border: 1px solid rgba(20,184,166,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--teal); flex-shrink: 0;
+    }
+    .hero-feature-icon svg { width: 13px; height: 13px; }
+
+    /* Hero right: breathing rings */
+    .breathing-wrap {
+      position: relative; display: flex;
+      align-items: center; justify-content: center;
+      height: 420px;
+    }
+    .breath-ring {
+      position: absolute; border-radius: 50%;
+      border: 1px solid rgba(20,184,166,0.15);
+      animation: breath var(--dur) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+    @keyframes breath {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50%       { transform: scale(1.08); opacity: 1; }
+    }
+    .r1 { width: 340px; height: 340px; --dur: 4s; --delay: 0s; }
+    .r2 { width: 280px; height: 280px; --dur: 4s; --delay: -0.5s; border-color: rgba(20,184,166,0.2); }
+    .r3 { width: 220px; height: 220px; --dur: 4s; --delay: -1s; border-color: rgba(20,184,166,0.25); }
+    .r4 { width: 160px; height: 160px; --dur: 4s; --delay: -1.5s; border-color: rgba(20,184,166,0.3); }
+    .breath-core {
+      position: relative; z-index: 2;
+      width: 100px; height: 100px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(20,184,166,0.2), rgba(20,184,166,0.05));
+      border: 1.5px solid rgba(20,184,166,0.4);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      animation: breath 4s ease-in-out infinite;
+    }
+    .breath-core svg { width: 28px; height: 28px; color: var(--teal); }
+    .breath-label {
+      font-family: var(--font-d); font-size: 0.6rem; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal);
+      animation: breath-text 4s ease-in-out infinite;
+    }
+    @keyframes breath-text {
+      0%, 100% { opacity: 0.6; }
+      50%       { opacity: 1; }
+    }
+    /* Floating stat chips */
+    .float-chip {
+      position: absolute;
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 100px; padding: 8px 16px;
+      font-size: 0.78rem; font-weight: 600; white-space: nowrap;
+      animation: chip-float var(--cdur) ease-in-out infinite;
+      animation-delay: var(--cdelay);
+    }
+    .float-chip span { color: var(--teal); }
+    @keyframes chip-float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
+    }
+    .c1 { top: 12%; left: 2%; --cdur: 5s; --cdelay: 0s; }
+    .c2 { bottom: 20%; right: 2%; --cdur: 4.5s; --cdelay: -1.5s; }
+    .c3 { top: 55%; left: 0%; --cdur: 6s; --cdelay: -2.5s; }
+
+    /* ── SERVICES ── */
+    .svc-section { padding: 96px 0; }
+    .section-eyebrow {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 14px;
+    }
+    .section-h2 {
+      font-family: var(--font-d);
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 800; letter-spacing: -0.04em; line-height: 1.15; margin-bottom: 12px;
+    }
+    .section-sub { color: var(--muted); font-size: 1rem; max-width: 500px; line-height: 1.75; }
+
+    .svc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 56px; align-items: start; }
+    .svc-list { display: flex; flex-direction: column; gap: 0; }
+    .svc-item {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 22px 0; border-bottom: 1px solid var(--border);
+      transition: padding-left 240ms;
+    }
+    .svc-item:first-child { padding-top: 0; }
+    .svc-item:hover { padding-left: 8px; }
+    .svc-num {
+      font-family: var(--font-d); font-size: 0.72rem; font-weight: 700;
+      color: var(--teal); letter-spacing: 0.06em; margin-top: 4px; flex-shrink: 0;
+      width: 28px;
+    }
+    .svc-content h3 {
+      font-family: var(--font-d); font-size: 1rem; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 6px;
+    }
+    .svc-content p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+    /* Booking widget */
+    .booking-card {
+      background: var(--bg-2);
+      border: 1px solid rgba(20,184,166,0.2);
+      border-radius: 20px; padding: 32px;
+      position: sticky; top: 100px;
+    }
+    .booking-title {
+      font-family: var(--font-d); font-size: 1rem; font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .booking-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 24px; }
+    .calendar-strip {
+      display: grid; grid-template-columns: repeat(7,1fr);
+      gap: 4px; margin-bottom: 20px;
+    }
+    .cal-day {
+      aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; font-size: 0.72rem; font-weight: 500;
+      background: rgba(255,255,255,0.03); color: var(--muted);
+      cursor: pointer; transition: all 180ms; border: 1px solid transparent;
+    }
+    .cal-day.active { background: var(--teal); color: var(--bg); font-weight: 700; border-color: var(--teal); }
+    .cal-day.available:hover { border-color: rgba(20,184,166,0.4); color: var(--text); }
+    .cal-day.taken { opacity: 0.25; cursor: not-allowed; }
+    .time-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .time-slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-bottom: 20px; }
+    .time-slot {
+      padding: 8px 6px; border-radius: 8px; text-align: center;
+      font-size: 0.78rem; font-weight: 500;
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      cursor: pointer; color: var(--muted); transition: all 180ms;
+    }
+    .time-slot.active { background: rgba(20,184,166,0.15); border-color: var(--teal); color: var(--teal); }
+    .time-slot:hover:not(.active) { border-color: rgba(20,184,166,0.3); color: var(--text); }
+    .booking-btn {
+      width: 100%; padding: 13px;
+      background: var(--teal); color: var(--bg);
+      border: none; border-radius: 100px;
+      font-family: var(--font-b); font-size: 0.875rem; font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ── TEAM ── */
+    .team-section { padding: 80px 0; background: var(--bg-2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 48px; }
+    .team-card {
+      background: var(--bg-3); border: 1px solid var(--border); border-radius: var(--r);
+      padding: 28px 24px; text-align: center;
+      transition: border-color 220ms, transform 220ms;
+    }
+    .team-card:hover { border-color: rgba(20,184,166,0.25); transform: translateY(-3px); }
+    .team-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--bg); border: 1.5px solid rgba(20,184,166,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      font-family: var(--font-d); font-size: 1.1rem; font-weight: 800;
+      color: var(--teal);
+    }
+    .team-name { font-family: var(--font-d); font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; }
+    .team-role { font-size: 0.78rem; color: var(--teal); margin-bottom: 10px; }
+    .team-spec { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── CTA ── */
+    .cta-section { padding: 96px 0; }
+    .cta-box {
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 24px; padding: 64px 56px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 48px; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(20,184,166,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .cta-text h2 {
+      font-family: var(--font-d); font-size: clamp(1.6rem,3vw,2.4rem);
+      font-weight: 800; letter-spacing: -0.04em; margin-bottom: 12px;
+    }
+    .cta-text p { color: var(--muted); font-size: 0.95rem; }
+    .cta-actions { display: flex; flex-direction: column; gap: 10px; align-items: flex-end; }
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 32px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .footer-logo { font-family: var(--font-d); font-size: 0.95rem; font-weight: 700; color: var(--text); }
+    .footer-logo span { color: var(--teal); }
+    .footer-copy { font-size: 0.78rem; color: var(--muted); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 0.78rem; color: var(--muted); transition: color 180ms; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .breathing-wrap { height: 280px; }
+      .r1 { width: 240px; height: 240px; }
+      .r2 { width: 190px; height: 190px; }
+      .r3 { width: 145px; height: 145px; }
+      .r4 { width: 100px; height: 100px; }
+      .svc-layout { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr 1fr; }
+      .cta-box { grid-template-columns: 1fr; text-align: center; padding: 40px 28px; }
+      .cta-actions { align-items: center; }
+      .nav-links { display: none; }
+    }
+
+    .slide-in { opacity: 0; transform: translateX(-20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .slide-in.on { opacity: 1; transform: translateX(0); }
+    .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.on { opacity: 1; transform: translateY(0); }
+    .fade-up-d1 { transition-delay: 0.1s; }
+    .fade-up-d2 { transition-delay: 0.2s; }
+    .fade-up-d3 { transition-delay: 0.3s; }
+  </style>
+</head>
+<body>
+
+  <a href="../index.html" class="nv-badge"><span class="nv-badge-logo">NY</span> Erstellt von Noventry</a>
+
+  <!-- Nav -->
+  <nav>
+    <div class="wrap">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <div class="nav-logo-mark">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          Physio &amp; Bewegung Lenz
+        </a>
+        <ul class="nav-links" role="list">
+          <li><a href="#leistungen">Leistungen</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#termin">Termin</a></li>
+        </ul>
+        <a href="#termin" class="nav-cta">Termin buchen</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-lines" aria-hidden="true"></div>
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <div class="hero-label"><div class="hero-label-dot"></div>Physiotherapie · Menden</div>
+          <h1>Zurück in Bewegung.<br>Voller Energie.</h1>
+          <p class="hero-sub">Individuelle physiotherapeutische Behandlung für mehr Lebensqualität – professionell, einfühlsam und auf Ihren Körper abgestimmt.</p>
+          <div class="hero-actions">
+            <a href="#termin" class="btn-teal">
+              Termin buchen
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#leistungen" class="btn-ghost">Leistungen ansehen</a>
+          </div>
+          <div class="hero-features">
+            <div class="hero-feature">
+              <div class="hero-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Alle Kassen &amp; Privat
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Online-Terminbuchung 24/7
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+              Hausbesuche auf Anfrage
+            </div>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="breathing-wrap" aria-hidden="true">
+            <div class="breath-ring r1"></div>
+            <div class="breath-ring r2"></div>
+            <div class="breath-ring r3"></div>
+            <div class="breath-ring r4"></div>
+            <div class="breath-core">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              </svg>
+              <span class="breath-label">Atem</span>
+            </div>
+            <div class="float-chip c1">⭐ 4,9 Bewertung <span>Google</span></div>
+            <div class="float-chip c2">✓ Kassenleistung</div>
+            <div class="float-chip c3"><span>500+</span> Patienten</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="svc-section" id="leistungen">
+    <div class="wrap">
+      <div class="section-eyebrow">Leistungen</div>
+      <h2 class="section-h2">Was wir für Sie tun</h2>
+      <p class="section-sub">Ganzheitliche Physiotherapie – von der Schmerzbehandlung bis zur Sportrehabilitation.</p>
+      <div class="svc-layout">
+        <div class="svc-list">
+          <div class="svc-item slide-in">
+            <span class="svc-num">01</span>
+            <div class="svc-content">
+              <h3>Manuelle Therapie</h3>
+              <p>Gezielte Behandlung von Gelenk- und Muskelproblemen durch spezifische Handgriffe und Mobilisationstechniken.</p>
+            </div>
+          </div>
+          <div class="svc-item slide-in" style="transition-delay:0.1s;">
+            <span class="svc-num">02</span>
+            <div class="svc-content">
+              <h3>Krankengymnastik</h3>
+              <p>Individuell angepasste Übungsprogramme zur Stärkung der Muskulatur, Verbesserung der Beweglichkeit und Schmerzreduktion.</p>
+            </div>
+          </div>
+          <div class="svc-item slide-in" style="transition-delay:0.2s;">
+            <span class="svc-num">03</span>
+            <div class="svc-content">
+              <h3>Sportphysiotherapie</h3>
+              <p>Rehabilitation nach Sportverletzungen, Leistungsoptimierung und Verletzungsprävention für aktive Sportler.</p>
+            </div>
+          </div>
+          <div class="svc-item slide-in" style="transition-delay:0.3s;">
+            <span class="svc-num">04</span>
+            <div class="svc-content">
+              <h3>Elektrotherapie &amp; Ultraschall</h3>
+              <p>Physikalische Therapiemethoden zur Schmerzlinderung, Förderung der Durchblutung und Geweberegeneration.</p>
+            </div>
+          </div>
+          <div class="svc-item slide-in" style="transition-delay:0.4s;">
+            <span class="svc-num">05</span>
+            <div class="svc-content">
+              <h3>Lymphdrainage</h3>
+              <p>Sanfte Massagetechnik zur Entstauung des Lymphsystems – besonders nach Operationen und bei chronischen Schwellungen.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Booking card -->
+        <div class="booking-card fade-up" id="termin">
+          <div class="booking-title">Termin vereinbaren</div>
+          <div class="booking-sub">Wählen Sie Datum und Uhrzeit</div>
+          <div class="calendar-strip">
+            <div class="cal-day taken">Mo</div>
+            <div class="cal-day available">Di</div>
+            <div class="cal-day active">Mi</div>
+            <div class="cal-day available">Do</div>
+            <div class="cal-day available">Fr</div>
+            <div class="cal-day taken">Sa</div>
+            <div class="cal-day taken">So</div>
+          </div>
+          <div class="time-label">Verfügbare Zeiten – Mittwoch</div>
+          <div class="time-slots">
+            <div class="time-slot">08:00</div>
+            <div class="time-slot active">09:30</div>
+            <div class="time-slot">11:00</div>
+            <div class="time-slot">13:00</div>
+            <div class="time-slot">14:30</div>
+            <div class="time-slot taken" style="opacity:.3;cursor:not-allowed;">16:00</div>
+          </div>
+          <button class="booking-btn">Termin bestätigen →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team -->
+  <section class="team-section" id="team">
+    <div class="wrap">
+      <div class="section-eyebrow">Team</div>
+      <h2 class="section-h2 fade-up">Ihre Therapeuten</h2>
+      <div class="team-grid">
+        <div class="team-card fade-up fade-up-d1">
+          <div class="team-avatar">SL</div>
+          <div class="team-name">Sandra Lenz</div>
+          <div class="team-role">Praxisinhaberin & Therapeutin</div>
+          <div class="team-spec">Manuelle Therapie · Sportphysio · 18 Jahre Erfahrung</div>
+        </div>
+        <div class="team-card fade-up fade-up-d2">
+          <div class="team-avatar">MK</div>
+          <div class="team-name">Markus Krause</div>
+          <div class="team-role">Physiotherapeut</div>
+          <div class="team-spec">Krankengymnastik · Elektrotherapie · Lymphdrainage</div>
+        </div>
+        <div class="team-card fade-up fade-up-d3">
+          <div class="team-avatar">JH</div>
+          <div class="team-name">Julia Hoffmann</div>
+          <div class="team-role">Physiotherapeutin</div>
+          <div class="team-spec">Sportrehabilitation · Ultraschall · Kinesio-Taping</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="wrap">
+      <div class="cta-box fade-up">
+        <div class="cta-text">
+          <h2>Schmerzen beenden.<br>Bewegung zurückgewinnen.</h2>
+          <p>Jetzt Termin buchen – online oder telefonisch. Wir sind für Sie da.</p>
+        </div>
+        <div class="cta-actions">
+          <a href="#termin" class="btn-teal">Online Termin buchen</a>
+          <a href="tel:+492373000000" class="btn-ghost">02373 · 000 000</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="wrap">
+      <div class="footer-inner">
+        <div class="footer-logo">Physio &amp; Bewegung <span>Lenz</span></div>
+        <span class="footer-copy">© 2026 Physio & Bewegung Lenz · Menden</span>
+        <nav class="footer-links">
+          <a href="#">Impressum</a>
+          <a href="#">Datenschutz</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver(
+      es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); }),
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.slide-in, .fade-up').forEach(el => obs.observe(el));
+
+    // Calendar interaction
+    document.querySelectorAll('.cal-day.available').forEach(d => {
+      d.addEventListener('click', function() {
+        document.querySelectorAll('.cal-day').forEach(x => x.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Time slot interaction
+    document.querySelectorAll('.time-slot:not([style])').forEach(s => {
+      s.addEventListener('click', function() {
+        document.querySelectorAll('.time-slot').forEach(x => x.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
