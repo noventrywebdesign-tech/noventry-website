@@ -1159,6 +1159,9 @@
             <p>Kostenloses Erstgespräch – unverbindlich, persönlich und ohne Verkaufsdruck.</p>
 
             <form id="contact-form" novalidate>
+              <!-- Spam-Schutz: unsichtbares Feld, das nur Bots ausfüllen -->
+              <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off"
+                     style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
               <div class="contact-fields">
                 <div class="form-row">
                   <div class="form-group">
@@ -1398,31 +1401,56 @@
       }, { threshold: 0.5, rootMargin: '0px 0px -20% 0px' });
       steps.forEach(function (s) { stepObserver.observe(s); });
 
-      /* ── Contact form (mailto fallback, no backend) ──────── */
+      /* ── Contact form — Web3Forms submission ─────────────────
+         Nachrichten gehen direkt an die bei Web3Forms hinterlegte E-Mail. */
+      var WEB3FORMS_ACCESS_KEY = '622cf673-2e0c-4958-886c-7cd2205aefb2';
       var form = document.getElementById('contact-form');
       var successBox = document.getElementById('contact-success');
       if (form) {
+        var submitBtn = document.getElementById('form-submit-btn');
+        var submitBtnHTML = submitBtn.innerHTML;
         form.addEventListener('submit', function (e) {
           e.preventDefault();
+          if (!form.checkValidity()) { form.reportValidity(); return; }
+
           var name = document.getElementById('cf-name').value.trim();
           var phone = document.getElementById('cf-phone').value.trim();
           var email = document.getElementById('cf-email').value.trim();
           var branche = document.getElementById('cf-branche').value.trim();
           var msg = document.getElementById('cf-msg').value.trim();
-          if (!name || !email) return;
+          var botcheck = form.querySelector('input[name="botcheck"]').checked;
 
-          var body = 'Name: ' + name + '\n' +
-            'Telefon: ' + (phone || '–') + '\n' +
-            'E-Mail: ' + email + '\n' +
-            'Branche: ' + (branche || '–') + '\n\n' +
-            'Nachricht:\n' + (msg || '–');
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Wird gesendet …';
 
-          window.location.href = 'mailto:noventrywebdesign@gmail.com' +
-            '?subject=' + encodeURIComponent('Neue Anfrage über Noventry Webdesign') +
-            '&body=' + encodeURIComponent(body);
-
-          form.style.display = 'none';
-          successBox.classList.add('show');
+          fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({
+              access_key: WEB3FORMS_ACCESS_KEY,
+              subject: 'Neue Anfrage von ' + name + ' – Noventry Webdesign',
+              from_name: 'Noventry Website',
+              botcheck: botcheck,
+              'Name': name,
+              'E-Mail': email,
+              'Telefon': phone || '–',
+              'Branche': branche || '–',
+              'Nachricht': msg || '–',
+              replyto: email
+            })
+          }).then(function (res) { return res.json(); }).then(function (data) {
+            if (data.success) {
+              form.style.display = 'none';
+              successBox.classList.add('show');
+            } else {
+              throw new Error(data.message || 'Senden fehlgeschlagen');
+            }
+          }).catch(function (err) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = submitBtnHTML;
+            console.error('Web3Forms-Fehler:', err);
+            alert('Die Nachricht konnte leider nicht gesendet werden.\n\nTechnische Info: ' + err.message + '\n\nBitte versuchen Sie es erneut oder schreiben Sie uns direkt an noventrywebdesign@gmail.com.');
+          });
         });
       }
     })();
