@@ -3,20 +3,21 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import Media from "@/components/ui/Media";
+import { layerRange } from "@/lib/layer-transform";
 
 const FRAMES = [
-  { src: "/images/interior-wide.jpg", alt: "The main dining room at Marezzo" },
-  { src: "/images/interior-table.jpg", alt: "A table set by candlelight" },
-  { src: "/images/interior-bar.jpg", alt: "The bar at Marezzo" },
+  { src: "/images/interior-wide.jpg", alt: "Der Hauptraum bei MAREZZO" },
+  { src: "/images/interior-table.jpg", alt: "Ein Tisch, eingedeckt bei Kerzenlicht" },
+  { src: "/images/interior-bar.jpg", alt: "Die Bar bei MAREZZO" },
 ];
 const TOTAL = FRAMES.length;
 const ZONE = 0.08;
 
 function Frame({ src, alt, index, progress }: { src: string; alt: string; index: number; progress: MotionValue<number> }) {
+  const { range, output } = layerRange(index, TOTAL, ZONE);
+  const opacity = useTransform(progress, range, output);
   const segStart = index / TOTAL;
   const segEnd = (index + 1) / TOTAL;
-  const range = [segStart, segStart + ZONE, segEnd - ZONE, segEnd];
-  const opacity = useTransform(progress, range, [index === 0 ? 1 : 0, 1, 1, index === TOTAL - 1 ? 1 : 0]);
   const scale = useTransform(progress, [segStart, segEnd], [1, 1.18]);
 
   return (
@@ -40,7 +41,7 @@ export default function Interior() {
           <Frame key={f.src} src={f.src} alt={f.alt} index={i} progress={scrollYProgress} />
         ))}
         <div className="absolute left-6 top-8 z-10 md:left-16 md:top-10">
-          <p className="eyebrow">05 / Step Inside</p>
+          <p className="eyebrow">09 / Ein Schritt hinein</p>
         </div>
       </div>
     </section>

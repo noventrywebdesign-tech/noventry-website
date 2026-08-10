@@ -5,12 +5,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useReservation } from "@/components/Reservation";
 
 const LINKS = [
-  { label: "Story", href: "/#story" },
-  { label: "Menu", href: "/menu" },
-  { label: "The Fire", href: "/#the-fire" },
-  { label: "Gallery", href: "/#gallery" },
+  { label: "Geschichte", href: "/#geschichte" },
+  { label: "Speisekarte", href: "/speisekarte" },
+  { label: "Das Feuer", href: "/#feuer" },
+  { label: "Galerie", href: "/#galerie" },
   { label: "Private Dining", href: "/#private-dining" },
-  { label: "Contact", href: "/contact" },
+  { label: "Kontakt", href: "/kontakt" },
 ];
 
 export default function Navbar() {
@@ -62,10 +62,10 @@ export default function Navbar() {
               onClick={open}
               className="btn-sear hidden bg-sear-500 px-6 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-linen-50 sm:inline-flex"
             >
-              Reserve
+              Reservieren
             </button>
             <button
-              aria-label="Open menu"
+              aria-label="Menü öffnen"
               onClick={() => setMenuOpen(true)}
               className="flex h-9 w-9 flex-col items-center justify-center gap-[5px] lg:hidden"
             >
@@ -100,8 +100,8 @@ export default function Navbar() {
                 <a href="/" onClick={() => setMenuOpen(false)} className="font-display text-xl tracking-[0.18em] text-linen-50">
                   MAREZZO
                 </a>
-                <button aria-label="Close menu" onClick={() => setMenuOpen(false)} className="text-xs uppercase tracking-[0.2em] text-linen-200">
-                  Close ✕
+                <button aria-label="Menü schließen" onClick={() => setMenuOpen(false)} className="text-xs uppercase tracking-[0.2em] text-linen-200">
+                  Schließen ✕
                 </button>
               </div>
 
@@ -128,7 +128,7 @@ export default function Navbar() {
                 }}
                 className="btn-sear bg-sear-500 px-7 py-4 text-center text-xs font-semibold uppercase tracking-[0.22em] text-linen-50"
               >
-                Reserve a Table
+                Tisch reservieren
               </button>
             </div>
           </motion.div>

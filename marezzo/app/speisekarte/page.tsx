@@ -5,8 +5,8 @@ import { menu } from "@/lib/menu-data";
 import { restaurant } from "@/lib/restaurant-data";
 
 export const metadata: Metadata = {
-  title: "Menu",
-  description: "Dry-aged British beef, Japanese A5 wagyu, and a 400-bin cellar list — the full Marezzo menu.",
+  title: "Speisekarte",
+  description: "Dry-aged britisches Rind, japanisches A5-Wagyu und ein vierhundert Positionen starker Weinkeller — die vollständige Speisekarte von MAREZZO.",
 };
 
 export default function MenuPage() {
@@ -14,13 +14,13 @@ export default function MenuPage() {
     <>
       <section className="relative flex h-[52vh] min-h-[420px] items-end overflow-hidden bg-char-950">
         <div className="absolute inset-0">
-          <Media src="/images/menu-starter.jpg" alt="A starter plate at Marezzo" className="h-full w-full" priority />
+          <Media src="/images/menu-starter.jpg" alt="Eine Vorspeise bei MAREZZO" className="h-full w-full" priority />
           <div className="cinematic-overlay" />
           <div className="vignette absolute inset-0" />
         </div>
         <div className="relative z-10 mx-auto w-full max-w-[1600px] px-6 pb-14 pt-32 md:px-16">
           <p className="eyebrow mb-6">{restaurant.name}</p>
-          <h1 className="font-display text-6xl text-linen-50 md:text-8xl">The Menu</h1>
+          <h1 className="font-display text-6xl text-linen-50 md:text-8xl">Die Speisekarte</h1>
         </div>
       </section>
 
@@ -38,31 +38,31 @@ export default function MenuPage() {
         </nav>
       </div>
 
-      <MenuCategoryGroup categories={menu.slice(0, 3)} startIndex={0} />
+      <MenuCategoryGroup categories={menu.slice(0, 5)} startIndex={0} />
 
       <div className="relative h-[42vh] min-h-[300px] overflow-hidden">
-        <Media src="/images/sear-crust.jpg" alt="The crust on a dry-aged cut, fresh off the coal" className="h-full w-full" />
+        <Media src="/images/sear-crust.jpg" alt="Die Kruste eines dry-aged Cuts, frisch von der Kohle" className="h-full w-full" />
         <div className="cinematic-overlay" />
         <p className="absolute inset-x-0 bottom-8 text-center font-accent text-xl italic text-linen-100 md:text-2xl">
-          &ldquo;The crust tells you everything you need to know.&rdquo;
+          &bdquo;Die Kruste verrät alles, was man wissen muss.&ldquo;
         </p>
       </div>
 
-      <MenuCategoryGroup categories={menu.slice(3, 8)} startIndex={3} />
+      <MenuCategoryGroup categories={menu.slice(5, 9)} startIndex={5} />
 
       <div className="relative h-[42vh] min-h-[300px] overflow-hidden">
-        <Media src="/images/whiskey-bottles.jpg" alt="The whiskey shelf at Marezzo's bar" className="h-full w-full" />
+        <Media src="/images/whiskey-bottles.jpg" alt="Das Digestif-Regal an der Bar von MAREZZO" className="h-full w-full" />
         <div className="cinematic-overlay" />
         <p className="absolute inset-x-0 bottom-8 text-center font-accent text-xl italic text-linen-100 md:text-2xl">
-          &ldquo;What&rsquo;s in your glass should answer what&rsquo;s on your plate.&rdquo;
+          &bdquo;Was im Glas ist, sollte immer antworten, was auf dem Teller steht.&ldquo;
         </p>
       </div>
 
-      <MenuCategoryGroup categories={menu.slice(8)} startIndex={8} />
+      <MenuCategoryGroup categories={menu.slice(9)} startIndex={9} />
 
       <p className="mx-auto max-w-4xl px-6 pb-20 pt-4 text-center text-xs text-linen-400/70 md:px-0">
-        A discretionary service charge of 12.5% is added to your bill. Please inform your server of any
-        allergies before ordering.
+        Ein Servicezuschlag von 12,5 % wird auf die Rechnung aufgeschlagen. Bitte informieren Sie Ihren Service
+        vorab über Allergien und Unverträglichkeiten.
       </p>
     </>
   );

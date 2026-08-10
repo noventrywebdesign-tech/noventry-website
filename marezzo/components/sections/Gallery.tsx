@@ -63,12 +63,12 @@ export default function Gallery() {
   }, [lightbox]);
 
   return (
-    <section id="gallery" className="relative scroll-mt-20 bg-char-950 px-6 py-24 md:px-16 md:py-32">
+    <section id="galerie" className="relative scroll-mt-20 bg-char-950 px-6 py-24 md:px-16 md:py-32">
       <Reveal>
-        <p className="eyebrow mb-6">06 / Gallery</p>
+        <p className="eyebrow mb-6">10 / Galerie</p>
       </Reveal>
       <Reveal delay={0.1}>
-        <h2 className="max-w-xl font-display text-4xl leading-[1.05] text-linen-50 md:text-6xl">A closer look.</h2>
+        <h2 className="max-w-xl font-display text-4xl leading-[1.05] text-linen-50 md:text-6xl">Ein genauerer Blick.</h2>
       </Reveal>
 
       <div className="mt-14 flex gap-4">
@@ -79,11 +79,11 @@ export default function Gallery() {
               return (
                 <button
                   key={img.src}
-                  data-cursor="VIEW"
+                  data-cursor="ANSEHEN"
                   onClick={() => setLightbox(globalIndex)}
                   className="group relative block w-full overflow-hidden"
                   style={{ aspectRatio: img.aspect }}
-                  aria-label={`View: ${img.alt}`}
+                  aria-label={`Ansehen: ${img.alt}`}
                 >
                   <Media
                     src={img.src}
@@ -118,10 +118,10 @@ export default function Gallery() {
             />
             <button
               onClick={() => setLightbox(null)}
-              aria-label="Close"
+              aria-label="Schließen"
               className="absolute right-6 top-6 text-xs uppercase tracking-[0.2em] text-linen-200 hover:text-linen-50"
             >
-              Close ✕
+              Schließen ✕
             </button>
           </motion.div>
         )}

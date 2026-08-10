@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export const dynamic = "force-static";
 
 const BASE_URL = "https://www.marezzo-london.com";
-const ROUTES = ["", "/menu", "/contact"];
+const ROUTES = ["", "/speisekarte", "/kontakt"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return ROUTES.map((route) => ({

@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import Media from "@/components/ui/Media";
 
-const LINES = ["No gas.", "No shortcuts.", "Just fire."];
+const LINES = ["Kein Gas.", "Keine Abkürzung.", "Nur Feuer."];
 
 function FireLine({ line, index, progress }: { line: string; index: number; progress: MotionValue<number> }) {
   const start = 0.12 + index * 0.22;
@@ -27,10 +27,10 @@ export default function TheFire() {
   const filter = useTransform(brightness, (b) => `brightness(${b})`);
 
   return (
-    <section id="the-fire" ref={ref} className="relative h-[220vh] bg-char-950">
+    <section id="feuer" ref={ref} className="relative h-[220vh] bg-char-950">
       <div className="sticky top-0 h-screen overflow-hidden">
         <motion.div style={{ scale, filter }} className="absolute inset-0">
-          <Media videoSrc="/videos/fire-section.mp4" poster="/images/fire-poster.jpg" alt="Open flame at Marezzo" className="h-full w-full" />
+          <Media videoSrc="/videos/fire-section.mp4" poster="/images/fire-poster.jpg" alt="Offene Flamme bei MAREZZO" className="h-full w-full" />
         </motion.div>
         <div className="absolute inset-0 bg-gradient-to-t from-char-950/70 via-transparent to-char-950/30" />
 

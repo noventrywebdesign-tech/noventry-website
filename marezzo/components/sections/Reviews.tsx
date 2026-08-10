@@ -23,7 +23,7 @@ export default function Reviews() {
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-3xl text-center">
-        <p className="eyebrow mb-10 justify-center">07 / In Their Words</p>
+        <p className="eyebrow mb-10 justify-center">11 / In ihren Worten</p>
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -51,7 +51,7 @@ export default function Reviews() {
             <button
               key={r.author}
               onClick={() => setIndex(i)}
-              aria-label={`Show review from ${r.author}`}
+              aria-label={`Bewertung von ${r.author} anzeigen`}
               className={`h-1.5 w-1.5 rounded-full transition-all ${i === index ? "w-6 bg-copper-400" : "bg-linen-50/30"}`}
             />
           ))}

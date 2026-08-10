@@ -30,29 +30,41 @@ const archivo = Archivo({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.marezzo-london.com"),
   title: {
-    default: `${restaurant.name} — Open-Fire Steakhouse in Mayfair, London`,
+    default: `${restaurant.name} — Steakhouse am offenen Feuer in Mayfair, London`,
     template: `%s — ${restaurant.name}`,
   },
   description:
-    "Marezzo is an open-fire steakhouse in Mayfair, London — dry-aged British beef, Japanese A5 wagyu, and a 400-bin cellar list. A concept showcase by Noventry Webdesign.",
+    "MAREZZO ist ein Steakhouse am offenen Feuer in Mayfair, London — dry-aged britisches Rind, japanisches A5-Wagyu und ein vierhundert Positionen starker Weinkeller. Ein Konzeptprojekt von Noventry Webdesign.",
   keywords: [
-    "steakhouse Mayfair",
-    "steakhouse London",
-    "dry aged steak London",
-    "wagyu London",
-    "fine dining Mayfair",
-    "private dining London",
+    "Steakhouse Mayfair",
+    "Steakhouse London",
+    "Dry Aged Steak London",
+    "Wagyu London",
+    "Fine Dining Mayfair",
+    "Private Dining London",
     "Marezzo",
   ],
   openGraph: {
-    title: `${restaurant.name} — Open-Fire Steakhouse in Mayfair, London`,
-    description: "Dry-aged British beef, Japanese A5 wagyu, and a 400-bin cellar list — cooked over open coal.",
+    title: `${restaurant.name} — Steakhouse am offenen Feuer in Mayfair, London`,
+    description: "Dry-aged britisches Rind, japanisches A5-Wagyu und ein vierhundert Positionen starker Weinkeller — gegart über offener Kohle.",
     url: "https://www.marezzo-london.com",
     siteName: restaurant.name,
-    locale: "en_GB",
+    locale: "de_DE",
     type: "website",
   },
   robots: { index: true, follow: true },
+};
+
+// Schema.org's dayOfWeek vocabulary is fixed English URIs regardless of
+// site locale — this maps the (now German) openingHours.day labels to it.
+const SCHEMA_DAY: Record<string, string> = {
+  Montag: "Monday",
+  Dienstag: "Tuesday",
+  Mittwoch: "Wednesday",
+  Donnerstag: "Thursday",
+  Freitag: "Friday",
+  Samstag: "Saturday",
+  Sonntag: "Sunday",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -73,13 +85,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     },
     openingHoursSpecification: openingHours.map(({ day, hours }) => {
       const [opens, closes] = hours.split(" – ");
-      return { "@type": "OpeningHoursSpecification", dayOfWeek: `https://schema.org/${day}`, opens, closes };
+      return { "@type": "OpeningHoursSpecification", dayOfWeek: `https://schema.org/${SCHEMA_DAY[day]}`, opens, closes };
     }),
     sameAs: [restaurant.instagram.url],
   };
 
   return (
-    <html lang="en">
+    <html lang="de">
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>

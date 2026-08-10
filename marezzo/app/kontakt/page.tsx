@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Media from "@/components/ui/Media";
 import { restaurant, openingHours } from "@/lib/restaurant-data";
+import { policies } from "@/lib/policies-data";
 import ContactActions from "@/components/ContactActions";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Visit Marezzo in Mayfair, London — address, phone, and opening hours.",
+  title: "Kontakt",
+  description: "Besuchen Sie MAREZZO in Mayfair, London — Adresse, Telefon und Öffnungszeiten.",
 };
 
 export default function ContactPage() {
@@ -13,18 +14,18 @@ export default function ContactPage() {
     <>
       <section className="relative flex h-[48vh] min-h-[380px] items-end overflow-hidden bg-char-950">
         <div className="absolute inset-0">
-          <Media src="/images/interior-wide.jpg" alt="The dining room at Marezzo" className="h-full w-full" priority />
+          <Media src="/images/interior-wide.jpg" alt="Der Gastraum bei MAREZZO" className="h-full w-full" priority />
           <div className="cinematic-overlay" />
         </div>
         <div className="relative z-10 mx-auto w-full max-w-[1600px] px-6 pb-14 pt-32 md:px-16">
           <p className="eyebrow mb-6">{restaurant.name}</p>
-          <h1 className="font-display text-6xl text-linen-50 md:text-8xl">Visit Us</h1>
+          <h1 className="font-display text-6xl text-linen-50 md:text-8xl">Besuchen Sie uns</h1>
         </div>
       </section>
 
       <section className="mx-auto grid max-w-[1600px] grid-cols-1 gap-16 px-6 py-20 md:grid-cols-2 md:px-16">
         <div>
-          <p className="eyebrow mb-6">Address</p>
+          <p className="eyebrow mb-6">Adresse</p>
           <p className="max-w-xs text-2xl text-linen-100">
             {restaurant.address.street}
             <br />
@@ -33,7 +34,7 @@ export default function ContactPage() {
             {restaurant.address.postalCode}
           </p>
 
-          <p className="eyebrow mb-6 mt-12">Reach Us</p>
+          <p className="eyebrow mb-6 mt-12">Kontakt</p>
           <a href={restaurant.phoneHref} className="block text-2xl text-copper-400 hover:text-sear-400">
             {restaurant.phone}
           </a>
@@ -41,7 +42,7 @@ export default function ContactPage() {
             {restaurant.email}
           </a>
 
-          <p className="eyebrow mb-6 mt-12">Hours</p>
+          <p className="eyebrow mb-6 mt-12">Öffnungszeiten</p>
           <ul className="max-w-sm divide-y divide-slate-500/20 border-t border-slate-500/20">
             {openingHours.map((h) => (
               <li key={h.day} className="flex justify-between py-3 text-sm text-linen-200">
@@ -54,8 +55,9 @@ export default function ContactPage() {
           <ContactActions />
         </div>
 
-        {/* Stylised, non-literal map graphic — Marezzo is a fictional showcase
-           restaurant, so no real map embed is used for its address. */}
+        {/* Stilisierte, nicht-wörtliche Kartengrafik — MAREZZO ist ein fiktives
+           Showcase-Restaurant, daher wird kein echtes Karten-Embed für die
+           Adresse verwendet. */}
         <div className="relative h-[50vh] min-h-[360px] overflow-hidden border border-slate-500/25 bg-char-900 md:h-auto">
           <div
             className="absolute inset-0 opacity-[0.35]"
@@ -77,6 +79,18 @@ export default function ContactPage() {
               {restaurant.address.street} · {restaurant.address.city}
             </p>
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1600px] border-t border-slate-500/20 px-6 py-20 md:px-16">
+        <p className="eyebrow mb-10">Gut zu wissen</p>
+        <div className="grid grid-cols-1 gap-x-12 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+          {policies.map((p) => (
+            <div key={p.label}>
+              <p className="font-display text-lg text-linen-50">{p.label}</p>
+              <p className="mt-2 text-sm leading-relaxed text-linen-400">{p.text}</p>
+            </div>
+          ))}
         </div>
       </section>
     </>

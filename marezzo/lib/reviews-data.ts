@@ -5,35 +5,39 @@ export type Review = {
   rating: number;
 };
 
+// Fiktive Gäste, keine realen Publikationen oder Personen — MAREZZO ist ein
+// fiktives Showcase-Projekt, siehe Footer-Hinweis. Bewusst fünf verschiedene
+// Themen (Steak, Service, Atmosphäre, Wein, Private Dining), keine
+// austauschbaren Dubletten.
 export const reviews: Review[] = [
   {
-    quote: "One of the best steaks I've had outside New York — the tomahawk arrives like a piece of theatre, and it earns every second of it.",
-    author: "Eleanor Ashworth",
-    context: "Tatler, Restaurant Guide",
+    quote: "Die Kruste beim Ribeye ist mineralisch, fast rauchig, aber nie verbrannt. So bekommt man dry-aged Fleisch selten auf den Teller.",
+    author: "Moritz Lindgren",
+    context: "Stammgast seit der Eröffnung",
     rating: 5,
   },
   {
-    quote: "The wagyu is sliced so thin it barely needs the fire. This is a kitchen that trusts its ingredients completely.",
-    author: "Marcus Reilly",
-    context: "Private client, monthly regular",
+    quote: "Unser Kellner wusste mehr über unseren Tomahawk als wir — Herkunft, Reifezeit, sogar die Holzart. Kein auswendig gelernter Text, echtes Wissen.",
+    author: "Sophie Arnold",
+    context: "Geschäftsessen im Dezember",
     rating: 5,
   },
   {
-    quote: "We hosted our anniversary in the Ember Room. Every course, every pour, every light cue — considered down to the minute.",
-    author: "Priya & Tom Whitfield",
-    context: "Private dining guests",
+    quote: "Man betritt den Raum und hört das Feuer, bevor man es sieht. Kaum ein Restaurant in London inszeniert das so zurückhaltend und trotzdem so wirkungsvoll.",
+    author: "Elias Brandt",
+    context: "Erster Besuch",
     rating: 5,
   },
   {
-    quote: "Dry-aged to a degree most London steakhouses won't attempt. The crust on the ribeye is worth the booking alone.",
-    author: "Julian Cross",
-    context: "Food critic, freelance",
+    quote: "Die Sommelière hat unseren Wagyu mit einem Rioja kombiniert, auf den wir nie gekommen wären — und der genau richtig war. Allein die Weinkarte ist einen Abend wert.",
+    author: "Katharina Reimann",
+    context: "Private Weinverkostung",
     rating: 5,
   },
   {
-    quote: "The cellar list rivals restaurants twice its size. Ask the sommelier for the Rioja pairing — she doesn't miss.",
-    author: "Nadia Fontaine",
-    context: "Wine Society member",
+    quote: "Wir haben unseren Hochzeitstag im Ember Room gefeiert. Der eigene Grill hinter Glas, der persönliche Service — es fühlte sich an wie ein eigenes kleines Restaurant.",
+    author: "Julia & Tom Ehrenberg",
+    context: "Hochzeitstag, Ember Room",
     rating: 5,
   },
 ];

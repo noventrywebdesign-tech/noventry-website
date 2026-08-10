@@ -81,14 +81,14 @@ export default function Hero() {
               onClick={() => setPhase("content")}
               className="absolute bottom-8 right-8 z-20 text-[0.65rem] uppercase tracking-[0.24em] text-linen-400 transition-colors hover:text-linen-50"
             >
-              Skip
+              Überspringen
             </button>
           </motion.div>
         )}
       </AnimatePresence>
 
       <div className="absolute inset-0">
-        <Media videoSrc="/videos/hero.mp4" poster="/images/hero-poster.jpg" alt="Steak searing over an open flame at Marezzo" priority className="h-full w-full" />
+        <Media videoSrc="/videos/hero.mp4" poster="/images/hero-poster.jpg" alt="Steak über offener Flamme bei MAREZZO" priority className="h-full w-full" />
         <div className="cinematic-overlay" />
         <div className="vignette absolute inset-0" />
       </div>
@@ -107,8 +107,8 @@ export default function Hero() {
           <h1 className="font-display text-[15vw] leading-[0.88] tracking-tight text-linen-50 md:text-[8.5vw]">
             {ready && (
               <>
-                <TextReveal as="span" text="TIME AND" delay={0.35} className="block" />
-                <TextReveal as="span" text="FIRE." delay={0.6} className="block italic text-copper-400" />
+                <TextReveal as="span" text="ZEIT UND" delay={0.35} className="block" />
+                <TextReveal as="span" text="FEUER." delay={0.6} className="block italic text-copper-400" />
               </>
             )}
           </h1>
@@ -120,7 +120,7 @@ export default function Hero() {
               animate={ready ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 1.3, duration: 0.9 }}
             >
-              An open-fire steakhouse in the heart of Mayfair.
+              Ein Steakhouse am offenen Feuer, mitten in Mayfair.
             </motion.p>
 
             <motion.div
@@ -129,11 +129,11 @@ export default function Hero() {
               animate={ready ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 1.45, duration: 0.9 }}
             >
-              <button data-cursor="RESERVE" onClick={open} className="btn-sear inline-flex items-center bg-sear-500 px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-linen-50">
-                Reserve a Table
+              <button data-cursor="RESERVIEREN" onClick={open} className="btn-sear inline-flex items-center bg-sear-500 px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-linen-50">
+                Tisch reservieren
               </button>
-              <a href="/menu" className="inline-flex items-center border border-linen-50/30 px-7 py-3.5 text-xs font-medium uppercase tracking-[0.2em] text-linen-50 transition-colors hover:border-copper-400">
-                Discover the Menu
+              <a href="/speisekarte" className="inline-flex items-center border border-linen-50/30 px-7 py-3.5 text-xs font-medium uppercase tracking-[0.2em] text-linen-50 transition-colors hover:border-copper-400">
+                Speisekarte entdecken
               </a>
             </motion.div>
           </div>
@@ -156,7 +156,7 @@ export default function Hero() {
         transition={{ delay: 2, duration: 1 }}
       >
         <span className="h-10 w-px bg-linen-50/30" />
-        <span className="text-[0.6rem] uppercase tracking-[0.2em] text-linen-400">Scroll</span>
+        <span className="text-[0.6rem] uppercase tracking-[0.2em] text-linen-400">Scrollen</span>
       </motion.div>
     </section>
   );
