@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Char: die Grundfläche — warmes Mahagoni-Schwarz, kein neutrales Volcanic-Black ── */
+  --color-char-950: #120d0a;
+  --color-char-900: #1a130f;
+  --color-char-800: #241a14;
+
+  /* ── Slate: kühles Anthrazit als Kontrastfläche — bewusste Warm/Kalt-Spannung ── */
+  --color-slate-700: #2b2724;
+  --color-slate-600: #3d3733;
+  --color-slate-500: #5c5450;
+
+  /* ── Midnight: seltener Palettenwechsel exklusiv für den Cellar-Bereich ── */
+  --color-midnight-950: #0b0d16;
+  --color-midnight-900: #12141f;
+  --color-midnight-800: #1b1e2c;
+
+  /* ── Linen: warmes Nichtweiß für Text auf Dunkel ── */
+  --color-linen-50: #f0e9df;
+  --color-linen-200: #dcd0bf;
+  --color-linen-400: #a89785;
+
+  /* ── Copper: metallischer Akzent — Rahmen, Linien, Kleinteile ── */
+  --color-copper-400: #d68a52;
+  --color-copper-500: #b8672f;
+  --color-copper-600: #8f4f24;
+
+  /* ── Sear: das Feuer — ausschließlich für Glut, Hover, Licht ── */
+  --color-sear-400: #d1502e;
+  --color-sear-500: #a8331a;
+  --color-sear-600: #7d2513;
+
+  --font-display: var(--font-caslon-display), "Times New Roman", serif;
+  --font-accent: var(--font-caslon-text), "Times New Roman", serif;
+  --font-body: var(--font-archivo), sans-serif;
+
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-sear: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --animate-glow-pulse: glow-pulse 5s ease-in-out infinite;
+  --animate-spark-rise: spark-rise 7s ease-in infinite;
+  --animate-drift-slow: drift-slow 22s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes spark-rise {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-160px) translateX(var(--drift, 10px));
+    opacity: 0;
+  }
+}
+
+@keyframes drift-slow {
+  from {
+    transform: scale(1.04) translate(0, 0);
+  }
+  to {
+    transform: scale(1.1) translate(-2%, -2%);
+  }
+}
+
+html {
+  background: var(--color-char-950);
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-char-950);
+  color: var(--color-linen-50);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  cursor: default;
+}
+
+::selection {
+  background: var(--color-sear-500);
+  color: var(--color-linen-50);
+}
+
+:focus-visible {
+  outline: 1px solid var(--color-copper-400);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── Eyebrow-Label: schmale Versalien mit Trennlinie ── */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65em;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--color-copper-400);
+}
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 2em;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.65;
+}
+
+/* ── Glut-Linie ── */
+.sear-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-copper-500) 45%, var(--color-sear-500) 55%, transparent);
+  opacity: 0.55;
+}
+.sear-rule-static {
+  height: 1px;
+  background: var(--color-slate-500);
+  opacity: 0.4;
+}
+
+/* ── Feiner Filmkorn ── */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Vignette ── */
+.vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 22vw rgba(18, 13, 10, 0.6);
+}
+
+/* ── Cinematic Overlay: bodenlastige Verdunkelung + warmer Tint ── */
+.cinematic-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 100% 65% at 50% 100%, rgba(18, 13, 10, 0.82), transparent 62%),
+    radial-gradient(ellipse 80% 55% at 50% 0%, rgba(18, 13, 10, 0.42), transparent 68%),
+    linear-gradient(180deg, rgba(18, 13, 10, 0.14) 0%, rgba(18, 13, 10, 0.03) 28%, rgba(18, 13, 10, 0.52) 100%);
+}
+.cinematic-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(209, 80, 46, 0.06);
+  mix-blend-mode: overlay;
+}
+
+/* ── Midnight Overlay: für Cellar-Sektion, kühler statt warm ── */
+.midnight-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 100% 65% at 50% 100%, rgba(11, 13, 22, 0.85), transparent 62%),
+    linear-gradient(180deg, rgba(11, 13, 22, 0.2) 0%, transparent 30%, rgba(11, 13, 22, 0.6) 100%);
+}
+
+/* ── Ember-Glow ── */
+.ember-glow {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(209, 80, 46, 0.38), transparent 70%);
+  filter: blur(44px);
+  pointer-events: none;
+}
+
+/* ── Warm-Tone Hover für Bilder ── */
+.photo-warm {
+  filter: saturate(1.06) contrast(1.07) brightness(0.97);
+  transition: filter 0.7s var(--ease-sear), transform 0.7s var(--ease-sear);
+}
+.photo-warm:hover {
+  filter: saturate(1.16) contrast(1.09) brightness(1.02);
+}
+
+/* ── Sear-Glow Button ── */
+.btn-sear {
+  position: relative;
+  isolation: isolate;
+  transition: box-shadow 0.4s var(--ease-sear), transform 0.4s var(--ease-sear);
+}
+.btn-sear:hover {
+  box-shadow: 0 0 30px 2px rgba(209, 80, 46, 0.48);
+  transform: translateY(-1px);
+}
+
+/* ── Numerische Editorial-Kennzahlen ── */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Dot-Leader für Menüzeilen ── */
+.dot-leader {
+  flex: 1;
+  border-bottom: 1px dotted var(--color-slate-500);
+  margin: 0 0.75em;
+  transform: translateY(-0.3em);
+  opacity: 0.55;
+}
+
+/* ── Custom Cursor (Desktop only, siehe CustomCursor.tsx) ── */
+.cursor-none-desktop {
+  cursor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (pointer: coarse) {
+  .cursor-none-desktop {
+    cursor: auto;
+  }
+}
