@@ -89,7 +89,14 @@ export default function Hero() {
       </AnimatePresence>
 
       <div className="absolute inset-0">
-        <Media videoSrc="/videos/hero.mp4" poster="/images/hero-poster.jpg" alt="Steak über offener Flamme bei MAREZZO" priority className="h-full w-full" />
+        <Media
+          videoSrc="/videos/hero.mp4"
+          mobileVideoSrc="/videos/hero-mobile.mp4"
+          poster="/images/hero-poster.jpg"
+          alt="Steak über offener Flamme bei MAREZZO"
+          priority
+          className="h-full w-full"
+        />
         <div className="cinematic-overlay" />
         <div className="vignette grain absolute inset-0" />
       </div>

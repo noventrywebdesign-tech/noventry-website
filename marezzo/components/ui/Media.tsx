@@ -11,6 +11,11 @@ type MediaProps = {
   className?: string;
   src?: string;
   videoSrc?: string;
+  /** Optional lighter/smaller rendition served under 768px, e.g. for a hero
+   * video where desktop can justify a much bigger file. Omitted everywhere
+   * except where a caller actually needs it — every other <video> usage on
+   * the site is untouched, still rendering the plain single-source path below. */
+  mobileVideoSrc?: string;
   poster?: string;
   priority?: boolean;
 };
@@ -19,23 +24,39 @@ function positionClass(className: string) {
   return /\b(absolute|fixed|sticky|static)\b/.test(className) ? "" : "relative";
 }
 
-export default function Media({ alt, className = "", src, videoSrc, poster, priority = false }: MediaProps) {
+export default function Media({ alt, className = "", src, videoSrc, mobileVideoSrc, poster, priority = false }: MediaProps) {
   const position = positionClass(className);
 
   if (videoSrc) {
     return (
       <div className={`${position} overflow-hidden bg-char-800 ${className}`}>
-        <video
-          src={videoSrc}
-          poster={poster}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload={priority ? "auto" : "metadata"}
-          className="h-full w-full object-cover"
-          aria-label={alt}
-        />
+        {mobileVideoSrc ? (
+          <video
+            poster={poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload={priority ? "auto" : "metadata"}
+            className="h-full w-full object-cover"
+            aria-label={alt}
+          >
+            <source src={mobileVideoSrc} media="(max-width: 767px)" />
+            <source src={videoSrc} />
+          </video>
+        ) : (
+          <video
+            src={videoSrc}
+            poster={poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload={priority ? "auto" : "metadata"}
+            className="h-full w-full object-cover"
+            aria-label={alt}
+          />
+        )}
       </div>
     );
   }
