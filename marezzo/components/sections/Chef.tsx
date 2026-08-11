@@ -38,8 +38,8 @@ export default function Chef() {
   const bottomY = useTransform(scrollYProgress, [0, 1], [-40, 100]);
 
   return (
-    <section ref={ref} className="relative h-[280vh] bg-char-950">
-      <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden">
+    <section ref={ref} className="relative h-[560vh] bg-char-950">
+      <div className="grain sticky top-0 flex h-screen items-center justify-center overflow-hidden">
         <div className="absolute inset-x-6 inset-y-16 md:inset-x-24 md:inset-y-24">
           <Media src="/images/chef-portrait.jpg" alt={`${chef.firstName} ${chef.lastName}, Executive Chef bei MAREZZO`} className="h-full w-full grayscale-[15%]" />
           <div className="absolute inset-0 bg-gradient-to-t from-char-950/70 via-transparent to-char-950/40" />

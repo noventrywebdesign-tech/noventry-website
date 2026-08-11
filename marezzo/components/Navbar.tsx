@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useReservation } from "@/components/Reservation";
+import { restaurant, openingHours } from "@/lib/restaurant-data";
+import MagneticButton from "@/components/ui/MagneticButton";
 
 const LINKS = [
   { label: "Geschichte", href: "/#geschichte" },
@@ -58,12 +60,14 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={open}
-              className="btn-sear hidden bg-sear-500 px-6 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-linen-50 sm:inline-flex"
-            >
-              Reservieren
-            </button>
+            <MagneticButton className="hidden sm:inline-block">
+              <button
+                onClick={open}
+                className="btn-sear bg-sear-500 px-6 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-linen-50"
+              >
+                Reservieren
+              </button>
+            </MagneticButton>
             <button
               aria-label="Menü öffnen"
               onClick={() => setMenuOpen(true)}
@@ -91,11 +95,11 @@ export default function Navbar() {
               muted
               loop
               playsInline
-              className="absolute inset-0 h-full w-full object-cover opacity-25"
+              className="absolute inset-0 h-full w-full object-cover opacity-20"
             />
-            <div className="cinematic-overlay" />
+            <div className="cinematic-overlay grain" />
 
-            <div className="relative z-10 flex h-full flex-col justify-between px-8 py-10">
+            <div className="relative z-10 flex h-full flex-col justify-between overflow-y-auto px-8 py-10">
               <div className="flex items-center justify-between">
                 <a href="/" onClick={() => setMenuOpen(false)} className="font-display text-xl tracking-[0.18em] text-linen-50">
                   MAREZZO
@@ -105,7 +109,7 @@ export default function Navbar() {
                 </button>
               </div>
 
-              <nav className="flex flex-col gap-1">
+              <nav className="flex flex-col gap-1 py-8">
                 {LINKS.map((link, i) => (
                   <motion.a
                     key={link.label}
@@ -121,15 +125,24 @@ export default function Navbar() {
                 ))}
               </nav>
 
-              <button
-                onClick={() => {
-                  setMenuOpen(false);
-                  open();
-                }}
-                className="btn-sear bg-sear-500 px-7 py-4 text-center text-xs font-semibold uppercase tracking-[0.22em] text-linen-50"
-              >
-                Tisch reservieren
-              </button>
+              <div>
+                <div className="flex flex-col gap-1.5 border-t border-linen-50/10 pb-6 pt-6 text-xs text-linen-400">
+                  <span>{restaurant.address.street} · {restaurant.address.city}</span>
+                  <span className="tnum">{openingHours[0].hours} · Mo–So</span>
+                  <a href={restaurant.instagram.url} target="_blank" rel="noopener noreferrer" className="text-copper-400">
+                    {restaurant.instagram.handle}
+                  </a>
+                </div>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    open();
+                  }}
+                  className="btn-sear w-full bg-sear-500 px-7 py-4 text-center text-xs font-semibold uppercase tracking-[0.22em] text-linen-50"
+                >
+                  Tisch reservieren
+                </button>
+              </div>
             </div>
           </motion.div>
         )}

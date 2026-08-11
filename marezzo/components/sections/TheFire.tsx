@@ -28,7 +28,7 @@ export default function TheFire() {
 
   return (
     <section id="feuer" ref={ref} className="relative h-[220vh] bg-char-950">
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="grain sticky top-0 h-screen overflow-hidden">
         <motion.div style={{ scale, filter }} className="absolute inset-0">
           <Media videoSrc="/videos/fire-section.mp4" poster="/images/fire-poster.jpg" alt="Offene Flamme bei MAREZZO" className="h-full w-full" />
         </motion.div>

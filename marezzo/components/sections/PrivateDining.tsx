@@ -2,6 +2,7 @@
 
 import Media from "@/components/ui/Media";
 import Reveal from "@/components/ui/Reveal";
+import MagneticButton from "@/components/ui/MagneticButton";
 import { useReservation } from "@/components/Reservation";
 import { restaurant } from "@/lib/restaurant-data";
 
@@ -21,7 +22,7 @@ export default function PrivateDining() {
       <div className="mx-auto grid max-w-[1600px] grid-cols-1 items-center gap-16 md:grid-cols-[0.9fr_1.1fr]">
         <div>
           <Reveal>
-            <p className="eyebrow mb-6">12 / Private Dining</p>
+            <p className="eyebrow mb-6">10 / Private Dining</p>
           </Reveal>
           <Reveal delay={0.1}>
             <h2 className="font-display text-4xl leading-[1.05] text-linen-50 md:text-6xl">
@@ -48,9 +49,11 @@ export default function PrivateDining() {
             </ul>
           </Reveal>
           <Reveal delay={0.4}>
-            <button onClick={open} className="btn-sear mt-10 inline-flex items-center bg-sear-500 px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-linen-50">
-              Private Dinner anfragen
-            </button>
+            <MagneticButton>
+              <button onClick={open} className="btn-sear mt-10 inline-flex items-center bg-sear-500 px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-linen-50">
+                Private Dinner anfragen
+              </button>
+            </MagneticButton>
           </Reveal>
         </div>
 

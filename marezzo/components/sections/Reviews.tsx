@@ -16,14 +16,22 @@ export default function Reviews() {
   const current = reviews[index];
 
   return (
-    <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-char-950 px-6 py-24 md:px-16">
+    <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-char-950 px-6 py-24 md:px-16">
       <div className="absolute inset-0">
         <Media src="/images/reviews-bg.jpg" alt="" className="h-full w-full opacity-40" />
-        <div className="cinematic-overlay" />
+        <div className="cinematic-overlay grain" />
       </div>
 
+      <p
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[58%] select-none font-display text-linen-50/[0.06]"
+        style={{ fontSize: "min(48vw, 620px)", lineHeight: 1 }}
+      >
+        &rdquo;
+      </p>
+
       <div className="relative z-10 mx-auto w-full max-w-3xl text-center">
-        <p className="eyebrow mb-10 justify-center">11 / In ihren Worten</p>
+        <p className="eyebrow mb-10 justify-center">09 / In ihren Worten</p>
 
         <AnimatePresence mode="wait">
           <motion.div

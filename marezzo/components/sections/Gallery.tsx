@@ -65,7 +65,7 @@ export default function Gallery() {
   return (
     <section id="galerie" className="relative scroll-mt-20 bg-char-950 px-6 py-24 md:px-16 md:py-32">
       <Reveal>
-        <p className="eyebrow mb-6">10 / Galerie</p>
+        <p className="eyebrow mb-6">08 / Galerie</p>
       </Reveal>
       <Reveal delay={0.1}>
         <h2 className="max-w-xl font-display text-4xl leading-[1.05] text-linen-50 md:text-6xl">Ein genauerer Blick.</h2>

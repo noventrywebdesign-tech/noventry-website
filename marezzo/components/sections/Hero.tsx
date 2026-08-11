@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Media from "@/components/ui/Media";
 import TextReveal from "@/components/ui/TextReveal";
+import MagneticButton from "@/components/ui/MagneticButton";
 import { useReservation } from "@/components/Reservation";
 import { restaurant } from "@/lib/restaurant-data";
 
@@ -90,7 +91,7 @@ export default function Hero() {
       <div className="absolute inset-0">
         <Media videoSrc="/videos/hero.mp4" poster="/images/hero-poster.jpg" alt="Steak über offener Flamme bei MAREZZO" priority className="h-full w-full" />
         <div className="cinematic-overlay" />
-        <div className="vignette absolute inset-0" />
+        <div className="vignette grain absolute inset-0" />
       </div>
 
       <div className="relative z-10 flex min-h-[100svh] flex-col justify-end px-6 pb-16 pt-32 md:px-10 md:pb-20">
@@ -129,12 +130,16 @@ export default function Hero() {
               animate={ready ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 1.45, duration: 0.9 }}
             >
-              <button data-cursor="RESERVIEREN" onClick={open} className="btn-sear inline-flex items-center bg-sear-500 px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-linen-50">
-                Tisch reservieren
-              </button>
-              <a href="/speisekarte" className="inline-flex items-center border border-linen-50/30 px-7 py-3.5 text-xs font-medium uppercase tracking-[0.2em] text-linen-50 transition-colors hover:border-copper-400">
-                Speisekarte entdecken
-              </a>
+              <MagneticButton>
+                <button data-cursor="RESERVIEREN" onClick={open} className="btn-sear inline-flex items-center bg-sear-500 px-7 py-3.5 text-xs font-semibold uppercase tracking-[0.2em] text-linen-50">
+                  Tisch reservieren
+                </button>
+              </MagneticButton>
+              <MagneticButton>
+                <a href="/speisekarte" className="inline-flex items-center border border-linen-50/30 px-7 py-3.5 text-xs font-medium uppercase tracking-[0.2em] text-linen-50 transition-colors hover:border-copper-400">
+                  Speisekarte entdecken
+                </a>
+              </MagneticButton>
             </motion.div>
           </div>
 

@@ -11,7 +11,7 @@ export default function Evening() {
       <div className="mx-auto grid max-w-[1600px] grid-cols-1 gap-16 md:grid-cols-2 md:gap-10">
         <div>
           <Reveal>
-            <p className="eyebrow mb-6">08 / Ein Abend am Feuer</p>
+            <p className="eyebrow mb-6">07 / Ein Abend am Feuer</p>
           </Reveal>
           <TextReveal as="h2" text="Mehr als ein Steak." className="font-display text-4xl leading-[1.05] text-linen-50 md:text-6xl" />
 

@@ -6,7 +6,9 @@ import { ReservationProvider } from "@/components/Reservation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
-import { restaurant, openingHours } from "@/lib/restaurant-data";
+import ScrollProgress from "@/components/ScrollProgress";
+import PageTransition from "@/components/PageTransition";
+import { restaurant } from "@/lib/restaurant-data";
 
 const caslonDisplay = Libre_Caslon_Display({
   variable: "--font-caslon-display",
@@ -52,42 +54,25 @@ export const metadata: Metadata = {
     locale: "de_DE",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: `${restaurant.name} — Steakhouse am offenen Feuer in Mayfair, London`,
+    description: "Dry-aged britisches Rind, japanisches A5-Wagyu und ein vierhundert Positionen starker Weinkeller — gegart über offener Kohle.",
+  },
   robots: { index: true, follow: true },
 };
 
-// Schema.org's dayOfWeek vocabulary is fixed English URIs regardless of
-// site locale — this maps the (now German) openingHours.day labels to it.
-const SCHEMA_DAY: Record<string, string> = {
-  Montag: "Monday",
-  Dienstag: "Tuesday",
-  Mittwoch: "Wednesday",
-  Donnerstag: "Thursday",
-  Freitag: "Friday",
-  Samstag: "Saturday",
-  Sonntag: "Sunday",
-};
-
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // MAREZZO doesn't exist — no Restaurant/LocalBusiness structured data here on
+  // purpose, since that vocabulary (address, phone, opening hours as facts
+  // about a real place) would tell search engines this is a real business.
+  // A plain WebSite entry is safe: it describes the page, not a physical premise.
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Restaurant",
+    "@type": "WebSite",
     name: restaurant.name,
-    servesCuisine: ["Steakhouse", "Grill"],
+    description: "Ein fiktives Showcase-Projekt von Noventry Webdesign — kein real existierendes Restaurant.",
     url: "https://www.marezzo-london.com",
-    telephone: restaurant.phone,
-    priceRange: "£££",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: restaurant.address.street,
-      addressLocality: "London",
-      postalCode: restaurant.address.postalCode,
-      addressCountry: "GB",
-    },
-    openingHoursSpecification: openingHours.map(({ day, hours }) => {
-      const [opens, closes] = hours.split(" – ");
-      return { "@type": "OpeningHoursSpecification", dayOfWeek: `https://schema.org/${SCHEMA_DAY[day]}`, opens, closes };
-    }),
-    sameAs: [restaurant.instagram.url],
   };
 
   return (
@@ -98,6 +83,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${caslonDisplay.variable} ${caslonText.variable} ${archivo.variable} font-body bg-char-950 text-linen-50 antialiased cursor-none-desktop`}>
         <SmoothScrollProvider>
           <ReservationProvider>
+            <PageTransition />
+            <ScrollProgress />
             <CustomCursor />
             <Navbar />
             {children}
