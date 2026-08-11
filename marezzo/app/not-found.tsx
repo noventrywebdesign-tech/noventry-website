@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-char-950 px-6 text-center">
       <div className="absolute inset-0">
-        <Media videoSrc="/videos/fire-section.mp4" poster="/images/fire-poster.jpg" alt="" className="h-full w-full opacity-30" />
+        <Media src="/images/error-embers.jpg" alt="" className="h-full w-full opacity-30" />
         <div className="cinematic-overlay" />
         <div className="vignette absolute inset-0" />
       </div>

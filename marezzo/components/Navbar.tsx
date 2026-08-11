@@ -90,7 +90,7 @@ export default function Navbar() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             <video
-              src="/videos/fire-section.mp4"
+              src="/videos/menu-nav-fire.mp4"
               autoPlay
               muted
               loop

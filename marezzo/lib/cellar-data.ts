@@ -30,28 +30,28 @@ export const cutPairings: CutPairing[] = [
     bottle: "Château Léoville-Barton",
     region: "Bordeaux, Frankreich",
     recommendation: "Ein kräftiger Bordeaux hält der mineralischen Kruste stand, ohne die Röstaromen zu überdecken.",
-    image: "/images/wine-cellar.jpg",
+    image: "/images/pairing-ribeye-bordeaux.jpg",
   },
   {
     cut: "Wagyu",
     bottle: "Gevrey-Chambertin",
     region: "Burgund, Frankreich",
     recommendation: "Ein eleganter Burgunder lässt die Marmorierung führen, statt mit ihr zu konkurrieren.",
-    image: "/images/wine-pour.jpg",
+    image: "/images/pairing-wagyu-burgundy.jpg",
   },
   {
     cut: "Tomahawk",
     bottle: "Caymus Cabernet Sauvignon",
     region: "Napa Valley, USA",
     recommendation: "Ein kräftiger Napa Cabernet für einen Cut, der selbst kräftig genug ist, ihm standzuhalten.",
-    image: "/images/wine-cellar.jpg",
+    image: "/images/pairing-tomahawk-napa.jpg",
   },
   {
     cut: "Filet",
     bottle: "Vietti Barolo",
     region: "Piemont, Italien",
     recommendation: "Ein eleganter Barolo passt sich der Feinheit des Filets an, statt sie zu überdecken.",
-    image: "/images/wine-pour.jpg",
+    image: "/images/pairing-filet-barolo.jpg",
   },
 ];
 

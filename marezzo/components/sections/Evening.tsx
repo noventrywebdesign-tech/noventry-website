@@ -34,7 +34,7 @@ export default function Evening() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="relative h-[26vh] overflow-hidden md:h-[30vh]">
-              <Media src="/images/interior-bar.jpg" alt="Die Bar bei MAREZZO" className="h-full w-full" />
+              <Media src="/images/evening-bar-detail.jpg" alt="Ein Cocktail an der Bar von MAREZZO" className="h-full w-full" />
               <div className="cinematic-overlay" />
             </div>
             <div className="relative h-[26vh] overflow-hidden md:h-[30vh]">

@@ -63,7 +63,7 @@ export default function PrivateDining() {
             <div className="cinematic-overlay" />
           </div>
           <div className="absolute -bottom-10 -left-6 hidden h-40 w-56 overflow-hidden border-4 border-char-900 shadow-2xl md:block">
-            <Media src="/images/interior-bar.jpg" alt="Detailansicht der Bar bei MAREZZO" className="h-full w-full" />
+            <Media src="/images/private-dining-bar.jpg" alt="Ein Whisky-Dekanter im Ember Room" className="h-full w-full" />
           </div>
         </div>
       </div>

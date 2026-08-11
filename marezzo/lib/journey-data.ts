@@ -10,19 +10,19 @@ export const journeySteps: JourneyStep[] = [
     index: "01",
     title: "Herkunft",
     text: "Wir arbeiten ausschließlich mit ausgewählten Erzeugern und Regionen, die wir persönlich kennen — von den Pampas Argentiniens bis zu den Weiden Galways.",
-    image: "/images/origin-ireland.jpg",
+    image: "/images/journey-origin.jpg",
   },
   {
     index: "02",
     title: "Auswahl",
     text: "Marmorierung, Faserstruktur, Rasse und Reifepotenzial entscheiden darüber, welcher Cut es überhaupt in unsere Küche schafft.",
-    image: "/images/origin-japan.jpg",
+    image: "/images/journey-selection.jpg",
   },
   {
     index: "03",
     title: "Reifung",
     text: "Ausgewählte Stücke verbringen bis zu 60 Tage unter kontrollierten Bedingungen in unserer Reifekammer — konstante Temperatur, definierte Luftfeuchtigkeit, permanente Luftzirkulation.",
-    image: "/images/cut-tomahawk.jpg",
+    image: "/images/journey-aging-chamber.jpg",
   },
   {
     index: "04",
@@ -34,7 +34,7 @@ export const journeySteps: JourneyStep[] = [
     index: "05",
     title: "Feuer",
     text: "Holz, Kohle und Temperaturen jenseits von 600 °C erzeugen die charakteristische Kruste — für jeden Cut individuell gesteuert.",
-    image: "/images/smoke-grill.jpg",
+    image: "/images/journey-fire.jpg",
   },
   {
     index: "06",
@@ -46,6 +46,6 @@ export const journeySteps: JourneyStep[] = [
     index: "07",
     title: "Service",
     text: "Erst danach wird angeschnitten, final gewürzt und serviert — nie früher.",
-    image: "/images/gallery-1.jpg",
+    image: "/images/journey-service.jpg",
   },
 ];

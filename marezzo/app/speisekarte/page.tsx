@@ -41,7 +41,7 @@ export default function MenuPage() {
       <MenuCategoryGroup categories={menu.slice(0, 5)} startIndex={0} />
 
       <div className="relative h-[42vh] min-h-[300px] overflow-hidden">
-        <Media src="/images/sear-crust.jpg" alt="Die Kruste eines dry-aged Cuts, frisch von der Kohle" className="h-full w-full" />
+        <Media src="/images/menu-crust-detail.jpg" alt="Die Kruste eines dry-aged Cuts, frisch von der Kohle" className="h-full w-full" />
         <div className="cinematic-overlay" />
         <p className="absolute inset-x-0 bottom-8 text-center font-accent text-xl italic text-linen-100 md:text-2xl">
           &bdquo;Die Kruste verrät alles, was man wissen muss.&ldquo;

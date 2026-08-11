@@ -14,7 +14,7 @@ export default function ContactPage() {
     <>
       <section className="relative flex h-[48vh] min-h-[380px] items-end overflow-hidden bg-char-950">
         <div className="absolute inset-0">
-          <Media src="/images/interior-wide.jpg" alt="Der Gastraum bei MAREZZO" className="h-full w-full" priority />
+          <Media src="/images/contact-atmosphere.jpg" alt="Der Gastraum bei MAREZZO" className="h-full w-full" priority />
           <div className="cinematic-overlay" />
         </div>
         <div className="relative z-10 mx-auto w-full max-w-[1600px] px-6 pb-14 pt-32 md:px-16">

@@ -18,7 +18,7 @@ export default function ReservationCTA() {
   return (
     <section ref={ref} className="relative flex min-h-[95vh] items-center justify-center overflow-hidden bg-char-950">
       <div className="absolute inset-0">
-        <Media src="/images/interior-wide.jpg" alt="Der Gastraum bei MAREZZO, spät am Abend" className="h-full w-full animate-drift-slow" />
+        <Media src="/images/reservation-finale.jpg" alt="Der Gastraum bei MAREZZO, spät am Abend" className="h-full w-full animate-drift-slow" />
         <div className="cinematic-overlay grain" />
         <div className="vignette absolute inset-0" />
         <motion.div className="pointer-events-none absolute inset-0 bg-char-950" style={{ opacity: darken }} />

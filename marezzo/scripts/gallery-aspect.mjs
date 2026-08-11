@@ -4,12 +4,12 @@ import path from "path";
 const files = [
   "gallery-1.jpg",
   "gallery-2.jpg",
-  "interior-table.jpg",
+  "gallery-table-detail.jpg",
   "gallery-4.jpg",
   "gallery-3.jpg",
   "gallery-5.jpg",
-  "whiskey-glass.jpg",
-  "philosophy-detail.jpg",
+  "gallery-whiskey-alt.jpg",
+  "gallery-embers.jpg",
 ];
 
 for (const file of files) {
